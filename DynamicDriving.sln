@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.AzureService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.Events", "Contracts\DynamicDriving.Events\DynamicDriving.Events.csproj", "{E259B573-F977-40A0-AA51-03CF1F387CB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.AzureServiceBus.Sender.TestHarness", "DynamicDriving.AzureServiceBus.Sender.TestHarness\DynamicDriving.AzureServiceBus.Sender.TestHarness.csproj", "{83C9E99F-1ADA-4900-A7C2-CC87306262D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{E259B573-F977-40A0-AA51-03CF1F387CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E259B573-F977-40A0-AA51-03CF1F387CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E259B573-F977-40A0-AA51-03CF1F387CB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83C9E99F-1ADA-4900-A7C2-CC87306262D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C9E99F-1ADA-4900-A7C2-CC87306262D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C9E99F-1ADA-4900-A7C2-CC87306262D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C9E99F-1ADA-4900-A7C2-CC87306262D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{F114242C-2850-423C-B6A9-5E3210151663} = {4CAF1AC3-2D76-41C0-8FA9-CD99DBC02EDE}
 		{02D3C75E-4BDF-45DF-90C2-ED6CFFDBA327} = {F53D37A0-B1B1-4F03-8523-CF6807136AEF}
 		{E259B573-F977-40A0-AA51-03CF1F387CB8} = {FC24E38B-3B33-4C93-9F3E-7EEB52E48F77}
+		{83C9E99F-1ADA-4900-A7C2-CC87306262D9} = {C101C2D5-D120-4C83-A294-2C5DA890E962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}
