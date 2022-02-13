@@ -1,20 +1,26 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using Azure.Messaging.ServiceBus;
+using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus;
 
 public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 {
+    private readonly IIntegrationEventSerializer integrationEventSerializer;
     private static readonly ConcurrentDictionary<Type, ServiceBusSender> ServiceBusSenders = new();
 
     private readonly ServiceBusClient serviceBusClient;
 
-    public AzureServiceBusMessagePublisher(AzureServiceBusOptions options)
+    public AzureServiceBusMessagePublisher(
+        IIntegrationEventSerializer integrationEventSerializer, 
+        AzureServiceBusOptions options)
     {
+        ArgumentNullException.ThrowIfNull(integrationEventSerializer);
         ArgumentNullException.ThrowIfNull(options);
 
+        this.integrationEventSerializer = integrationEventSerializer;
         this.serviceBusClient = new ServiceBusClient(options.StorageConnectionString);
     }
 
@@ -25,7 +31,7 @@ public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
         var integrationEventType = integrationEvent.GetType();
         var sender = ServiceBusSenders.GetOrAdd(integrationEventType, this.serviceBusClient.CreateSender(integrationEventType.Name));
 
-        var serializedIntegrationEvent = JsonSerializer.Serialize(integrationEvent, integrationEventType); // TODO: use source generators
+        var serializedIntegrationEvent = this.integrationEventSerializer.Serialize(integrationEvent);
         await sender.SendMessageAsync(new ServiceBusMessage(serializedIntegrationEvent), cancellationToken).ConfigureAwait(false);
     }
 
