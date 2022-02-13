@@ -2,7 +2,6 @@
 using System.Text.Json;
 using AutoFixture;
 using DynamicDriving.AzureServiceBus.Serializers;
-using DynamicDriving.Events;
 using FluentAssertions;
 using Xunit;
 
@@ -16,8 +15,8 @@ public class IntegrationEventSerializerTests
     public void Serialize_when_type_with_JsonSerializerContext_is_provided_then_the_object_is_serialized_accordingly()
     {
         // Arrange
-        this.fixture.Register<IIntegrationEventSerializer>(()=> 
-            new IntegrationEventSerializer(new IEventContextFactory[]{new TestEventContextFactory()}));
+        this.fixture.Register<IIntegrationEventSerializer>(() =>
+            new IntegrationEventSerializer(new IEventContextFactory[] { new TestEventContextFactory() }));
         var eventSerializer = this.fixture.Create<IIntegrationEventSerializer>();
         var testEvent = this.fixture.Create<TestEvent>();
 
@@ -33,7 +32,7 @@ public class IntegrationEventSerializerTests
     public void Serialize_when_type_without_JsonSerializerContext_is_provided_then_the_operation_is_invalid()
     {
         // Arrange
-        this.fixture.Register<IIntegrationEventSerializer>(()=> 
+        this.fixture.Register<IIntegrationEventSerializer>(() =>
             new IntegrationEventSerializer(Array.Empty<IEventContextFactory>()));
         var eventSerializer = this.fixture.Create<IIntegrationEventSerializer>();
         var testEvent = this.fixture.Create<TestEvent>();

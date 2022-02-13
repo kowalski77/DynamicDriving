@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.Events;
@@ -8,13 +7,13 @@ namespace DynamicDriving.AzureServiceBus;
 
 public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 {
-    private readonly IIntegrationEventSerializer integrationEventSerializer;
     private static readonly ConcurrentDictionary<Type, ServiceBusSender> ServiceBusSenders = new();
+    private readonly IIntegrationEventSerializer integrationEventSerializer;
 
     private readonly ServiceBusClient serviceBusClient;
 
     public AzureServiceBusMessagePublisher(
-        IIntegrationEventSerializer integrationEventSerializer, 
+        IIntegrationEventSerializer integrationEventSerializer,
         AzureServiceBusOptions options)
     {
         ArgumentNullException.ThrowIfNull(integrationEventSerializer);
@@ -22,6 +21,15 @@ public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 
         this.integrationEventSerializer = integrationEventSerializer;
         this.serviceBusClient = new ServiceBusClient(options.StorageConnectionString);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await this.serviceBusClient.DisposeAsync().ConfigureAwait(false);
+        foreach (var serviceBusSender in ServiceBusSenders)
+        {
+            await serviceBusSender.Value.DisposeAsync().ConfigureAwait(false);
+        }
     }
 
     public async Task PublishAsync(IIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
@@ -33,14 +41,5 @@ public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 
         var serializedIntegrationEvent = this.integrationEventSerializer.Serialize(integrationEvent);
         await sender.SendMessageAsync(new ServiceBusMessage(serializedIntegrationEvent), cancellationToken).ConfigureAwait(false);
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await this.serviceBusClient.DisposeAsync().ConfigureAwait(false);
-        foreach (var serviceBusSender in ServiceBusSenders)
-        {
-            await serviceBusSender.Value.DisposeAsync().ConfigureAwait(false);
-        }
     }
 }
