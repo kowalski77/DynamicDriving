@@ -31,7 +31,7 @@ public class TestHarnessEventContextFactory : IEventContextFactory
     public JsonSerializerContext GetContext() => TestHarnessEventContext.Default;
 }
 
-[JsonSerializable(typeof(TestHarnessEvent), GenerationMode = JsonSourceGenerationMode.Metadata)]
+[JsonSerializable(typeof(TestHarnessEvent), GenerationMode = JsonSourceGenerationMode.Serialization)]
 public partial class TestHarnessEventContext : JsonSerializerContext
 {
 }
