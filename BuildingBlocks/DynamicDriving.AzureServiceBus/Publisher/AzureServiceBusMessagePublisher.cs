@@ -3,7 +3,7 @@ using Azure.Messaging.ServiceBus;
 using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.Events;
 
-namespace DynamicDriving.AzureServiceBus;
+namespace DynamicDriving.AzureServiceBus.Publisher;
 
 public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 {

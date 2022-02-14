@@ -2,6 +2,7 @@
 
 using System.Text.Json.Serialization;
 using DynamicDriving.AzureServiceBus;
+using DynamicDriving.AzureServiceBus.Publisher;
 using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.Events;
 using Microsoft.Extensions.Configuration;
@@ -14,24 +15,22 @@ Console.WriteLine("Press a key to send a message through Azure Service Bus");
 Console.ReadKey();
 
 await using var serviceBus = new AzureServiceBusMessagePublisher(
-    new IntegrationEventSerializer(new IEventContextFactory[] { new TestHarnessEventContextFactory() }),
+    new IntegrationEventSerializer(new IEventContextFactory[] { new PingContextFactory() }),
     new AzureServiceBusOptions
     {
         StorageConnectionString = config["StorageConnectionString"]
     });
 
-await serviceBus.PublishAsync(new TestHarnessEvent(Guid.NewGuid(), "value1"));
+await serviceBus.PublishAsync(new Ping(Guid.NewGuid(), 10));
 
-public record TestHarnessEvent(Guid Id, string Value) : IIntegrationEvent;
-
-public class TestHarnessEventContextFactory : IEventContextFactory
+public class PingContextFactory : IEventContextFactory
 {
-    public Type ContextType => typeof(TestHarnessEvent);
+    public Type ContextType => typeof(Ping);
 
-    public JsonSerializerContext GetContext() => TestHarnessEventContext.Default;
+    public JsonSerializerContext GetContext() => PingContext.Default;
 }
 
-[JsonSerializable(typeof(TestHarnessEvent), GenerationMode = JsonSourceGenerationMode.Serialization)]
-public partial class TestHarnessEventContext : JsonSerializerContext
+[JsonSerializable(typeof(Ping), GenerationMode = JsonSourceGenerationMode.Serialization)]
+public partial class PingContext : JsonSerializerContext
 {
 }

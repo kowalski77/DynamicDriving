@@ -29,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5979F8D5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.BuildingBlocks.Tests", "BuildingBlocks\DynamicDriving.BuildingBlocks.Tests\DynamicDriving.BuildingBlocks.Tests.csproj", "{D477A1AC-356D-4721-985E-01AC4C6E90DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.BuildingBlocks.PerformanceTests", "BuildingBlocks\DynamicDriving.BuildingBlocks.PerformanceTests\DynamicDriving.BuildingBlocks.PerformanceTests.csproj", "{F3776066-7285-4EB0-9387-40176CEF99F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.BuildingBlocks.PerformanceTests", "BuildingBlocks\DynamicDriving.BuildingBlocks.PerformanceTests\DynamicDriving.BuildingBlocks.PerformanceTests.csproj", "{F3776066-7285-4EB0-9387-40176CEF99F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.AzureServiceBus.Receiver.TestHarness", "TestHarness\DynamicDriving.AzureServiceBus.Receiver.TestHarness\DynamicDriving.AzureServiceBus.Receiver.TestHarness.csproj", "{23B59181-8502-4C52-BADF-5D776C0855A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{F3776066-7285-4EB0-9387-40176CEF99F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3776066-7285-4EB0-9387-40176CEF99F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3776066-7285-4EB0-9387-40176CEF99F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23B59181-8502-4C52-BADF-5D776C0855A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23B59181-8502-4C52-BADF-5D776C0855A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23B59181-8502-4C52-BADF-5D776C0855A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23B59181-8502-4C52-BADF-5D776C0855A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{5979F8D5-F22F-4D30-AE63-8F0C10BD8397} = {F53D37A0-B1B1-4F03-8523-CF6807136AEF}
 		{D477A1AC-356D-4721-985E-01AC4C6E90DA} = {5979F8D5-F22F-4D30-AE63-8F0C10BD8397}
 		{F3776066-7285-4EB0-9387-40176CEF99F2} = {5979F8D5-F22F-4D30-AE63-8F0C10BD8397}
+		{23B59181-8502-4C52-BADF-5D776C0855A8} = {C101C2D5-D120-4C83-A294-2C5DA890E962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

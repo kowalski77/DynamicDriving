@@ -9,10 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Contracts\DynamicDriving.Events\DynamicDriving.Events.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Receiver\" />
   </ItemGroup>
 
 </Project>
