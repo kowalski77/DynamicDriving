@@ -9,7 +9,8 @@ public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
 
     public IntegrationEventSerializer(IEventContextFactory[] eventContextFactories)
     {
-        this.eventContextFactories = eventContextFactories ?? throw new ArgumentNullException(nameof(eventContextFactories));
+        this.eventContextFactories = eventContextFactories ?? 
+                                     throw new ArgumentNullException(nameof(eventContextFactories));
     }
 
     public string Serialize(IIntegrationEvent integrationEvent)

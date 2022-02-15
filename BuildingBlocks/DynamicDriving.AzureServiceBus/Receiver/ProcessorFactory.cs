@@ -33,7 +33,7 @@ public sealed class ProcessorFactory<T> : ProcessorFactoryWrapper
         using var scope = this.serviceProvider.CreateScope();
         var consumer = scope.ServiceProvider.GetRequiredService<IConsumer<T>>();
 
-        await consumer.Consume(message).ConfigureAwait(false);
+        await consumer.ExecuteAsync(message).ConfigureAwait(false);
     }
 
     private static Task ProcessorOnProcessErrorAsync(ProcessErrorEventArgs arg)

@@ -6,10 +6,7 @@ public static class MessageReceiverExtensions
 {
     public static IServiceCollection AddAzureServiceBusReceiver(this IServiceCollection services, Action<AzureServiceBusOptions> configure)
     {
-        if (configure == null)
-        {
-            throw new ArgumentNullException(nameof(configure));
-        }
+        ArgumentNullException.ThrowIfNull(configure);
 
         var options = new AzureServiceBusOptions();
         configure.Invoke(options);

@@ -2,5 +2,5 @@
 
 public interface IConsumer<in T>
 {
-    Task Consume(T message);
+    Task ExecuteAsync(T message);
 }

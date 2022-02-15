@@ -13,7 +13,7 @@ public sealed class Consumer<T> : IConsumer<T>
         this.translator = translator ?? throw new ArgumentNullException(nameof(translator));
     }
 
-    public async Task Consume(T message)
+    public async Task ExecuteAsync(T message)
     {
         var notification = this.translator.Translate(message);
 
