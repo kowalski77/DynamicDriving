@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Receiver\" />
+    <Folder Include="Serializers\Contexts\" />
   </ItemGroup>
 
 </Project>

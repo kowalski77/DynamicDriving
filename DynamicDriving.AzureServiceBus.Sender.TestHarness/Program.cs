@@ -1,9 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Text.Json.Serialization;
 using DynamicDriving.AzureServiceBus;
 using DynamicDriving.AzureServiceBus.Publisher;
 using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.AzureServiceBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using Microsoft.Extensions.Configuration;
 
@@ -22,15 +22,3 @@ await using var serviceBus = new AzureServiceBusMessagePublisher(
     });
 
 await serviceBus.PublishAsync(new Ping(Guid.NewGuid(), 10));
-
-public class PingContextFactory : IEventContextFactory
-{
-    public Type ContextType => typeof(Ping);
-
-    public JsonSerializerContext GetContext() => PingContext.Default;
-}
-
-[JsonSerializable(typeof(Ping), GenerationMode = JsonSourceGenerationMode.Serialization)]
-public partial class PingContext : JsonSerializerContext
-{
-}
