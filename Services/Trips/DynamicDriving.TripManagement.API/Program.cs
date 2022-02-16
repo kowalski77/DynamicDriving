@@ -1,3 +1,7 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

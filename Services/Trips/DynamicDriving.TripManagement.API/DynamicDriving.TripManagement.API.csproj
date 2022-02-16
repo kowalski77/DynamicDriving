@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="UseCases\Cars\" />
+    <Folder Include="UseCases\Trips\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj" />
+    <ProjectReference Include="..\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>
