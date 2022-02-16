@@ -5,4 +5,6 @@ namespace DynamicDriving.AzureServiceBus.Serializers;
 public interface IIntegrationEventSerializer
 {
     string Serialize(IIntegrationEvent integrationEvent);
+
+    Task<T> DeserializeAsync<T>(Stream data);
 }

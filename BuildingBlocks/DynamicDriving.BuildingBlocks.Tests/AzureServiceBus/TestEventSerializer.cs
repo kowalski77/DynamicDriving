@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.Events;
 
@@ -12,6 +13,8 @@ public class TestEventContextFactory : IEventContextFactory
     public Type ContextType => typeof(TestEvent);
 
     public JsonSerializerContext GetContext() => TestEventContext.Default;
+
+    public JsonTypeInfo GetJsonTypeInfo() => TestEventContext.Default.TestEvent;
 }
 
 [JsonSerializable(typeof(TestEvent), GenerationMode = JsonSourceGenerationMode.Serialization)]

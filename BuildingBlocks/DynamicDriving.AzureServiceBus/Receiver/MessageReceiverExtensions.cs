@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.AzureServiceBus.Serializers.Contexts;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;
 
@@ -13,6 +15,10 @@ public static class MessageReceiverExtensions
 
         services.AddSingleton<IServiceBusClientFactory, ServiceBusClientFactory>(_ => new ServiceBusClientFactory(options.StorageConnectionString));
         services.AddScoped(typeof(IConsumer<>), typeof(Consumer<>));
+        services.AddScoped<IIntegrationEventSerializer, IntegrationEventSerializer>(_ => new IntegrationEventSerializer(new IEventContextFactory[]
+        {
+            new PingContextFactory()
+        }));
 
         services.AddSingleton(sp =>
         {
