@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddMediatR(typeof(PingNotification).Assembly);
-builder.Services.AddScoped<ITranslator<Ping>, PingTranslator>();
+builder.Services.AddTranslator<Ping, PingTranslator>();
 builder.Services.AddAzureServiceBusReceiver(cfg =>
             {
                 cfg.StorageConnectionString = builder.Configuration["StorageConnectionString"];

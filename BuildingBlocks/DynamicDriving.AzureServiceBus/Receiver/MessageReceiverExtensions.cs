@@ -39,7 +39,7 @@ public static class MessageReceiverExtensions
     public static IServiceCollection AddTranslator<TEvent, TTranslator>(this IServiceCollection services)
         where TTranslator : class, ITranslator<TEvent>
     {
-        services.AddSingleton<ITranslator<TEvent>, TTranslator>();
+        services.AddScoped<ITranslator<TEvent>, TTranslator>();
 
         return services;
     }
