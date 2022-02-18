@@ -7,4 +7,10 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Maps\" />
+    <Folder Include="Users\" />
+    <Folder Include="Trips\" />
+  </ItemGroup>
+
 </Project>

@@ -8,17 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UseCases\Cars\" />
-    <Folder Include="UseCases\Trips\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UseCases\" />
   </ItemGroup>
 
 </Project>

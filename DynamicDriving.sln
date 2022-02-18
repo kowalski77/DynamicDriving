@@ -35,13 +35,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.AzureService
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Trips", "Trips", "{CFFD5220-3DFE-453F-BDB2-F0D67335AC16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.API", "Services\Trips\DynamicDriving.TripManagement.API\DynamicDriving.TripManagement.API.csproj", "{E24B2937-3B7B-4DA2-BA62-45133CA61791}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.API", "Services\Trips\DynamicDriving.TripManagement.API\DynamicDriving.TripManagement.API.csproj", "{E24B2937-3B7B-4DA2-BA62-45133CA61791}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.Application", "Services\Trips\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj", "{0FF7855E-63F3-4228-A6D3-DF700DCAFDE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Application", "Services\Trips\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj", "{0FF7855E-63F3-4228-A6D3-DF700DCAFDE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.Domain", "Services\Trips\DynamicDriving.TripManagement.Domain\DynamicDriving.TripManagement.Domain.csproj", "{04FCF736-1D70-4D31-8414-98B4818C3D8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Domain", "Services\Trips\DynamicDriving.TripManagement.Domain\DynamicDriving.TripManagement.Domain.csproj", "{04FCF736-1D70-4D31-8414-98B4818C3D8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.Infraestructure", "Services\Trips\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj", "{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Infraestructure", "Services\Trips\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj", "{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.SharedKernel", "BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj", "{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{0FF7855E-63F3-4228-A6D3-DF700DCAFDE2} = {CFFD5220-3DFE-453F-BDB2-F0D67335AC16}
 		{04FCF736-1D70-4D31-8414-98B4818C3D8A} = {CFFD5220-3DFE-453F-BDB2-F0D67335AC16}
 		{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6} = {CFFD5220-3DFE-453F-BDB2-F0D67335AC16}
+		{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3} = {F53D37A0-B1B1-4F03-8523-CF6807136AEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

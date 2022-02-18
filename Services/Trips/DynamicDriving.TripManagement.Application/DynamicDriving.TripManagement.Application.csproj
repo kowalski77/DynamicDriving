@@ -11,4 +11,11 @@
     <ProjectReference Include="..\DynamicDriving.TripManagement.Domain\DynamicDriving.TripManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Maps\" />
+    <Folder Include="Trips\Commands\" />
+    <Folder Include="Trips\Queries\" />
+    <Folder Include="Users\" />
+  </ItemGroup>
+
 </Project>
