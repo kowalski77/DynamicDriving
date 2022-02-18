@@ -29,7 +29,7 @@ public static class Guards
     {
         if (argument == Guid.Empty)
         {
-            ThrowNull(paramName);
+            ThrowGuidEmpty(paramName);
         }
 
         return argument;
@@ -45,5 +45,11 @@ public static class Guards
     private static void ThrowNull(string? paramName)
     {
         throw new ArgumentNullException(paramName);
+    }
+
+    [DoesNotReturn]
+    private static void ThrowGuidEmpty(string? paramName)
+    {
+        throw new ArgumentException("The guid has empty value", paramName);
     }
 }
