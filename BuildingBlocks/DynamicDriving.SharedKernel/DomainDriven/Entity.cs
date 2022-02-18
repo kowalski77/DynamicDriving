@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace DynamicDriving.SharedKernel.Repositories;
+namespace DynamicDriving.SharedKernel.DomainDriven;
 
 public abstract class Entity
 {

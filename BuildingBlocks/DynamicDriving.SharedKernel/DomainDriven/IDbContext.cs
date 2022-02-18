@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DynamicDriving.SharedKernel.Repositories;
+namespace DynamicDriving.SharedKernel.DomainDriven;
 
 public interface IDbContext
 {

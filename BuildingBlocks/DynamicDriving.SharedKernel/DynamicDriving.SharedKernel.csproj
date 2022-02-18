@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <Folder Include="DomainDriven\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DynamicDriving.SharedKernel.Repositories;
+namespace DynamicDriving.SharedKernel.DomainDriven;
 
 public abstract class TransactionContext : DbContext, IDbContext, IUnitOfWork
 {

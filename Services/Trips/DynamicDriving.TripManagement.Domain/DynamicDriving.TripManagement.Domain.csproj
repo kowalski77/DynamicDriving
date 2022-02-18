@@ -8,9 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Maps\" />
     <Folder Include="Users\" />
     <Folder Include="Trips\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

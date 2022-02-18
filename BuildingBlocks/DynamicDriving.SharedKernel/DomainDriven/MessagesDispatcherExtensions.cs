@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicDriving.SharedKernel.Repositories;
+namespace DynamicDriving.SharedKernel.DomainDriven;
 
 public static class MessagesDispatcherExtensions
 {

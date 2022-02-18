@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Maps\" />
+    <Folder Include="Cars\" />
     <Folder Include="Trips\Commands\" />
     <Folder Include="Trips\Queries\" />
     <Folder Include="Users\" />

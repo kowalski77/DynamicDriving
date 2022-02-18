@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.SharedKernel.Repositories;
+﻿namespace DynamicDriving.SharedKernel.DomainDriven;
 
 public interface IRepository<T>
     where T : class, IAggregateRoot
