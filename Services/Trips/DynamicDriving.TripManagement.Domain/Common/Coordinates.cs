@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 
-namespace DynamicDriving.TripManagement.Domain.Trips;
+namespace DynamicDriving.TripManagement.Domain.Common;
 
 public class Coordinates : ValueObject
 {

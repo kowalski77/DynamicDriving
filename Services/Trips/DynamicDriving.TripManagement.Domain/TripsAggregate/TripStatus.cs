@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.TripManagement.Domain.Trips;
+﻿namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
 public enum TripStatus
 {

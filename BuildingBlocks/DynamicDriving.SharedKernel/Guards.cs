@@ -35,6 +35,16 @@ public static class Guards
         return argument;
     }
 
+    public static string ThrowIfNullOrEmpty(string argument, [CallerArgumentExpression("argument")] string? paramName = null)
+    {
+        if (string.IsNullOrEmpty(argument))
+        {
+            ThrowGuidEmpty(paramName);
+        }
+
+        return argument;
+    }
+
     [DoesNotReturn]
     private static void ThrowOutOfRange(string? paramName)
     {

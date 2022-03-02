@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <Folder Include="DomainDriven\" />
+    <Folder Include="Envelopes\" />
+    <Folder Include="Results\" />
   </ItemGroup>
 
   <ItemGroup>

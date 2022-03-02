@@ -1,8 +1,7 @@
 ﻿using DynamicDriving.SharedKernel.DomainDriven;
 
-namespace DynamicDriving.TripManagement.Domain.Users;
+namespace DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 public class User : Entity, IAggregateRoot
 {
-    public Guid Id { get; set; }
 }

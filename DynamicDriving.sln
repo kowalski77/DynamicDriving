@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Infraestructure", "Services\Trips\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj", "{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.SharedKernel", "BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj", "{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.SharedKernel", "BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj", "{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

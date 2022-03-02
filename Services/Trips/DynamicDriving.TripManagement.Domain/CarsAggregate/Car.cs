@@ -1,8 +1,7 @@
 ﻿using DynamicDriving.SharedKernel.DomainDriven;
 
-namespace DynamicDriving.TripManagement.Domain.Cars;
+namespace DynamicDriving.TripManagement.Domain.CarsAggregate;
 
 public class Car : Entity, IAggregateRoot
 {
-    public Guid Id { get; set; }
 }
