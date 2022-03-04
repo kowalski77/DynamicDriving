@@ -5,5 +5,5 @@ namespace DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 
 public interface ILocationProvider
 {
-    Maybe<Location> GetLocation(Coordinates coordinates);
+    Task<Maybe<Location>> GetLocationAsync(Coordinates coordinates);
 }

@@ -11,14 +11,14 @@ public class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    internal Trip(User user, Car car, DateTime pickUp, Coordinates origin, Coordinates destination, TripStatus tripStatus)
+    internal Trip(User user, Car car, DateTime pickUp, Coordinates origin, Coordinates destination)
     {
         this.User = Guards.ThrowIfNull(user);
         this.Car = Guards.ThrowIfNull(car);
         this.PickUp = pickUp;
         this.Origin = Guards.ThrowIfNull(origin);
         this.Destination = Guards.ThrowIfNull(destination);
-        this.TripStatus = tripStatus;
+        this.TripStatus = TripStatus.Draft;
         this.Kilometers = 0;
     }
 

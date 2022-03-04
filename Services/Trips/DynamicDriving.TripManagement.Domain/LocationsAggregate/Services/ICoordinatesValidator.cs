@@ -5,5 +5,5 @@ namespace DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 
 public interface ICoordinatesValidator
 {
-     Result Validate(Coordinates coordinates);
+     Task<Result> ValidateAsync(Coordinates coordinates);
 }

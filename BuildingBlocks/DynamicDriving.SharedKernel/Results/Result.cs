@@ -15,7 +15,7 @@ public class Result
         this.Success = true;
     }
 
-    public ErrorResult? Error { get; set; }
+    public ErrorResult? Error { get; }
 
     public bool Success { get; }
 
