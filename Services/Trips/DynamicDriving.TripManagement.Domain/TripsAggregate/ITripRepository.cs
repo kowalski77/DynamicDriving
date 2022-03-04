@@ -1,6 +1,7 @@
-﻿namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
+﻿using DynamicDriving.SharedKernel.DomainDriven;
 
-public interface ITripRepository
+namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
+
+public interface ITripRepository : IRepository<Trip>
 {
-    
 }

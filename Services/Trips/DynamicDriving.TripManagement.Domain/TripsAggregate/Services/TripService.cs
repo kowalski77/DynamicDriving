@@ -1,6 +1,5 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Results;
-using DynamicDriving.TripManagement.Domain.CarsAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
@@ -17,11 +16,10 @@ public sealed class TripService : ITripService
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
-        User user, Car car, DateTime pickUp, 
+        User user, DateTime pickUp, 
         Coordinates origin, Coordinates destination)
     {
         ArgumentNullException.ThrowIfNull(user);
-        ArgumentNullException.ThrowIfNull(car);
         ArgumentNullException.ThrowIfNull(origin);
         ArgumentNullException.ThrowIfNull(destination);
 
@@ -37,7 +35,7 @@ public sealed class TripService : ITripService
             return Result.Fail<Trip>(destinationValidation.Error!);
         }
 
-        var trip = new Trip(user, car, pickUp, origin, destination);
+        var trip = new Trip(user, pickUp, origin, destination);
 
         return Result.Ok(trip);
     }

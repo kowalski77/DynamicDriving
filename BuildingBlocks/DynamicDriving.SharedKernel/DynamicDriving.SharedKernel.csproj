@@ -10,6 +10,8 @@
   <ItemGroup>
     <Folder Include="DomainDriven\" />
     <Folder Include="Envelopes\" />
+    <Folder Include="Mediator\" />
+    <Folder Include="ResultModels\" />
     <Folder Include="Results\" />
   </ItemGroup>
 

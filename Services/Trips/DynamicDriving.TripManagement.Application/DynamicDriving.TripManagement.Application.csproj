@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="Cars\" />
+    <Folder Include="Locations\" />
     <Folder Include="Trips\Commands\" />
     <Folder Include="Trips\Queries\" />
     <Folder Include="Users\" />

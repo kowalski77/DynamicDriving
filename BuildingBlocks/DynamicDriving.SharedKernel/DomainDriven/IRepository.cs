@@ -5,5 +5,7 @@ public interface IRepository<T>
 {
     IUnitOfWork UnitOfWork { get; }
 
-    Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    T Add(T item);
+
+    Task<Maybe<T>> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }

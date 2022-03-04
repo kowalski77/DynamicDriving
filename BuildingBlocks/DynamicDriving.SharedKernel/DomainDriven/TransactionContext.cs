@@ -46,10 +46,7 @@ public abstract class TransactionContext : DbContext, IDbContext, IUnitOfWork
 
     public virtual Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default)
     {
-        if (transaction is null)
-        {
-            throw new ArgumentNullException(nameof(transaction));
-        }
+        Guards.ThrowIfNull(transaction);
 
         if (transaction != this.currentTransaction)
         {

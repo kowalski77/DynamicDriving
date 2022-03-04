@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
-using DynamicDriving.TripManagement.Domain.CarsAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
@@ -23,7 +22,7 @@ public class TripServiceTests
         [Frozen] Mock<ILocationProvider> locationProviderMock,
         [Frozen] Mock<ILocationRepository> locationRepositoryMock,
         Location location,
-        User user, Car car, DateTime pickUp, Coordinates origin, Coordinates destination,
+        User user, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
         // Arrange
@@ -33,7 +32,7 @@ public class TripServiceTests
             .Returns(new List<Location> { location });
 
         // Act
-        var result = await sut.CreateDraftTripAsync(user, car, pickUp, origin, destination);
+        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination);
 
         // Assert
         result.Success.Should().BeTrue();
