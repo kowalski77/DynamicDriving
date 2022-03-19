@@ -22,7 +22,7 @@ public sealed class ResultModel<T> : ResultModel, IResultModel<T>
     {
         get
         {
-            if (!this.Success)
+            if (this.Failure || this.value is null)
             {
                 throw new InvalidOperationException("The result object has no value.");
             }

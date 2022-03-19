@@ -8,15 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DomainDriven\" />
     <Folder Include="Envelopes\" />
     <Folder Include="Mediator\" />
+    <Folder Include="Validators\" />
     <Folder Include="ResultModels\" />
     <Folder Include="Results\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />

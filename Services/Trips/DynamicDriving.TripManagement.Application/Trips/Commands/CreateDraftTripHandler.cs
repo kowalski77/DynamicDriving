@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.ResultModels;
+using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
@@ -20,7 +21,11 @@ public class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IResultMo
 
     public async Task<IResultModel<DraftTripDto>> Handle(CreateDraftTrip request, CancellationToken cancellationToken)
     {
-        //Guards.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(request);
+
+        var originCoordinates = Coordinates.CreateInstance(request.OriginLatitude, request.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(request.DestinationLatitude, request.DestinationLongitude);
+
 
         //var resultModel = await ResultModel.Init()
         //    .OnSuccess(async () =>

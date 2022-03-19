@@ -10,7 +10,7 @@ public static class MessagesDispatcherExtensions
         DbContext context,
         CancellationToken cancellationToken = default)
     {
-        Guards.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(context);
 
         var domainEntities = context.ChangeTracker
             .Entries<Entity>()

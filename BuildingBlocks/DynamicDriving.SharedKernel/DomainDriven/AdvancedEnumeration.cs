@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace DynamicDriving.SharedKernel.DomainDriven;
 
-public class Enumeration<T>
+public class AdvancedEnumeration<T>
 {
-    protected Enumeration() { }
+    protected AdvancedEnumeration() { }
 
-    protected Enumeration(int id, string name)
+    protected AdvancedEnumeration(int id, string name)
     {
         (this.Id, this.Name) = (id, name);
     }

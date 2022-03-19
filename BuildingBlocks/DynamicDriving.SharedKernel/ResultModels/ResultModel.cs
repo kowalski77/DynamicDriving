@@ -10,13 +10,6 @@ public class ResultModel : IResultModel
         this.Success = false;
     }
 
-    private ResultModel(IEnumerable<ErrorResult> errors)
-    {
-        this.ErrorResultCollection = errors.ToList();
-        this.ErrorResult = this.ErrorResultCollection[0];
-        this.Success = false;
-    }
-
     protected ResultModel()
     {
         this.Success = true;
@@ -24,9 +17,9 @@ public class ResultModel : IResultModel
 
     public ErrorResult? ErrorResult { get; }
 
-    public IReadOnlyList<ErrorResult> ErrorResultCollection { get; } = Array.Empty<ErrorResult>();
-
     public bool Success { get; }
+
+    public bool Failure => !this.Success;
 
     public static IResultModel Ok()
     {
@@ -40,22 +33,17 @@ public class ResultModel : IResultModel
         return new ResultModel<T>(value);
     }
 
-    public static IResultModel Fail(ErrorResult error)
+    public static IResultModel Fail(ErrorResult? error)
     {
         return new ResultModel(error);
     }
 
-    public static IResultModel Fail(IEnumerable<ErrorResult> errorResults)
-    {
-        return new ResultModel(errorResults);
-    }
-
-    public static IResultModel<T> Fail<T>(ErrorResult error)
+    public static IResultModel<T> Fail<T>(ErrorResult? error)
     {
         return new ResultModel<T>(default!, error);
     }
 
-    public static IResultModel<T> Fail<T>(T value, ErrorResult error)
+    public static IResultModel<T> Fail<T>(T value, ErrorResult? error)
     {
         return new ResultModel<T>(value, error);
     }
