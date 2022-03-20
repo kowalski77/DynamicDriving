@@ -1,7 +1,21 @@
-﻿namespace DynamicDriving.SharedKernel.ResultModels;
+﻿using DynamicDriving.SharedKernel.Results;
+
+namespace DynamicDriving.SharedKernel.ResultModels;
 
 public static class ResultModelExtensions
 {
+    public static IResultModel Validate(this IResultModel _, params Result[] results)
+    {
+        var errorCollection = (from result in results
+                where result.Failure
+                select Result.Fail(result.Error!))
+            .ToList();
+
+        return errorCollection.Any() ? 
+            ResultModel.Fail(errorCollection.Select(x => x.Error!)) : 
+            ResultModel.Ok();
+    }
+
     public static async Task<IResultModel<T>> OnSuccess<T>(this IResultModel resultModel, Func<Task<IResultModel<T>>> func)
     {
         ArgumentNullException.ThrowIfNull(resultModel);
@@ -74,5 +88,15 @@ public static class ResultModelExtensions
         return awaitedResultModel.Success ? 
             await func(awaitedResultModel.Value).ConfigureAwait(false) : 
             ResultModel.Fail<TR>(awaitedResultModel.ErrorResult);
+    }
+
+    public static async Task<IResultModel<TR>> Map<T, TR>(this Task<IResultModel<T>> resultModel, Func<T, TR> mapper)
+    {
+        ArgumentNullException.ThrowIfNull(resultModel);
+        ArgumentNullException.ThrowIfNull(mapper);
+
+        var awaitedResultModel = await resultModel.ConfigureAwait(false);
+
+        return ResultModel.Ok(mapper(awaitedResultModel.Value));
     }
 }

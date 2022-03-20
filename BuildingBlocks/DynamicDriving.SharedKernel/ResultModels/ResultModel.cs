@@ -26,11 +26,16 @@ public class ResultModel : IResultModel
         return new ResultModel();
     }
 
-    public static IResultModel Init() => Ok();
+    public static IResultModel Init => Ok();
 
     public static IResultModel<T> Ok<T>(T value)
     {
         return new ResultModel<T>(value);
+    }
+
+    public static IResultModel Fail(IEnumerable<ErrorResult> errorResults)
+    {
+        return new ResultModel(errorResults.First()); // TODO: rethink this
     }
 
     public static IResultModel Fail(ErrorResult? error)

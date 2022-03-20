@@ -25,6 +25,16 @@ public static class Guards
         return argument;
     }
 
+    public static decimal ThrowIfNotInBetween(decimal argument, decimal min, decimal max, [CallerArgumentExpression("argument")] string? paramName = null)
+    {
+        if (argument < min || argument > max)
+        {
+            ThrowOutOfRange(paramName);
+        }
+
+        return argument;
+    }
+
     public static Guid ThrowIfEmpty(Guid argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
         if (argument == Guid.Empty)

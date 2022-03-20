@@ -1,23 +1,38 @@
-﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.SharedKernel.DomainDriven;
+﻿using DynamicDriving.SharedKernel.DomainDriven;
+using DynamicDriving.SharedKernel.Results;
 
 namespace DynamicDriving.TripManagement.Domain.Common;
 
-public class Coordinates : ValueObject
+public sealed class Coordinates : ValueObject
 {
+    private const decimal MinLatitude = -90;
+    private const decimal MaxLatitude = 90;
+    private const decimal MinLongitude = -180;
+    private const decimal MaxLongitude = 180;
+
     private Coordinates(decimal latitude, decimal longitude)
     {
-        this.Latitude = Guards.ThrowIfLessThan(latitude, 0);
-        this.Longitude = Guards.ThrowIfLessThan(longitude, 0);
+        this.Latitude = latitude;
+        this.Longitude = longitude;
     }
 
     public decimal Latitude { get; }
 
     public decimal Longitude { get; }
 
-    public static Coordinates CreateInstance(decimal latitude, decimal longitude)
+    public static Result<Coordinates> CreateInstance(decimal latitude, decimal longitude)
     {
-        return new Coordinates(latitude, longitude);
+        if (latitude is < MinLatitude or > MaxLatitude)
+        {
+            return Result.Fail<Coordinates>(DomainErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
+        }
+
+        if (longitude is < MinLongitude or > MaxLongitude)
+        {
+            return Result.Fail<Coordinates>(DomainErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
+        }
+
+        return Result.Ok(new Coordinates(latitude, longitude));
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
