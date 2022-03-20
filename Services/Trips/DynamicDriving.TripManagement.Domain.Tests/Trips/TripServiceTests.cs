@@ -6,7 +6,7 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
-namespace DynamicDriving.TripManagement.Domain.Tests;
+namespace DynamicDriving.TripManagement.Domain.Tests.Trips;
 
 public class TripServiceTests
 {
