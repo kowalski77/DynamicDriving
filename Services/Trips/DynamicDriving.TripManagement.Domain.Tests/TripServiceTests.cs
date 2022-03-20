@@ -74,21 +74,21 @@ public class TripServiceTests
         result.Error!.Code.Should().Be(DomainErrorConstants.InvalidCoordinatesCode);
         result.Error!.Message.Should().Be(string.Format(DomainErrorConstants.InvalidCityCoordinatesMessage, origin.Latitude, origin.Longitude));
     }
-}
 
-public class TripServiceDataSourceAttribute : CustomDataSourceAttribute
-{
-    public TripServiceDataSourceAttribute() : base(new ValidatorCustomization())
+    private class TripServiceDataSourceAttribute : CustomDataSourceAttribute
     {
-    }
-
-    private class ValidatorCustomization : ICustomization
-    {
-        public void Customize(IFixture fixture)
+        public TripServiceDataSourceAttribute() : base(new ValidatorCustomization())
         {
-            fixture.Register<ICoordinatesValidator>(fixture.Create<CoordinatesValidator>);
-            var coordinates = Coordinates.CreateInstance(10, 10);
-            fixture.Inject(coordinates.Value);
+        }
+
+        private class ValidatorCustomization : ICustomization
+        {
+            public void Customize(IFixture fixture)
+            {
+                fixture.Register<ICoordinatesValidator>(fixture.Create<CoordinatesValidator>);
+                var coordinates = Coordinates.CreateInstance(10, 10);
+                fixture.Inject(coordinates.Value);
+            }
         }
     }
 }
