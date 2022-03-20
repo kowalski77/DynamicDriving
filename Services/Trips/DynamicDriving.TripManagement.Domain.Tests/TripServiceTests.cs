@@ -47,6 +47,8 @@ public class TripServiceTests
 
         // Assert
         result.Success.Should().BeFalse();
+        result.Error!.Code.Should().Be(DomainErrorConstants.InvalidCoordinatesCode);
+        result.Error!.Message.Should().Be(string.Format(DomainErrorConstants.InvalidCoordinatesMessage, origin.Latitude, origin.Longitude));
     }
 
     [Theory, TripServiceDataSource]
@@ -69,6 +71,8 @@ public class TripServiceTests
 
         // Assert
         result.Success.Should().BeFalse();
+        result.Error!.Code.Should().Be(DomainErrorConstants.InvalidCoordinatesCode);
+        result.Error!.Message.Should().Be(string.Format(DomainErrorConstants.InvalidCityCoordinatesMessage, origin.Latitude, origin.Longitude));
     }
 }
 
