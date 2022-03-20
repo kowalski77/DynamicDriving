@@ -24,12 +24,12 @@ public sealed class Coordinates : ValueObject
     {
         if (latitude is < MinLatitude or > MaxLatitude)
         {
-            return Result.Fail<Coordinates>(DomainErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
+            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
         }
 
         if (longitude is < MinLongitude or > MaxLongitude)
         {
-            return Result.Fail<Coordinates>(DomainErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
+            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
         }
 
         return Result.Ok(new Coordinates(latitude, longitude));
