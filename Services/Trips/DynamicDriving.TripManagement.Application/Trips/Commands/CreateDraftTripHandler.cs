@@ -52,7 +52,7 @@ public class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IResultMo
 
     private async Task<IResultModel<Trip>> CreateTripAsync(User user, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
     {
-        var result = await this.tripService.CreateDraftTripAsync(user, pickUp, origin, destination).ConfigureAwait(false);
+        var result = await this.tripService.CreateDraftTripAsync(user, pickUp, origin, destination, cancellationToken).ConfigureAwait(false);
         if (result.Failure)
         {
             return ResultModel.Fail<Trip>(result.Error);

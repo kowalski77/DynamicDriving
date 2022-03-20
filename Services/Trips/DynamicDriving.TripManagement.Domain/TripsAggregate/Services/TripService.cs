@@ -17,19 +17,20 @@ public sealed class TripService : ITripService
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
         User user, DateTime pickUp, 
-        Coordinates origin, Coordinates destination)
+        Coordinates origin, Coordinates destination,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(user);
         ArgumentNullException.ThrowIfNull(origin);
         ArgumentNullException.ThrowIfNull(destination);
 
-        var originValidation = await this.coordinatesValidator.ValidateAsync(origin).ConfigureAwait(false);
+        var originValidation = await this.coordinatesValidator.ValidateAsync(origin, cancellationToken).ConfigureAwait(false);
         if (originValidation.Failure)
         {
             return Result.Fail<Trip>(originValidation.Error!);
         }
 
-        var destinationValidation = await this.coordinatesValidator.ValidateAsync(destination).ConfigureAwait(false);
+        var destinationValidation = await this.coordinatesValidator.ValidateAsync(destination, cancellationToken).ConfigureAwait(false);
         if (destinationValidation.Failure)
         {
             return Result.Fail<Trip>(destinationValidation.Error!);

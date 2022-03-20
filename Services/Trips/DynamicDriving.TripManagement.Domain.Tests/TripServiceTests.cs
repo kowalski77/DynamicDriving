@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
@@ -17,7 +18,7 @@ namespace DynamicDriving.TripManagement.Domain.Tests;
 
 public class TripServiceTests
 {
-    [Theory, TestServiceDataSource]
+    [Theory, TripServiceDataSource]
     public async Task Draft_trip_is_created_when_valid_coordinates(
         [Frozen] Mock<ILocationProvider> locationProviderMock,
         [Frozen] Mock<ILocationRepository> locationRepositoryMock,
@@ -28,11 +29,11 @@ public class TripServiceTests
         // Arrange
         locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
             .ReturnsAsync(location);
-        locationRepositoryMock.Setup(x => x.GetLocations())
+        locationRepositoryMock.Setup(x => x.GetLocations(CancellationToken.None))
             .Returns(new List<Location> { location });
 
         // Act
-        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination);
+        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeTrue();
@@ -40,9 +41,9 @@ public class TripServiceTests
     }
 }
 
-public class TestServiceDataSourceAttribute : CustomDataSourceAttribute
+public class TripServiceDataSourceAttribute : CustomDataSourceAttribute
 {
-    public TestServiceDataSourceAttribute() : base(new ValidatorCustomization())
+    public TripServiceDataSourceAttribute() : base(new ValidatorCustomization())
     {
     }
 
@@ -51,6 +52,8 @@ public class TestServiceDataSourceAttribute : CustomDataSourceAttribute
         public void Customize(IFixture fixture)
         {
             fixture.Register<ICoordinatesValidator>(fixture.Create<CoordinatesValidator>);
+            var coordinates = Coordinates.CreateInstance(10, 10);
+            fixture.Inject(coordinates.Value);
         }
     }
 }
