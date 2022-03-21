@@ -51,8 +51,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.Models", "Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj", "{D3C39D01-2794-47FB-AB9B-4ECA313D3997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.Application.IntegrationTests", "Services\Trips\DynamicDriving.TripManagement.Application.IntegrationTests\DynamicDriving.TripManagement.Application.IntegrationTests.csproj", "{7C3023EB-F573-4368-B33A-19F0028F1086}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,10 +109,6 @@ Global
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C3023EB-F573-4368-B33A-19F0028F1086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C3023EB-F573-4368-B33A-19F0028F1086}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C3023EB-F573-4368-B33A-19F0028F1086}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C3023EB-F573-4368-B33A-19F0028F1086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,7 +134,6 @@ Global
 		{7F9E813C-C546-45F0-9316-321947A711C4} = {CFFD5220-3DFE-453F-BDB2-F0D67335AC16}
 		{ACACE4A0-D7D3-46B1-87CE-9961DC3EC413} = {7F9E813C-C546-45F0-9316-321947A711C4}
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997} = {FC24E38B-3B33-4C93-9F3E-7EEB52E48F77}
-		{7C3023EB-F573-4368-B33A-19F0028F1086} = {7F9E813C-C546-45F0-9316-321947A711C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

@@ -11,7 +11,7 @@ public class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    internal Trip(User user, DateTime pickUp, Coordinates origin, Coordinates destination)
+    public Trip(User user, DateTime pickUp, Coordinates origin, Coordinates destination)
     {
         this.User = Guards.ThrowIfNull(user);
         this.PickUp = pickUp;

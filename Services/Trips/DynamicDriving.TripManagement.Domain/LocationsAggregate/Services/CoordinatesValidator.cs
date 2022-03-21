@@ -25,7 +25,7 @@ public class CoordinatesValidator : ICoordinatesValidator
             return Result.Fail(LocationErrors.InvalidCoordinates(coordinates.Latitude, coordinates.Longitude));
         }
 
-        var currentLocations = this.locationRepository.GetLocations(cancellationToken);
+        var currentLocations = await this.locationRepository.GetLocationsAsync(cancellationToken).ConfigureAwait(false);
         return currentLocations.Contains(location) ? 
             Result.Ok() : 
             Result.Fail(LocationErrors.InvalidCityCoordinates(coordinates.Latitude, coordinates.Longitude));

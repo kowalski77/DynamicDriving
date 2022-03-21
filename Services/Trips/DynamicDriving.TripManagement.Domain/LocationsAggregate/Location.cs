@@ -12,7 +12,7 @@ public class Location : Entity, IAggregateRoot
         this.Coordinates = Guards.ThrowIfNull(coordinates);
     }
 
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
-    public Coordinates Coordinates { get; set; }
+    public Coordinates Coordinates { get; private set; }
 }

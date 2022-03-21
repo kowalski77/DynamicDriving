@@ -2,5 +2,5 @@
 
 public interface ILocationRepository
 {
-    public IReadOnlyList<Location> GetLocations(CancellationToken cancellationToken = default);
+    public Task<IReadOnlyList<Location>> GetLocationsAsync(CancellationToken cancellationToken = default);
 }

@@ -21,8 +21,8 @@ public class TripServiceTests
         // Arrange
         locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
             .ReturnsAsync(location);
-        locationRepositoryMock.Setup(x => x.GetLocations(CancellationToken.None))
-            .Returns(new List<Location> { location });
+        locationRepositoryMock.Setup(x => x.GetLocationsAsync(CancellationToken.None))
+            .ReturnsAsync(new[] { location });
 
         // Act
         var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
@@ -63,8 +63,8 @@ public class TripServiceTests
         // Arrange
         locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
             .ReturnsAsync(location);
-        locationRepositoryMock.Setup(x => x.GetLocations(CancellationToken.None))
-            .Returns(new List<Location> { otherLocation });
+        locationRepositoryMock.Setup(x => x.GetLocationsAsync(CancellationToken.None))
+            .ReturnsAsync(new[] { otherLocation });
 
         // Act
         var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
