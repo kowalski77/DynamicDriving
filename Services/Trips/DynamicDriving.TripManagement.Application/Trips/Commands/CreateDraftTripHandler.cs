@@ -2,7 +2,6 @@
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.ResultModels;
-using DynamicDriving.TripManagement.Application.Users;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
