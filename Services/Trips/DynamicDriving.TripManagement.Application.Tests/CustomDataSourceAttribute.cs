@@ -4,7 +4,7 @@
 public class CustomDataSourceAttribute : AutoDataAttribute
 {
     public CustomDataSourceAttribute() : base(() =>
-        new Fixture().Customize(new AutoMoqCustomization()))
+        new Fixture().Customize(new AutoMoqCustomization { ConfigureMembers = true }))
     {
     }
 

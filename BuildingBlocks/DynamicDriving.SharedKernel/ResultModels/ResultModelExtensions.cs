@@ -97,6 +97,8 @@ public static class ResultModelExtensions
 
         var awaitedResultModel = await resultModel.ConfigureAwait(false);
 
-        return ResultModel.Ok(mapper(awaitedResultModel.Value));
+        return awaitedResultModel.Success ? 
+            ResultModel.Ok(mapper(awaitedResultModel.Value)) : 
+            ResultModel.Fail<TR>(awaitedResultModel.ErrorResult);
     }
 }

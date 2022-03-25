@@ -1,4 +1,5 @@
-﻿using DynamicDriving.SharedKernel.Results;
+﻿using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -37,6 +38,68 @@ public class CreateDraftTripHandlerShould
         result.Value.Id.Should().Be(trip.Id);
         tripRepositoryMock.Verify(x => x.Add(trip), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Once);
+    }
+
+    [Theory, HandlerDataSource]
+    public async Task Return_error_when_coordinates_are_not_valid(
+        [Frozen] Mock<ITripRepository> tripRepositoryMock,
+        CreateDraftTrip command,
+        CreateDraftTripHandler sut)
+    {
+        // Arrange
+        var commandWithOutOfRangeLatitude = command with { OriginLatitude = -150 };
+
+        // Act
+        var result = await sut.Handle(commandWithOutOfRangeLatitude, CancellationToken.None);
+
+        // Assert
+        result.Success.Should().BeFalse();
+        result.ErrorResult!.Code.Should().Be(DomainErrorConstants.InvalidCoordinatesCode);
+        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
+        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
+    }
+
+    [Theory, HandlerDataSource]
+    public async Task Return_error_when_user_not_found(
+        [Frozen] Mock<ITripRepository> tripRepositoryMock,
+        CreateDraftTrip command,
+        CreateDraftTripHandler sut)
+    {
+        // Act
+        var result = await sut.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.Success.Should().BeFalse();
+        result.ErrorResult!.Code.Should().Be(ErrorConstants.RecordNotFound);
+        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
+        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
+    }
+
+    [Theory, HandlerDataSource]
+    public async Task Return_error_when_cannot_create_a_draft_trip(
+        [Frozen] Mock<ITripRepository> tripRepositoryMock,
+        [Frozen] Mock<IUserRepository> userRepositoryMock,
+        [Frozen] Mock<ITripService> tripServiceMock,
+        User user,
+        string errorCode, string errorMessage,
+        CreateDraftTrip command,
+        CreateDraftTripHandler sut)
+    {
+        // Arrange
+        userRepositoryMock.Setup(x => x.GetAsync(command.UserId, CancellationToken.None))
+            .ReturnsAsync(user);
+        tripServiceMock.Setup(x => x.CreateDraftTripAsync(user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync(Result.Fail<Trip>(new ErrorResult(errorCode, errorMessage)));
+
+        // Act
+        var result = await sut.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.Success.Should().BeFalse();
+        result.ErrorResult!.Code.Should().Be(errorCode);
+        result.ErrorResult!.Message.Should().Be(errorMessage);
+        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
+        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }
 
     private class HandlerDataSourceAttribute : CustomDataSourceAttribute
