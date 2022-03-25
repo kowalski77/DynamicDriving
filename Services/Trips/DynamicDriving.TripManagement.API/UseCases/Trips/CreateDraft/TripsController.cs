@@ -14,12 +14,17 @@ public class TripsController : ApplicationController
     }
 
     [HttpPost("draft")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+    [ProducesDefaultResponseType(typeof(Envelope))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        return this.Ok();
+        var command = model.AsCommand();
+        var result = await this.Mediator.Send(command).ConfigureAwait(false);
+
+        return FromResultModel(result);
     }
 }

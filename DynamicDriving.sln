@@ -51,7 +51,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.Models", "Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj", "{D3C39D01-2794-47FB-AB9B-4ECA313D3997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.Application.Tests", "Services\Trips\DynamicDriving.TripManagement.Application.Tests\DynamicDriving.TripManagement.Application.Tests.csproj", "{8DB578E2-5468-48FE-89EF-0C8B488C71DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Application.Tests", "Services\Trips\DynamicDriving.TripManagement.Application.Tests\DynamicDriving.TripManagement.Application.Tests.csproj", "{8DB578E2-5468-48FE-89EF-0C8B488C71DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.API.Tests", "Services\Trips\DynamicDriving.TripManagement.API.Tests\DynamicDriving.TripManagement.API.Tests.csproj", "{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +117,10 @@ Global
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +147,7 @@ Global
 		{ACACE4A0-D7D3-46B1-87CE-9961DC3EC413} = {7F9E813C-C546-45F0-9316-321947A711C4}
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997} = {FC24E38B-3B33-4C93-9F3E-7EEB52E48F77}
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC} = {7F9E813C-C546-45F0-9316-321947A711C4}
+		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0} = {7F9E813C-C546-45F0-9316-321947A711C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}
