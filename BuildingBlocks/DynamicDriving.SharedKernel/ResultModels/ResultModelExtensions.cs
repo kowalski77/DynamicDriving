@@ -90,7 +90,7 @@ public static class ResultModelExtensions
             ResultModel.Fail<TR>(awaitedResultModel.ErrorResult);
     }
 
-    public static async Task<IResultModel<TR>> Map<T, TR>(this Task<IResultModel<T>> resultModel, Func<T, TR> mapper)
+    public static async Task<IResultModel<TR>> OnSuccess<T, TR>(this Task<IResultModel<T>> resultModel, Func<T, TR> mapper)
     {
         ArgumentNullException.ThrowIfNull(resultModel);
         ArgumentNullException.ThrowIfNull(mapper);

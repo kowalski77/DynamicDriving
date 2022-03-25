@@ -10,7 +10,7 @@ using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IResultModel<DraftTripDto>>
+public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IResultModel<DraftTripDto>>
 {
     private readonly ITripService tripService;
     private readonly ITripRepository tripRepository;
@@ -34,7 +34,7 @@ public class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IResultMo
             .Validate(originCoordinates, destinationCoordinates)
             .OnSuccess(async () => await this.GetUserAsync(request.UserId, cancellationToken).ConfigureAwait(false))
             .OnSuccess(async user => await this.CreateTripAsync(user, request.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken).ConfigureAwait(false))
-            .Map(trip => new DraftTripDto(trip.Id))
+            .OnSuccess(trip => new DraftTripDto(trip.Id))
             .ConfigureAwait(false);
 
         return resultModel;
