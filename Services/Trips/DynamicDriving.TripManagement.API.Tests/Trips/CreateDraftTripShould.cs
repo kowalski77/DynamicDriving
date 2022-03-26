@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
@@ -14,9 +13,8 @@ namespace DynamicDriving.TripManagement.API.Tests.Trips;
 
 public class CreateDraftTripShould
 {
-    [Theory]
-    [CustomDataSource]
-    public async Task Return_success_result_when_model_is_valid(
+    [Theory, CustomDataSource]
+    public async Task Return_success_envelope_result_when_model_is_valid(
         [Frozen] Mock<IMediator> mediatorMock,
         DraftTripDto draftTripDto,
         CreateDraftTripModel model,
@@ -32,22 +30,50 @@ public class CreateDraftTripShould
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
         envelopeResult.StatusCode.Should().Be(StatusCodes.Status200OK);
-        var value = (Envelope<DraftTripDto>)envelopeResult.Envelope;
-        value.Result.Id.Should().Be(draftTripDto.Id);
+        var resultDto = (DraftTripDto)((Envelope<object>)envelopeResult.Envelope).Result;
+        resultDto.Id.Should().Be(draftTripDto.Id);
     }
 
-    private class ControllerDataSourceAttribute : CustomDataSourceAttribute
+    [Theory, CustomDataSource]
+    public async Task Return_error_envelope_result_when_not_found_user(
+        [Frozen] Mock<IMediator> mediatorMock,
+        string errorMessage,
+        CreateDraftTripModel model,
+        TripsController sut)
     {
-        public ControllerDataSourceAttribute() : base(new MediatorCustomization())
-        {
-        }
+        // Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+            .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
 
-        private class MediatorCustomization : ICustomization
-        {
-            public void Customize(IFixture fixture)
-            {
-                throw new NotImplementedException();
-            }
-        }
+        // Act
+        var actionResult = await sut.CreateDraftTrip(model);
+
+        // Assert
+        var envelopeResult = (EnvelopeResult)actionResult;
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        envelopeResult.Envelope.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
+        envelopeResult.Envelope.ErrorMessage.Should().Be(errorMessage);
+    }
+
+    [Theory, CustomDataSource]
+    public async Task Return_error_envelope_result_when_bad_request(
+        [Frozen] Mock<IMediator> mediatorMock,
+        string errorCode,
+        string errorMessage,
+        CreateDraftTripModel model,
+        TripsController sut)
+    {
+        // Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+            .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
+
+        // Act
+        var actionResult = await sut.CreateDraftTrip(model);
+
+        // Assert
+        var envelopeResult = (EnvelopeResult)actionResult;
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        envelopeResult.Envelope.ErrorCode.Should().Be(errorCode);
+        envelopeResult.Envelope.ErrorMessage.Should().Be(errorMessage);
     }
 }
