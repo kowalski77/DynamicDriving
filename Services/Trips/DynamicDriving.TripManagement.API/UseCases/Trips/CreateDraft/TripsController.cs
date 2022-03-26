@@ -25,6 +25,6 @@ public class TripsController : ApplicationController
         var command = model.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
-        return FromResultModel(result);
+        return FromResultModel(result); // TODO: change to this.CreatedResultModel when GetById is available
     }
 }

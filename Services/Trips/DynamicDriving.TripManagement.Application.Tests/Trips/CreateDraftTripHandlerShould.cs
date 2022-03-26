@@ -12,7 +12,7 @@ namespace DynamicDriving.TripManagement.Application.Tests.Trips;
 public class CreateDraftTripHandlerShould
 {
     [Theory, HandlerDataSource]
-    public async Task Create_a_draft_trip_when_coordinates_are_valid(
+    public async Task Return_a_draft_trip_identifier_when_command_is_valid(
         [Frozen] Mock<ITripService> tripServiceMock,
         [Frozen] Mock<ITripRepository> tripRepositoryMock,
         [Frozen] Mock<IUserRepository> userRepositoryMock,

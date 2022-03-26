@@ -23,7 +23,7 @@ public class Envelope
     public DateTime TimeGenerated { get; set; }
 
     public static Envelope Ok<T>([NotNull]T result)
-        where T : notnull
+        where T : class
     {
         return new Envelope<T>(result);
     }

@@ -42,6 +42,7 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IR
 
     private async Task<IResultModel<User>> GetUserAsync(Guid userId, CancellationToken cancellationToken)
     {
+        // TODO: If user not found must be an Exception!!! it's a application error, not controlled
         var maybeUser = await this.userRepository.GetAsync(userId, cancellationToken).ConfigureAwait(false);
 
         return !maybeUser.TryGetValue(out var user) ?

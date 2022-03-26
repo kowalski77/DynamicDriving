@@ -2,7 +2,8 @@
 
 namespace DynamicDriving.SharedKernel.Envelopes;
 
-public class Envelope<T> : Envelope
+public class Envelope<T> : Envelope 
+    where T : class
 {
     public Envelope([DisallowNull] T result)
     {

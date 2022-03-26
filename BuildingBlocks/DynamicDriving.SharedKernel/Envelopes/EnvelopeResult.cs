@@ -5,21 +5,19 @@ namespace DynamicDriving.SharedKernel.Envelopes
 {
     public sealed class EnvelopeResult : IActionResult
     {
-        private readonly Envelope envelope;
-        private readonly int statusCode;
-
         public EnvelopeResult(Envelope envelope, HttpStatusCode statusCode)
         {
-            this.statusCode = (int)statusCode;
-            this.envelope = envelope;
+            this.StatusCode = (int)statusCode;
+            this.Envelope = envelope;
         }
+
+        public Envelope Envelope { get; }
+
+        public int StatusCode { get; }
 
         public Task ExecuteResultAsync(ActionContext context)
         {
-            var objectResult = new ObjectResult(this.envelope)
-            {
-                StatusCode = this.statusCode
-            };
+            var objectResult = new ObjectResult(this.Envelope) { StatusCode = this.StatusCode };
 
             return objectResult.ExecuteResultAsync(context);
         }

@@ -51,6 +51,21 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
+    protected IActionResult CreatedResultModel<T>(IResultModel<T> result, string routeName, object routeValues)
+        where T : class // TDO: review this null and errorResult class
+    {
+        ArgumentNullException.ThrowIfNull(result);
+
+        IActionResult actionResult = (result.Success, result.ErrorResult?.Code) switch
+        {
+            (true, _) => this.CreatedAtRoute(routeName, routeValues, EnvelopeOk(result.Value)),
+            (false, ErrorConstants.RecordNotFound) => NotFound(result.ErrorResult, string.Empty),
+            _ => Error(result.ErrorResult, string.Empty)
+        };
+
+        return actionResult;
+    }
+
     protected static IActionResult FromResultModel<T, TR>(IResultModel<T> result, Func<T, TR> converter)
         where TR : class
     {
