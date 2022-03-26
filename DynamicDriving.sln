@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Domain", "Services\Trips\DynamicDriving.TripManagement.Domain\DynamicDriving.TripManagement.Domain.csproj", "{04FCF736-1D70-4D31-8414-98B4818C3D8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Infraestructure", "Services\Trips\DynamicDriving.TripManagement.Infraestructure\DynamicDriving.TripManagement.Infraestructure.csproj", "{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Infrastructure", "Services\Trips\DynamicDriving.TripManagement.Infrastructure\DynamicDriving.TripManagement.Infrastructure.csproj", "{8A8BC0E2-B5EB-4E61-B977-A6659121D1E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.SharedKernel", "BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj", "{5FFB3DC1-AEF0-4436-99D3-B938AC5588F3}"
 EndProject
@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.Models", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.Application.Tests", "Services\Trips\DynamicDriving.TripManagement.Application.Tests\DynamicDriving.TripManagement.Application.Tests.csproj", "{8DB578E2-5468-48FE-89EF-0C8B488C71DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.API.Tests", "Services\Trips\DynamicDriving.TripManagement.API.Tests\DynamicDriving.TripManagement.API.Tests.csproj", "{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.API.Tests", "Services\Trips\DynamicDriving.TripManagement.API.Tests\DynamicDriving.TripManagement.API.Tests.csproj", "{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
