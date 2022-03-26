@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <NoWarn>CA2007</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

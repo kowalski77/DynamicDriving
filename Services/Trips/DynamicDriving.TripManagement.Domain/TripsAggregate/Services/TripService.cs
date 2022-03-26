@@ -24,13 +24,13 @@ public sealed class TripService : ITripService
         ArgumentNullException.ThrowIfNull(origin);
         ArgumentNullException.ThrowIfNull(destination);
 
-        var originLocationResult = await this.locationService.ValidateAsync(origin, cancellationToken).ConfigureAwait(false);
+        var originLocationResult = await this.locationService.ValidateAsync(origin, cancellationToken);
         if (originLocationResult.Failure)
         {
             return Result.Fail<Trip>(originLocationResult.Error!);
         }
 
-        var destinationLocationResult = await this.locationService.ValidateAsync(destination, cancellationToken).ConfigureAwait(false);
+        var destinationLocationResult = await this.locationService.ValidateAsync(destination, cancellationToken);
         if (destinationLocationResult.Failure)
         {
             return Result.Fail<Trip>(destinationLocationResult.Error!);

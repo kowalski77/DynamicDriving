@@ -19,13 +19,13 @@ public class LocationService : ILocationService
     {
         ArgumentNullException.ThrowIfNull(coordinates);
 
-        var maybeLocation = await this.locationProvider.GetLocationAsync(coordinates).ConfigureAwait(false);
+        var maybeLocation = await this.locationProvider.GetLocationAsync(coordinates);
         if (!maybeLocation.TryGetValue(out var location))
         {
             return Result.Fail<Location>(LocationErrors.InvalidCoordinates(coordinates.Latitude, coordinates.Longitude));
         }
 
-        var currentLocations = await this.locationRepository.GetLocationsAsync(cancellationToken).ConfigureAwait(false);
+        var currentLocations = await this.locationRepository.GetLocationsAsync(cancellationToken);
 
         return currentLocations.Any(loc => loc.IsPermittedArea(location))
             ? Result.Ok(location) :
