@@ -2,6 +2,7 @@
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
@@ -119,9 +120,11 @@ public class CreateDraftTripHandlerShould
                     .With(y => y.DestinationLongitude, 10));
 
                 var coordinates = Coordinates.CreateInstance(10, 10);
+                var originLocation = new Location(fixture.Create<string>(), fixture.Create<string>(), coordinates.Value);
+                var destinationLocation = new Location(fixture.Create<string>(), fixture.Create<string>(), coordinates.Value);
                 var user = new User();
-                fixture.Inject(user);
-                var trip = new Trip(user, fixture.Create<DateTime>(), coordinates.Value, coordinates.Value);
+                fixture.Inject(new User());
+                var trip = new Trip(user, fixture.Create<DateTime>(), originLocation, destinationLocation);
                 fixture.Inject(trip);
             }
         }

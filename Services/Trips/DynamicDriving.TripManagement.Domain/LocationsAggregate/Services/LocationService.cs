@@ -4,30 +4,31 @@ using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 
-public class CoordinatesValidator : ICoordinatesValidator
+public class LocationService : ILocationService
 {
     private readonly ILocationProvider locationProvider;
     private readonly ILocationRepository locationRepository;
 
-    public CoordinatesValidator(ILocationRepository locationRepository, ILocationProvider locationProvider)
+    public LocationService(ILocationRepository locationRepository, ILocationProvider locationProvider)
     {
         this.locationRepository = Guards.ThrowIfNull(locationRepository);
         this.locationProvider = Guards.ThrowIfNull(locationProvider);
     }
 
-    public async Task<Result> ValidateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
+    public async Task<Result<Location>> ValidateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(coordinates);
 
         var maybeLocation = await this.locationProvider.GetLocationAsync(coordinates).ConfigureAwait(false);
         if (!maybeLocation.TryGetValue(out var location))
         {
-            return Result.Fail(LocationErrors.InvalidCoordinates(coordinates.Latitude, coordinates.Longitude));
+            return Result.Fail<Location>(LocationErrors.InvalidCoordinates(coordinates.Latitude, coordinates.Longitude));
         }
 
         var currentLocations = await this.locationRepository.GetLocationsAsync(cancellationToken).ConfigureAwait(false);
-        return currentLocations.Contains(location) ? 
-            Result.Ok() : 
-            Result.Fail(LocationErrors.InvalidCityCoordinates(coordinates.Latitude, coordinates.Longitude));
+
+        return currentLocations.Any(loc => loc.IsPermittedArea(location))
+            ? Result.Ok(location) :
+            Result.Fail<Location>(LocationErrors.InvalidCityCoordinates(coordinates.Latitude, coordinates.Longitude));
     }
 }

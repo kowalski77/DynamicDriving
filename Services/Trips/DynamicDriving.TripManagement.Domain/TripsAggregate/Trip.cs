@@ -1,8 +1,8 @@
 ﻿#pragma warning disable 8618
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
-using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
+using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -11,7 +11,7 @@ public class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    public Trip(User user, DateTime pickUp, Coordinates origin, Coordinates destination)
+    public Trip(User user, DateTime pickUp, Location origin, Location destination)
     {
         this.User = Guards.ThrowIfNull(user);
         this.PickUp = pickUp;
@@ -27,9 +27,9 @@ public class Trip : Entity, IAggregateRoot
 
     public DateTime PickUp { get; private set; }
 
-    public Coordinates Origin { get; private set; }
+    public Location Origin { get; private set; }
 
-    public Coordinates Destination { get; private set; }
+    public Location Destination { get; private set; }
 
     public TripStatus TripStatus { get; private set; }
 

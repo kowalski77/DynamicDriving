@@ -3,7 +3,7 @@ using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 
-public interface ICoordinatesValidator
+public interface ILocationService
 {
-     Task<Result> ValidateAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
+     Task<Result<Location>> ValidateAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
 }

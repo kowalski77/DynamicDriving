@@ -8,11 +8,11 @@ namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 public sealed class TripService : ITripService
 {
-    private readonly ICoordinatesValidator coordinatesValidator;
+    private readonly ILocationService locationService;
 
-    public TripService(ICoordinatesValidator coordinatesValidator)
+    public TripService(ILocationService locationService)
     {
-        this.coordinatesValidator = Guards.ThrowIfNull(coordinatesValidator);
+        this.locationService = Guards.ThrowIfNull(locationService);
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
@@ -24,19 +24,19 @@ public sealed class TripService : ITripService
         ArgumentNullException.ThrowIfNull(origin);
         ArgumentNullException.ThrowIfNull(destination);
 
-        var originValidation = await this.coordinatesValidator.ValidateAsync(origin, cancellationToken).ConfigureAwait(false);
-        if (originValidation.Failure)
+        var originLocationResult = await this.locationService.ValidateAsync(origin, cancellationToken).ConfigureAwait(false);
+        if (originLocationResult.Failure)
         {
-            return Result.Fail<Trip>(originValidation.Error!);
+            return Result.Fail<Trip>(originLocationResult.Error!);
         }
 
-        var destinationValidation = await this.coordinatesValidator.ValidateAsync(destination, cancellationToken).ConfigureAwait(false);
-        if (destinationValidation.Failure)
+        var destinationLocationResult = await this.locationService.ValidateAsync(destination, cancellationToken).ConfigureAwait(false);
+        if (destinationLocationResult.Failure)
         {
-            return Result.Fail<Trip>(destinationValidation.Error!);
+            return Result.Fail<Trip>(destinationLocationResult.Error!);
         }
 
-        var trip = new Trip(user, pickUp, origin, destination);
+        var trip = new Trip(user, pickUp, originLocationResult.Value, destinationLocationResult.Value);
 
         return Result.Ok(trip);
     }

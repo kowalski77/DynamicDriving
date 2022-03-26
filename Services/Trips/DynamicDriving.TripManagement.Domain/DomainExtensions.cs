@@ -12,6 +12,6 @@ public static class DomainExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddScoped<ITripService, TripService>();
-        services.AddScoped<ICoordinatesValidator, CoordinatesValidator>();
+        services.AddScoped<ILocationService, LocationService>();
     }
 }

@@ -85,7 +85,7 @@ public class TripServiceTests
         {
             public void Customize(IFixture fixture)
             {
-                fixture.Register<ICoordinatesValidator>(fixture.Create<CoordinatesValidator>);
+                fixture.Register<ILocationService>(fixture.Create<LocationService>);
                 var coordinates = Coordinates.CreateInstance(10, 10);
                 fixture.Inject(coordinates.Value);
             }
