@@ -16,9 +16,9 @@ public sealed class Coordinates : ValueObject
         this.Longitude = longitude;
     }
 
-    public decimal Latitude { get; }
+    public decimal Latitude { get; private set; }
 
-    public decimal Longitude { get; }
+    public decimal Longitude { get; private set; }
 
     public static Result<Coordinates> CreateInstance(decimal latitude, decimal longitude)
     {

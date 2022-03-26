@@ -1,8 +1,8 @@
 ﻿#pragma warning disable 8618
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
-using DynamicDriving.TripManagement.Domain.CarsAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -23,7 +23,7 @@ public class Trip : Entity, IAggregateRoot
 
     public User User { get; private set; }
 
-    public Car? Car { get; private set; }
+    public Driver? Driver { get; private set; }
 
     public DateTime PickUp { get; private set; }
 

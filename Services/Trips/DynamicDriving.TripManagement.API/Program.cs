@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //app.MigrateDatabase<>()
 }
 
 app.UseHttpsRedirection();
