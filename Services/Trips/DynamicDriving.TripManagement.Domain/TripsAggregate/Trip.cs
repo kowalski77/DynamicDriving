@@ -7,7 +7,7 @@ using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
-public class Trip : Entity, IAggregateRoot
+public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 

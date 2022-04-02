@@ -1,8 +1,8 @@
 ﻿using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
+using DynamicDriving.TripManagement.Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
 builder.Services.AddDomainServices();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

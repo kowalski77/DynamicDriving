@@ -55,6 +55,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.API.Tests", "Services\Trips\DynamicDriving.TripManagement.API.Tests\DynamicDriving.TripManagement.API.Tests.csproj", "{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.API.IntegrationTests", "Services\Trips\DynamicDriving.TripManagement.API.IntegrationTests\DynamicDriving.TripManagement.API.IntegrationTests.csproj", "{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +154,7 @@ Global
 		{D3C39D01-2794-47FB-AB9B-4ECA313D3997} = {FC24E38B-3B33-4C93-9F3E-7EEB52E48F77}
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC} = {7F9E813C-C546-45F0-9316-321947A711C4}
 		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0} = {7F9E813C-C546-45F0-9316-321947A711C4}
+		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1} = {7F9E813C-C546-45F0-9316-321947A711C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

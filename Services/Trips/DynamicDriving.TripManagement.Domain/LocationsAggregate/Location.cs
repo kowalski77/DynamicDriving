@@ -4,8 +4,10 @@ using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
 
-public class Location : Entity, IAggregateRoot
+public sealed class Location : Entity, IAggregateRoot
 {
+    private Location() { }
+
     public Location(string name, string city, Coordinates coordinates)
     {
         this.Name = Guards.ThrowIfNullOrEmpty(name);

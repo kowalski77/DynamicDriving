@@ -1,9 +1,12 @@
-﻿using DynamicDriving.SharedKernel.DomainDriven;
+﻿#pragma warning disable 8618
+using DynamicDriving.SharedKernel.DomainDriven;
 
 namespace DynamicDriving.TripManagement.Domain.DriversAggregate;
 
-public class Driver : Entity, IAggregateRoot
+public sealed class Driver : Entity, IAggregateRoot
 {
+    public Driver() { }
+
     public Driver(string name, string description, Car car)
     {
         this.Name = name;
