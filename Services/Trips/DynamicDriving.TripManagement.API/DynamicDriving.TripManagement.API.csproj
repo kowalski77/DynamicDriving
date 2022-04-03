@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,6 +20,10 @@
     <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.Infrastructure\DynamicDriving.TripManagement.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicDriving.TripManagement.API.IntegrationTests" />
   </ItemGroup>
 
   <ItemGroup>

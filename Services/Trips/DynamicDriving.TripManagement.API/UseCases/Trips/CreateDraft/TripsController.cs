@@ -13,7 +13,7 @@ public class TripsController : ApplicationController
     {
     }
 
-    [HttpPost("draft")]
+    [HttpPost]
     [ProducesDefaultResponseType(typeof(Envelope))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -3,13 +3,11 @@ using System.Net.Mime;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.ResultModels;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDriving.TripManagement.API.Support;
 
 [ApiController]
-[Authorize]
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 public class ApplicationController : ControllerBase
