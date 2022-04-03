@@ -12,9 +12,9 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
         this.hasValue = true;
     }
 
-    public static implicit operator Maybe<T>(T value)
+    public static implicit operator Maybe<T>(T? value)
     {
-        return value == null! ? new Maybe<T>() : new Maybe<T>(value);
+        return value == null ? new Maybe<T>() : new Maybe<T>(value);
     }
 
     public bool TryGetValue(out T tryValue)

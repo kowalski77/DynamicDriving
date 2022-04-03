@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -12,13 +11,6 @@ namespace DynamicDriving.TripManagement.API.IntegrationTests;
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private IServiceProvider serviceProvider = default!;
-
-    public TestWebApplicationFactory()
-    {
-        this.HttpClient = this.CreateClient();
-    }
-
-    public HttpClient HttpClient { get; }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {

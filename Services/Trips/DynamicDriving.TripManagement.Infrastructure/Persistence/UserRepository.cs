@@ -1,20 +1,11 @@
-﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.SharedKernel.DomainDriven;
+﻿using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Infrastructure.Persistence;
 
-public sealed class UserRepository : IUserRepository
+public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public IUnitOfWork UnitOfWork { get; }
-
-    public User Add(User item)
+    public UserRepository(TransactionContext context) : base(context)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Maybe<User>> GetAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 }
