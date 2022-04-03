@@ -1,14 +1,15 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using DynamicDriving.Models;
+using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
+using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -22,8 +23,10 @@ public class TripControllerTests
     private const string JsonMediaType = "application/json";
     private const string TripsEndpoint = "/api/v1/Trips";
 
-    private readonly IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+
     private readonly TestWebApplicationFactory factory;
+    private readonly IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
 
     public TripControllerTests(TestWebApplicationFactory factory)
     {
@@ -43,8 +46,8 @@ public class TripControllerTests
                 var locationProviderMock = new Mock<ILocationProvider>();
                 locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
                     .ReturnsAsync(() => new Location(
-                        IntegrationTestConstants.LocationName, 
-                        IntegrationTestConstants.LocationCityName, 
+                        IntegrationTestConstants.LocationName,
+                        IntegrationTestConstants.LocationCityName,
                         Coordinates.CreateInstance(10, 10).Value));
 
                 services.AddScoped(_ => locationProviderMock.Object);
@@ -55,6 +58,8 @@ public class TripControllerTests
         var response = await client.PostAsync(TripsEndpoint, jsonModel);
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = (Envelope)(await response.Content.ReadFromJsonAsync(typeof(Envelope), JsonSerializerOptions))!;
+        result.ErrorCode.Should().BeNull();
     }
 }
