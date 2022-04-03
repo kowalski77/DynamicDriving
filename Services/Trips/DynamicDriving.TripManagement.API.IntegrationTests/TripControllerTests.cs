@@ -34,7 +34,7 @@ public class TripControllerTests
     public async Task Draft_trip_is_created()
     {
         // Arrange
-        var model = new CreateDraftTripModel(Guid.NewGuid(), DateTime.Now, 10, 10, 20, 20);
+        var model = new CreateDraftTripModel(Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
         var client = this.factory.WithWebHostBuilder(builder =>
         {
@@ -42,7 +42,10 @@ public class TripControllerTests
             {
                 var locationProviderMock = new Mock<ILocationProvider>();
                 locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
-                    .ReturnsAsync(() => new Location("aa", "aa", Coordinates.CreateInstance(10, 10).Value));
+                    .ReturnsAsync(() => new Location(
+                        IntegrationTestConstants.LocationName, 
+                        IntegrationTestConstants.LocationCityName, 
+                        Coordinates.CreateInstance(10, 10).Value));
 
                 services.AddScoped(_ => locationProviderMock.Object);
 

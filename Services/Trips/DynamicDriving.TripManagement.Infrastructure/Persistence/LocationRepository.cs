@@ -1,16 +1,21 @@
-﻿using DynamicDriving.SharedKernel.DomainDriven;
+﻿using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDriving.TripManagement.Infrastructure.Persistence;
 
 public sealed class LocationRepository : BaseRepository<Location>, ILocationRepository
 {
-    public LocationRepository(TransactionContext context) : base(context)
+    private readonly TripManagementContext context;
+
+    public LocationRepository(TripManagementContext context) : base(context)
     {
+        this.context = Guards.ThrowIfNull(context);
     }
 
-    public Task<IReadOnlyList<Location>> GetLocationsAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Location>> GetLocationsAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await this.context.Locations.ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 }

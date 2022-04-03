@@ -1,4 +1,7 @@
 ﻿using System;
+using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+using DynamicDriving.TripManagement.Domain.UsersAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -34,6 +37,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+            SeedDatabase(context);
         });
 
         base.ConfigureWebHost(builder);
@@ -52,5 +56,16 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         }
 
         base.Dispose(disposing);
+    }
+
+    private static void SeedDatabase(TripManagementContext context)
+    {
+        context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId),  IntegrationTestConstants.UserName));
+        context.Locations.Add(new Location(
+            IntegrationTestConstants.LocationName,
+            IntegrationTestConstants.LocationCityName,
+            Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
+
+        context.SaveChanges();
     }
 }

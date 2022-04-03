@@ -5,7 +5,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Persistence;
 
 public sealed class TripRepository : BaseRepository<Trip>, ITripRepository
 {
-    public TripRepository(TransactionContext context) : base(context)
+    public TripRepository(TripManagementContext context) : base(context)
     {
     }
 }

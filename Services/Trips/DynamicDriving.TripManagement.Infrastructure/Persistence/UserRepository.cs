@@ -5,7 +5,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Persistence;
 
 public sealed class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(TransactionContext context) : base(context)
+    public UserRepository(TripManagementContext context) : base(context)
     {
     }
 }
