@@ -48,7 +48,6 @@ public class TripControllerTests
                         Coordinates.CreateInstance(10, 10).Value));
 
                 services.AddScoped(_ => locationProviderMock.Object);
-
             });
         }).CreateClient();
 
