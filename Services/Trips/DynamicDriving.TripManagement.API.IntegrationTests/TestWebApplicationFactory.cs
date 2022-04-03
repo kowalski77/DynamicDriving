@@ -1,5 +1,4 @@
-﻿using System;
-using DynamicDriving.TripManagement.Domain.Common;
+﻿using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.UsersAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
@@ -60,7 +59,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     private static void SeedDatabase(TripManagementContext context)
     {
-        context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId),  IntegrationTestConstants.UserName));
+        context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId), IntegrationTestConstants.UserName));
         context.Locations.Add(new Location(
             IntegrationTestConstants.LocationName,
             IntegrationTestConstants.LocationCityName,
