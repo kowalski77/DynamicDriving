@@ -6,19 +6,7 @@ public abstract class Entity
 {
     private readonly List<INotification> domainEvents = new();
 
-    protected Entity()
-    {
-    }
-
-    protected Entity(Guid id)
-        : this()
-    {
-        this.Id = id;
-    }
-
     public IEnumerable<INotification> DomainEvents => this.domainEvents;
-
-    public Guid Id { get; protected set; } = Guid.NewGuid();
 
     public bool SoftDeleted { get; protected set; }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20220402161052_Inititial")]
-    partial class Inititial
+    [Migration("20220403161520_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,9 +26,11 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.DriversAggregate.Car", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -55,8 +57,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CarId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()

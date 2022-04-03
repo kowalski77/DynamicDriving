@@ -122,8 +122,8 @@ public class CreateDraftTripHandlerShould
                 var coordinates = Coordinates.CreateInstance(10, 10);
                 var originLocation = new Location(fixture.Create<string>(), fixture.Create<string>(), coordinates.Value);
                 var destinationLocation = new Location(fixture.Create<string>(), fixture.Create<string>(), coordinates.Value);
-                var user = new User(fixture.Create<string>());
-                fixture.Inject(new User(fixture.Create<string>()));
+                var user = new User(Guid.NewGuid(), fixture.Create<string>());
+                fixture.Inject(new User(Guid.NewGuid(), fixture.Create<string>()));
                 var trip = new Trip(user, fixture.Create<DateTime>(), originLocation, destinationLocation);
                 fixture.Inject(trip);
             }

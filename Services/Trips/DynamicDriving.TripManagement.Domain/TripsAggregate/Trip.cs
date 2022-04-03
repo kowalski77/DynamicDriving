@@ -21,6 +21,8 @@ public sealed class Trip : Entity, IAggregateRoot
         this.Kilometers = 0;
     }
 
+    public Guid Id { get; private set; } = Guid.NewGuid();
+
     public User User { get; private set; }
 
     public Driver? Driver { get; private set; }

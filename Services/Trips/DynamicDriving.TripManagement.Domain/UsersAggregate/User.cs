@@ -8,16 +8,13 @@ public sealed class User : Entity, IAggregateRoot
 {
     private User() { }
 
-    public User(string name)
-    {
-        this.Name = name;
-    }
-
     public User(Guid id, string name)
     {
         this.Id = Guards.ThrowIfEmpty(id);
         this.Name = Guards.ThrowIfNullOrEmpty(name);
     }
+
+    public Guid Id { get; private set; }
 
     public string Name { get; private set; }
 }

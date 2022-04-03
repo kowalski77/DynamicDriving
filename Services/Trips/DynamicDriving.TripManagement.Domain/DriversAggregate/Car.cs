@@ -14,6 +14,8 @@ public sealed class Car : Entity
         this.CarType = carType;
     }
 
+    public int Id { get; private set; }
+
     public string Brand { get; private set; }
 
     public string Model { get; private set; }

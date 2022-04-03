@@ -1,4 +1,5 @@
-﻿using DynamicDriving.SharedKernel;
+﻿#pragma warning disable 8618
+using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.Common;
 
@@ -14,6 +15,8 @@ public sealed class Location : Entity, IAggregateRoot
         this.City = Guards.ThrowIfNullOrEmpty(city);
         this.Coordinates = Guards.ThrowIfNull(coordinates);
     }
+
+    public Guid Id { get; private set; } = Guid.NewGuid();
 
     public string Name { get; private set; }
 
