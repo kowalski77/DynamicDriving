@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
