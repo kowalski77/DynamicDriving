@@ -14,10 +14,9 @@ public class TripsController : ApplicationController
     }
 
     [HttpPost]
-    [ProducesDefaultResponseType(typeof(Envelope))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(Envelope<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);

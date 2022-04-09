@@ -13,12 +13,11 @@ public class TripsController : ApplicationController
 {
     public TripsController(IMediator mediator) : base(mediator)
     {
-    } 
+    }
 
     [HttpGet("{id:guid}")]
-    [ProducesDefaultResponseType(typeof(Envelope<TripByIdResponse>))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(Envelope<TripByIdResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTripById(Guid id)
     {
         Guards.ThrowIfEmpty(id);
