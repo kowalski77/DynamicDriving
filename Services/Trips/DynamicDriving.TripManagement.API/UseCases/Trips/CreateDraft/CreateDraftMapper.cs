@@ -5,16 +5,17 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 
 public static class CreateDraftMapper
 {
-    public static CreateDraftTrip AsCommand(this CreateDraftTripModel model)
+    public static CreateDraftTrip AsCommand(this CreateDraftTripRequest request)
     {
-        ArgumentNullException.ThrowIfNull(model);
+        ArgumentNullException.ThrowIfNull(request);
 
         return new CreateDraftTrip(
-            model.UserId, 
-            model.PickUp, 
-            model.OriginLatitude, 
-            model.OriginLatitude, 
-            model.DestinationLatitude, 
-            model.DestinationLongitude);
+            request.TripId,
+            request.UserId, 
+            request.PickUp, 
+            request.OriginLatitude, 
+            request.OriginLatitude, 
+            request.DestinationLatitude, 
+            request.DestinationLongitude);
     }
 }

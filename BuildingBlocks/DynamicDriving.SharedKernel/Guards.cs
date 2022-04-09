@@ -5,7 +5,7 @@ namespace DynamicDriving.SharedKernel;
 
 public static class Guards
 {
-    public static T ThrowIfNull<T>(T argument, [CallerArgumentExpression("argument")] string? paramName = null)
+    public static T ThrowIfNull<T>([NotNull] T argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
         if (argument is null)
         {

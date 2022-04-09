@@ -6,5 +6,5 @@ namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 public interface ITripService
 {
-    Task<Result<Trip>> CreateDraftTripAsync(User user, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default);
+    Task<Result<Trip>> CreateDraftTripAsync(Guid id, User user, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default);
 }

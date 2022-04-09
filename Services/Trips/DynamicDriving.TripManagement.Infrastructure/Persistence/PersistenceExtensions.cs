@@ -13,6 +13,7 @@ public static class PersistenceExtensions
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITripReadRepository, TripReadRepository>();
     }
 
     public static void AddSqlPersistence(this IServiceCollection services, string connectionString)

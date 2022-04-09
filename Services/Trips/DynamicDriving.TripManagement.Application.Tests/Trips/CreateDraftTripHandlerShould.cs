@@ -26,7 +26,7 @@ public class CreateDraftTripHandlerShould
         userRepositoryMock.Setup(x => x.GetAsync(command.UserId, CancellationToken.None))
             .ReturnsAsync(user);
         tripServiceMock.Setup(x => x
-            .CreateDraftTripAsync(user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+            .CreateDraftTripAsync(command.TripId, user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
             .ReturnsAsync(Result.Ok(trip));
         tripRepositoryMock.Setup(x => x.Add(trip)).Returns(trip);
 
@@ -89,7 +89,7 @@ public class CreateDraftTripHandlerShould
         // Arrange
         userRepositoryMock.Setup(x => x.GetAsync(command.UserId, CancellationToken.None))
             .ReturnsAsync(user);
-        tripServiceMock.Setup(x => x.CreateDraftTripAsync(user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+        tripServiceMock.Setup(x => x.CreateDraftTripAsync(command.TripId, user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
             .ReturnsAsync(Result.Fail<Trip>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
@@ -124,7 +124,7 @@ public class CreateDraftTripHandlerShould
                 var destinationLocation = new Location(fixture.Create<string>(), fixture.Create<string>(), coordinates.Value);
                 var user = new User(Guid.NewGuid(), fixture.Create<string>());
                 fixture.Inject(new User(Guid.NewGuid(), fixture.Create<string>()));
-                var trip = new Trip(user, fixture.Create<DateTime>(), originLocation, destinationLocation);
+                var trip = new Trip(Guid.NewGuid(), user, fixture.Create<DateTime>(), originLocation, destinationLocation);
                 fixture.Inject(trip);
             }
         }

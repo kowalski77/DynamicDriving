@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Support\" />
+    <Folder Include="UseCases\Trips\GetTrip\" />
   </ItemGroup>
 
 </Project>

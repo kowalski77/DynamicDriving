@@ -15,6 +15,7 @@ public class TripServiceTests
         [Frozen] Mock<ILocationProvider> locationProviderMock,
         [Frozen] Mock<ILocationRepository> locationRepositoryMock,
         Location location,
+        Guid tripId,
         User user, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
@@ -25,7 +26,7 @@ public class TripServiceTests
             .ReturnsAsync(new[] { location });
 
         // Act
-        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeTrue();
@@ -35,6 +36,7 @@ public class TripServiceTests
     [Theory, TripServiceDataSource]
     public async Task Draft_trip_is_not_created_when_invalid_location_coordinates(
         [Frozen] Mock<ILocationProvider> locationProviderMock,
+        Guid tripId,
         User user, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
@@ -43,7 +45,7 @@ public class TripServiceTests
             .ReturnsAsync((Maybe<Location>)null!);
 
         // Act
-        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -57,6 +59,7 @@ public class TripServiceTests
         [Frozen] Mock<ILocationRepository> locationRepositoryMock,
         Location location,
         Location otherLocation,
+        Guid tripId,
         User user, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
@@ -67,7 +70,7 @@ public class TripServiceTests
             .ReturnsAsync(new[] { otherLocation });
 
         // Act
-        var result = await sut.CreateDraftTripAsync(user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeFalse();

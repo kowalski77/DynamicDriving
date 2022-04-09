@@ -12,4 +12,8 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TripsAggregate\Queries\" />
+  </ItemGroup>
+
 </Project>

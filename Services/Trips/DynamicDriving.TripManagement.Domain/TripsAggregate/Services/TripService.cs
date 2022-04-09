@@ -16,6 +16,7 @@ public sealed class TripService : ITripService
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
+        Guid id,
         User user, DateTime pickUp, 
         Coordinates origin, Coordinates destination,
         CancellationToken cancellationToken = default)
@@ -36,7 +37,7 @@ public sealed class TripService : ITripService
             return Result.Fail<Trip>(destinationLocationResult.Error!);
         }
 
-        var trip = new Trip(user, pickUp, originLocationResult.Value, destinationLocationResult.Value);
+        var trip = new Trip(id, user, pickUp, originLocationResult.Value, destinationLocationResult.Value);
 
         return Result.Ok(trip);
     }

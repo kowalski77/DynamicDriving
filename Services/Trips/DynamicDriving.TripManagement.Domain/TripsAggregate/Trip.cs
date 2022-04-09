@@ -11,8 +11,9 @@ public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    public Trip(User user, DateTime pickUp, Location origin, Location destination)
+    public Trip(Guid id, User user, DateTime pickUp, Location origin, Location destination)
     {
+        this.Id = Guards.ThrowIfEmpty(id);
         this.User = Guards.ThrowIfNull(user);
         this.PickUp = pickUp;
         this.Origin = Guards.ThrowIfNull(origin);

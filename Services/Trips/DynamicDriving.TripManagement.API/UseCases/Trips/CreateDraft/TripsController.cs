@@ -18,11 +18,11 @@ public class TripsController : ApplicationController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripModel model)
+    public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
     {
-        ArgumentNullException.ThrowIfNull(model);
+        ArgumentNullException.ThrowIfNull(request);
 
-        var command = model.AsCommand();
+        var command = request.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
         return FromResultModel(result); // TODO: change to this.CreatedResultModel when GetById is available

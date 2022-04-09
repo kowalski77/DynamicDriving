@@ -33,7 +33,7 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IR
         var resultModel = await ResultModel.Init
             .Validate(originCoordinates, destinationCoordinates)
             .OnSuccess(async () => await this.GetUserAsync(request.UserId, cancellationToken))
-            .OnSuccess(async user => await this.CreateTripAsync(user, request.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
+            .OnSuccess(async user => await this.CreateTripAsync(request.TripId, user, request.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
             .OnSuccess(trip => new DraftTripDto(trip.Id));
 
         return resultModel;
@@ -48,9 +48,9 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, IR
             ResultModel.Ok(user);
     }
 
-    private async Task<IResultModel<Trip>> CreateTripAsync(User user, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    private async Task<IResultModel<Trip>> CreateTripAsync(Guid tripId, User user, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
     {
-        var result = await this.tripService.CreateDraftTripAsync(user, pickUp, origin, destination, cancellationToken);
+        var result = await this.tripService.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, cancellationToken);
         if (result.Failure)
         {
             return ResultModel.Fail<Trip>(result.Error);

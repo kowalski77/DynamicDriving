@@ -18,7 +18,6 @@
     <Folder Include="Locations\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Trips\Commands\" />
-    <Folder Include="Trips\Queries\" />
     <Folder Include="Users\" />
   </ItemGroup>
 

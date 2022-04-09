@@ -17,7 +17,7 @@ public class CreateDraftTripShould
     public async Task Return_success_envelope_result_when_model_is_valid(
         [Frozen] Mock<IMediator> mediatorMock,
         DraftTripDto draftTripDto,
-        CreateDraftTripModel model,
+        CreateDraftTripRequest request,
         TripsController sut)
     {
         // Arrange
@@ -25,7 +25,7 @@ public class CreateDraftTripShould
             .ReturnsAsync(ResultModel.Ok(draftTripDto));
 
         // Act
-        var actionResult = await sut.CreateDraftTrip(model);
+        var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
@@ -38,7 +38,7 @@ public class CreateDraftTripShould
     public async Task Return_error_envelope_result_when_not_found_user(
         [Frozen] Mock<IMediator> mediatorMock,
         string errorMessage,
-        CreateDraftTripModel model,
+        CreateDraftTripRequest request,
         TripsController sut)
     {
         // Arrange
@@ -46,7 +46,7 @@ public class CreateDraftTripShould
             .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
 
         // Act
-        var actionResult = await sut.CreateDraftTrip(model);
+        var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
@@ -60,7 +60,7 @@ public class CreateDraftTripShould
         [Frozen] Mock<IMediator> mediatorMock,
         string errorCode,
         string errorMessage,
-        CreateDraftTripModel model,
+        CreateDraftTripRequest request,
         TripsController sut)
     {
         // Arrange
@@ -68,7 +68,7 @@ public class CreateDraftTripShould
             .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
-        var actionResult = await sut.CreateDraftTrip(model);
+        var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
