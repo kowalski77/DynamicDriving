@@ -8,6 +8,7 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDriving.TripManagement.API.Tests.Trips;
 
@@ -28,10 +29,10 @@ public class CreateDraftTripShould
         var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
-        var envelopeResult = (EnvelopeResult)actionResult;
-        envelopeResult.StatusCode.Should().Be(StatusCodes.Status200OK);
-        var resultDto = (DraftTripDto)((Envelope<object>)envelopeResult.Envelope).Result;
-        resultDto.Id.Should().Be(draftTripDto.Id);
+        var envelopeResult = (CreatedAtRouteResult)actionResult;
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status201Created);
+        var successEnvelope = (SuccessEnvelope<CreateDraftTripResponse>)envelopeResult.Value!;
+        successEnvelope.Data.TripId.Should().Be(draftTripDto.Id);
     }
 
     [Theory, CustomDataSource]
@@ -51,8 +52,8 @@ public class CreateDraftTripShould
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
         envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        envelopeResult.Envelope.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
-        envelopeResult.Envelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
+        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 
     [Theory, CustomDataSource]
@@ -73,7 +74,7 @@ public class CreateDraftTripShould
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
         envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        envelopeResult.Envelope.ErrorCode.Should().Be(errorCode);
-        envelopeResult.Envelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
+        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 }

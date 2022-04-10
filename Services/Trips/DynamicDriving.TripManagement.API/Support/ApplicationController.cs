@@ -19,19 +19,9 @@ public class ApplicationController : ControllerBase
 
     protected IMediator Mediator { get; }
 
-    protected static IActionResult EnvelopeOk(object result)
-    {
-        return new EnvelopeResult(Envelope.Ok(result), HttpStatusCode.OK);
-    }
-
-    protected static IActionResult EnvelopeOk()
-    {
-        return new EnvelopeResult(Envelope.Ok(), HttpStatusCode.OK);
-    }
-
     protected static IActionResult Error(ErrorResult? error, string invalidField)
     {
-        return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.BadRequest);
+        return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.BadRequest);
     }
 
     protected static IActionResult FromResultModel<T>(IResultModel<T> result)
@@ -41,7 +31,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.ErrorResult?.Code) switch
         {
-            (true, _) => EnvelopeOk(result.Value),
+            (true, _) => new EnvelopeResult(SuccessEnvelope.Create(result.Value), HttpStatusCode.Created),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.ErrorResult, string.Empty),
             _ => Error(result.ErrorResult, string.Empty)
         };
@@ -49,14 +39,17 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
-    protected IActionResult CreatedResultModel<T>(IResultModel<T> result, string routeName, object routeValues)
-        where T : class // TDO: review this null and errorResult class
+    protected IActionResult CreatedResultModel<T, TR>(IResultModel<T> result, Func<T, TR> converter, string routeName, Func<object> routeValues)
+        where T : class
+        where TR : class
     {
         ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(converter);
+        ArgumentNullException.ThrowIfNull(routeValues);
 
         IActionResult actionResult = (result.Success, result.ErrorResult?.Code) switch
         {
-            (true, _) => this.CreatedAtRoute(routeName, routeValues, EnvelopeOk(result.Value)),
+            (true, _) => this.CreatedAtRoute(routeName, routeValues.Invoke(), SuccessEnvelope.Create(converter(result.Value))),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.ErrorResult, string.Empty),
             _ => Error(result.ErrorResult, string.Empty)
         };
@@ -65,6 +58,7 @@ public class ApplicationController : ControllerBase
     }
 
     protected static IActionResult FromResultModel<T, TR>(IResultModel<T> result, Func<T, TR> converter)
+        where T : class
         where TR : class
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -72,7 +66,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.ErrorResult?.Code) switch
         {
-            (true, _) => EnvelopeOk(converter(result.Value)),
+            (true, _) => new EnvelopeResult(SuccessEnvelope.Create(converter(result.Value)), HttpStatusCode.OK),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.ErrorResult, string.Empty),
             _ => Error(result.ErrorResult, string.Empty)
         };
@@ -86,7 +80,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.ErrorResult?.Code) switch
         {
-            (true, _) => EnvelopeOk(),
+            (true, _) => new EnvelopeResult(SuccessEnvelope.Ok(), HttpStatusCode.OK),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.ErrorResult, string.Empty),
             _ => Error(result.ErrorResult, string.Empty)
         };
@@ -96,6 +90,6 @@ public class ApplicationController : ControllerBase
 
     private static IActionResult NotFound(ErrorResult error, string invalidField)
     {
-        return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.NotFound);
+        return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.NotFound);
     }
 }

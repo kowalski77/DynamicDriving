@@ -15,9 +15,9 @@ public class TripsController : ApplicationController
     {
     }
 
-    [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Envelope<TripByIdResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+    [HttpGet("{id:guid}", Name = nameof(GetTripById))]
+    [ProducesResponseType(typeof(SuccessEnvelope<TripByIdResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTripById(Guid id)
     {
         Guards.ThrowIfEmpty(id);

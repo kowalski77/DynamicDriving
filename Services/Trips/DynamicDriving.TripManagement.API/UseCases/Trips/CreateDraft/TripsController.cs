@@ -14,9 +14,9 @@ public class TripsController : ApplicationController
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Envelope<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(SuccessEnvelope<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -24,6 +24,10 @@ public class TripsController : ApplicationController
         var command = request.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
-        return FromResultModel(result); // TODO: change to this.CreatedResultModel when GetById is available
+        return this.CreatedResultModel(
+            result,
+            dto => dto.AsResponse(),
+            nameof(GetTrip.TripsController.GetTripById),
+            () => new { id = result.Value.Id });
     }
 }

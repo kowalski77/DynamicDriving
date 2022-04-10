@@ -30,7 +30,8 @@ public class TripControllerTests
     public async Task Draft_trip_is_created()
     {
         // Arrange
-        var model = new CreateDraftTripRequest(Guid.NewGuid(), Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
+        var tripId = Guid.NewGuid();
+        var model = new CreateDraftTripRequest(tripId, Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
         var location = new Location(
             IntegrationTestConstants.LocationName,
@@ -43,9 +44,9 @@ public class TripControllerTests
         var response = await client.PostAsync(TripsEndpoint, jsonModel);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var result = (Envelope)(await response.Content.ReadFromJsonAsync(typeof(Envelope), JsonSerializerOptions))!;
-        result.ErrorCode.Should().BeNull();
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        var result = (SuccessEnvelope<CreateDraftTripResponse>)(await response.Content.ReadFromJsonAsync(typeof(SuccessEnvelope<CreateDraftTripResponse>), JsonSerializerOptions))!;
+        result.Data.TripId.Should().Be(tripId);
     }
 
     [Fact]
@@ -59,7 +60,7 @@ public class TripControllerTests
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var result = (Envelope<TripByIdResponse>)(await response.Content.ReadFromJsonAsync(typeof(Envelope<TripByIdResponse>), JsonSerializerOptions))!;
-        result.Result.Should().NotBeNull();
+        var result = (SuccessEnvelope<TripByIdResponse>)(await response.Content.ReadFromJsonAsync(typeof(SuccessEnvelope<TripByIdResponse>), JsonSerializerOptions))!;
+        result.Data.Should().NotBeNull();
     }
 }
