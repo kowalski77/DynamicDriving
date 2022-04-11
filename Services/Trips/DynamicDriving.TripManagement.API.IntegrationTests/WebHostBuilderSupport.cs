@@ -9,15 +9,15 @@ namespace DynamicDriving.TripManagement.API.IntegrationTests;
 
 public static class WebHostBuilderSupport
 {
-    public static HttpClient CreateClientWithMockLocationProvider(this TestWebApplicationFactory factory, Location location)
+    public static HttpClient CreateClientWithMockCityProvider(this TestWebApplicationFactory factory, City city)
     {
         var client = factory.WithWebHostBuilder(builder =>
         {
             builder.ConfigureTestServices(services =>
             {
-                var locationProviderMock = new Mock<ILocationProvider>();
-                locationProviderMock.Setup(x => x.GetLocationAsync(It.IsAny<Coordinates>()))
-                    .ReturnsAsync(() => location);
+                var locationProviderMock = new Mock<ICityProvider>();
+                locationProviderMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>()))
+                    .ReturnsAsync(() => city);
 
                 services.AddScoped(_ => locationProviderMock.Object);
             });

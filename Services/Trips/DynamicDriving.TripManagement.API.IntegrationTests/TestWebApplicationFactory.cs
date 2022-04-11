@@ -61,12 +61,18 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     private static void SeedDatabase(TripManagementContext context)
     {
         var userEntry = context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId), IntegrationTestConstants.UserName));
-        var locationEntry = context.Locations.Add(new Location(
+
+        var originEntry = context.Locations.Add(new Location(
             IntegrationTestConstants.LocationName,
-            IntegrationTestConstants.LocationCityName,
+            new City(IntegrationTestConstants.LocationCityName),
             Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
 
-        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userEntry.Entity, DateTime.Now, locationEntry.Entity, locationEntry.Entity));
+        var destinationEntry = context.Locations.Add(new Location(
+            IntegrationTestConstants.LocationName,
+            new City(IntegrationTestConstants.LocationCityName),
+            Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
+
+        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userEntry.Entity, DateTime.Now, originEntry.Entity, destinationEntry.Entity));
 
         context.SaveChanges();
     }

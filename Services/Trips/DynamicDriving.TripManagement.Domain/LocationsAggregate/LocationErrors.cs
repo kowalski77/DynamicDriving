@@ -9,14 +9,14 @@ public static class LocationErrors
     public static ErrorResult InvalidCoordinates(decimal latitude, decimal longitude)
     {
         return new(
-            DomainErrorConstants.InvalidCoordinatesCode, 
+            DomainErrorConstants.InvalidCityCode, 
             string.Format(CultureInfo.InvariantCulture, DomainErrorConstants.InvalidCoordinatesMessage, latitude, longitude));
     }
 
-    public static ErrorResult InvalidCityCoordinates(decimal latitude, decimal longitude)
+    public static ErrorResult InvalidCity(string name)
     {
         return new(
-            DomainErrorConstants.InvalidCoordinatesCode, 
-            string.Format(CultureInfo.InvariantCulture, DomainErrorConstants.InvalidCityCoordinatesMessage, latitude, longitude));
+            DomainErrorConstants.InvalidCityCode, 
+            string.Format(CultureInfo.InvariantCulture, DomainErrorConstants.InvalidCityMessage, name));
     }
 }

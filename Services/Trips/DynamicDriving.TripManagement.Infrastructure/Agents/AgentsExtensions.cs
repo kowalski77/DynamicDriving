@@ -7,6 +7,6 @@ public static class AgentsExtensions
 {
     public static void AddAgents(this IServiceCollection services)
     {
-        services.AddScoped<ILocationProvider, LocationProvider>();
+        services.AddScoped<ICityProvider, FakeCityProvider>();
     }
 }

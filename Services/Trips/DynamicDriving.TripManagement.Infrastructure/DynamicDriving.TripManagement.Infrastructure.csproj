@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Agents\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

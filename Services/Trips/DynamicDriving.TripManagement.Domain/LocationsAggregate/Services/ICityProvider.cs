@@ -3,7 +3,7 @@ using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 
-public interface ILocationProvider
+public interface ICityProvider
 {
-    Task<Maybe<Location>> GetLocationAsync(Coordinates coordinates);
+    Task<Maybe<City>> GetCityByCoordinatesAsync(Coordinates coordinates);
 }

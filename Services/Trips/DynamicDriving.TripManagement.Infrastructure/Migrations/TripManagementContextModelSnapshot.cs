@@ -76,15 +76,14 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.ToTable("Drivers");
                 });
 
-            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", b =>
+            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.City", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -94,6 +93,29 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SoftDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Locations");
                 });
@@ -173,6 +195,12 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", b =>
                 {
+                    b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("DynamicDriving.TripManagement.Domain.Common.Coordinates", "Coordinates", b1 =>
                         {
                             b1.Property<Guid>("LocationId")
@@ -193,6 +221,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("LocationId");
                         });
+
+                    b.Navigation("City");
 
                     b.Navigation("Coordinates")
                         .IsRequired();

@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using FluentAssertions;
 using Xunit;
@@ -33,12 +32,9 @@ public class TripControllerTests
         var tripId = Guid.NewGuid();
         var model = new CreateDraftTripRequest(tripId, Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
-        var location = new Location(
-            IntegrationTestConstants.LocationName,
-            IntegrationTestConstants.LocationCityName,
-            Coordinates.CreateInstance(10, 10).Value);
+        var city = new City(IntegrationTestConstants.LocationCityName);
 
-        var client = this.factory.CreateClientWithMockLocationProvider(location);
+        var client = this.factory.CreateClientWithMockCityProvider(city);
 
         // Act
         var response = await client.PostAsync(TripsEndpoint, jsonModel);

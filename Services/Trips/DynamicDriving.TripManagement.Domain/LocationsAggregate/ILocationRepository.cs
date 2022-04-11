@@ -1,8 +1,9 @@
-﻿using DynamicDriving.SharedKernel.DomainDriven;
+﻿using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.DomainDriven;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
 
 public interface ILocationRepository : IRepository<Location>
 {
-    public Task<IReadOnlyList<Location>> GetLocationsAsync(CancellationToken cancellationToken = default);
+    Task<Maybe<Location>> GetLocationByCityNameAsync(string city, CancellationToken cancellationToken = default);
 }

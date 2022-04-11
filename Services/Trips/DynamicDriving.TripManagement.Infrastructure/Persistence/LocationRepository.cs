@@ -14,8 +14,10 @@ public sealed class LocationRepository : BaseRepository<Location>, ILocationRepo
         this.context = Guards.ThrowIfNull(context);
     }
 
-    public async Task<IReadOnlyList<Location>> GetLocationsAsync(CancellationToken cancellationToken = default)
+    public async Task<Maybe<Location>> GetLocationByCityNameAsync(string city, CancellationToken cancellationToken = default)
     {
-        return await this.context.Locations.ToListAsync(cancellationToken).ConfigureAwait(false);
+        return await this.context.Locations
+            .FirstOrDefaultAsync(x => x.City.Name == city, cancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -17,8 +17,8 @@ public sealed class TripReadRepository : ITripReadRepository
     {
         var trip = await this.context.Trips
             .AsNoTracking()
-            .Include(x => x.Origin)
-            .Include(x => x.Destination)
+            .Include(x => x.Origin).ThenInclude(x => x.City)
+            .Include(x => x.Destination).ThenInclude(x => x.City)
             .Include(x => x.Driver)
             .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
