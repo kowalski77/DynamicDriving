@@ -63,11 +63,13 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var userEntry = context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId), IntegrationTestConstants.UserName));
 
         var originEntry = context.Locations.Add(new Location(
+            Guid.NewGuid(),
             IntegrationTestConstants.LocationName,
             new City(IntegrationTestConstants.LocationCityName),
             Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
 
         var destinationEntry = context.Locations.Add(new Location(
+            Guid.NewGuid(),
             IntegrationTestConstants.LocationName,
             new City(IntegrationTestConstants.LocationCityName),
             Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));

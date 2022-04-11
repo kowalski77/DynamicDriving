@@ -9,8 +9,9 @@ public sealed class Location : Entity, IAggregateRoot
 {
     private Location() { }
 
-    public Location(string name, City city, Coordinates coordinates)
+    public Location(Guid id, string name, City city, Coordinates coordinates)
     {
+        this.Id = Guards.ThrowIfEmpty(id);
         this.Name = Guards.ThrowIfNullOrEmpty(name);
         this.City = Guards.ThrowIfNull(city);
         this.Coordinates = Guards.ThrowIfNull(coordinates);
