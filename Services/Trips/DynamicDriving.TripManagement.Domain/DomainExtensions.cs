@@ -1,5 +1,4 @@
-﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate.Services;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
+﻿using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: CLSCompliant(false)]
@@ -12,6 +11,6 @@ public static class DomainExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddScoped<ITripService, TripService>();
-        services.AddScoped<ICityValidator, CityValidator>();
+        services.AddScoped<ITripValidator, TripValidator>();
     }
 }

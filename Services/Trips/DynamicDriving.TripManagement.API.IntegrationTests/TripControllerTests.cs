@@ -4,8 +4,14 @@ using System.Text;
 using System.Text.Json;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+using DynamicDriving.SharedKernel.Results;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using FluentAssertions;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Xunit;
 
 namespace DynamicDriving.TripManagement.API.IntegrationTests;
@@ -33,8 +39,21 @@ public class TripControllerTests
         var model = new CreateDraftTripRequest(tripId, Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
         var city = new City(IntegrationTestConstants.LocationCityName);
+        var location = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName, city, Coordinates.CreateInstance(10, 10).Value);
 
-        var client = this.factory.CreateClientWithMockCityProvider(city);
+        var client = this.factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                var coordinatesAgentMock = new Mock<ICoordinatesAgent>();
+                coordinatesAgentMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+                    .ReturnsAsync(Result.Ok(city));
+                coordinatesAgentMock.Setup(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+                    .ReturnsAsync(Result.Ok(location));
+
+                services.AddScoped(_ => coordinatesAgentMock.Object);
+            });
+        }).CreateClient();
 
         // Act
         var response = await client.PostAsync(TripsEndpoint, jsonModel);

@@ -1,18 +1,17 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Results;
-using DynamicDriving.TripManagement.Domain.CitiesAggregate.Services;
 using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 public sealed class TripService : ITripService
 {
-    private readonly ICityValidator cityValidator;
+    private readonly ITripValidator tripValidator;
     private readonly ICoordinatesAgent coordinatesAgent;
 
-    public TripService(ICityValidator cityValidator, ICoordinatesAgent coordinatesAgent)
+    public TripService(ITripValidator tripValidator, ICoordinatesAgent coordinatesAgent)
     {
-        this.cityValidator = Guards.ThrowIfNull(cityValidator);
+        this.tripValidator = Guards.ThrowIfNull(tripValidator);
         this.coordinatesAgent = Guards.ThrowIfNull(coordinatesAgent);
     }
 
@@ -26,7 +25,7 @@ public sealed class TripService : ITripService
         Guards.ThrowIfNull(origin);
         Guards.ThrowIfNull(destination);
 
-        var validationResult = await this.ValidateCoordinatesAsync(origin, destination, cancellationToken);
+        var validationResult = await this.tripValidator.ValidateTripCoordinatesAsync(origin, destination, cancellationToken);
         if (validationResult.Failure)
         {
             return Result.Fail<Trip>(validationResult.Error!);
@@ -41,28 +40,6 @@ public sealed class TripService : ITripService
         var trip = new Trip(id, userId, pickUp, originLocation, destinationLocation);
 
         return Result.Ok(trip);
-    }
-
-    private async Task<Result> ValidateCoordinatesAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
-    {
-        var originCityResultTask = this.cityValidator.ValidateCityCoordinates(origin, cancellationToken);
-        var destinationCityResultTask = this.cityValidator.ValidateCityCoordinates(destination, cancellationToken);
-
-        await Task.WhenAll(originCityResultTask, destinationCityResultTask);
-
-        var originCityResult = await originCityResultTask;
-        if (originCityResult.Failure)
-        {
-            return originCityResult;
-        }
-
-        var destinationCityResult = await destinationCityResultTask;
-        if (destinationCityResult.Failure)
-        {
-            return destinationCityResult;
-        }
-
-        return Result.Ok();
     }
 
     private async Task<(Result, Location, Location)> GetLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken)

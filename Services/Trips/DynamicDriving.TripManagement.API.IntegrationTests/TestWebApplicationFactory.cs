@@ -1,4 +1,5 @@
-﻿using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -58,19 +59,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     private static void SeedDatabase(TripManagementContext context)
     {
-        var originEntry = context.Locations.Add(new Location(
-            Guid.NewGuid(),
-            IntegrationTestConstants.LocationName,
-            new City(IntegrationTestConstants.LocationCityName),
-            Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
+        var cityEntry = context.Cities.Add(new City(IntegrationTestConstants.LocationCityName));
+        var originLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
+        var destinationLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName2, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
 
-        var destinationEntry = context.Locations.Add(new Location(
-            Guid.NewGuid(),
-            IntegrationTestConstants.LocationName,
-            new City(IntegrationTestConstants.LocationCityName),
-            Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
-
-        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originEntry.Entity, destinationEntry.Entity));
+        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originLocation, destinationLocation));
 
         context.SaveChanges();
     }

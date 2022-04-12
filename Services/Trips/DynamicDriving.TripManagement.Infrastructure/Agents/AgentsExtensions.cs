@@ -1,5 +1,4 @@
-﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
-using DynamicDriving.TripManagement.Domain.Common;
+﻿using DynamicDriving.TripManagement.Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.TripManagement.Infrastructure.Agents;
