@@ -11,15 +11,15 @@ public class TripEntityTypeConfiguration : IEntityTypeConfiguration<Trip>
     {
         Guards.ThrowIfNull(builder);
 
+        builder.OwnsOne(x => x.UserId, y =>
+        {
+            y.Property(z => z.Value).HasColumnName("UserId");
+        });
+
         builder
             .HasOne(x => x.Driver)
             .WithMany()
             .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasOne(x => x.User)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.Destination)

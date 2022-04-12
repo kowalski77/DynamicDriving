@@ -6,7 +6,6 @@ using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
-using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Application.Tests.Trips;
 
@@ -16,17 +15,13 @@ public class CreateDraftTripHandlerShould
     public async Task Return_a_draft_trip_identifier_when_command_is_valid(
         [Frozen] Mock<ITripService> tripServiceMock,
         [Frozen] Mock<ITripRepository> tripRepositoryMock,
-        [Frozen] Mock<IUserRepository> userRepositoryMock,
         CreateDraftTrip command,
-        User user,
         Trip trip,
         CreateDraftTripHandler sut)
     {
         // Arrange
-        userRepositoryMock.Setup(x => x.GetAsync(command.UserId, CancellationToken.None))
-            .ReturnsAsync(user);
         tripServiceMock.Setup(x => x
-            .CreateDraftTripAsync(command.TripId, user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+            .CreateDraftTripAsync(command.TripId, It.IsAny<UserId>(), command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
             .ReturnsAsync(Result.Ok(trip));
         tripRepositoryMock.Setup(x => x.Add(trip)).Returns(trip);
 
@@ -61,35 +56,15 @@ public class CreateDraftTripHandlerShould
     }
 
     [Theory, HandlerDataSource]
-    public async Task Return_error_when_user_not_found(
-        [Frozen] Mock<ITripRepository> tripRepositoryMock,
-        CreateDraftTrip command,
-        CreateDraftTripHandler sut)
-    {
-        // Act
-        var result = await sut.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.ErrorResult!.Code.Should().Be(ErrorConstants.RecordNotFound);
-        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
-        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
-    }
-
-    [Theory, HandlerDataSource]
     public async Task Return_error_when_cannot_create_a_draft_trip(
         [Frozen] Mock<ITripRepository> tripRepositoryMock,
-        [Frozen] Mock<IUserRepository> userRepositoryMock,
         [Frozen] Mock<ITripService> tripServiceMock,
-        User user,
         string errorCode, string errorMessage,
         CreateDraftTrip command,
         CreateDraftTripHandler sut)
     {
         // Arrange
-        userRepositoryMock.Setup(x => x.GetAsync(command.UserId, CancellationToken.None))
-            .ReturnsAsync(user);
-        tripServiceMock.Setup(x => x.CreateDraftTripAsync(command.TripId, user, command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+        tripServiceMock.Setup(x => x.CreateDraftTripAsync(command.TripId, It.IsAny<UserId>(), command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
             .ReturnsAsync(Result.Fail<Trip>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
@@ -119,12 +94,12 @@ public class CreateDraftTripHandlerShould
                     .With(y => y.DestinationLatitude, 10)
                     .With(y => y.DestinationLongitude, 10));
 
+                var userId = UserId.CreateInstance(Guid.NewGuid()).Value;
                 var coordinates = Coordinates.CreateInstance(10, 10);
                 var originLocation = new Location(Guid.NewGuid(), fixture.Create<string>(), fixture.Create<City>(), coordinates.Value);
                 var destinationLocation = new Location(Guid.NewGuid(), fixture.Create<string>(), fixture.Create<City>(), coordinates.Value);
-                var user = new User(Guid.NewGuid(), fixture.Create<string>());
-                fixture.Inject(new User(Guid.NewGuid(), fixture.Create<string>()));
-                var trip = new Trip(Guid.NewGuid(), user, fixture.Create<DateTime>(), originLocation, destinationLocation);
+
+                var trip = new Trip(Guid.NewGuid(), userId, fixture.Create<DateTime>(), originLocation, destinationLocation);
                 fixture.Inject(trip);
             }
         }

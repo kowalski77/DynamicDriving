@@ -3,7 +3,6 @@ using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
-using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
@@ -11,10 +10,10 @@ public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    public Trip(Guid id, User user, DateTime pickUp, Location origin, Location destination)
+    public Trip(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination)
     {
         this.Id = Guards.ThrowIfEmpty(id);
-        this.User = Guards.ThrowIfNull(user);
+        this.UserId = Guards.ThrowIfNull(userId);
         this.PickUp = pickUp;
         this.Origin = Guards.ThrowIfNull(origin);
         this.Destination = Guards.ThrowIfNull(destination);
@@ -24,7 +23,7 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public Guid Id { get; private set; } = Guid.NewGuid();
 
-    public User User { get; private set; }
+    public UserId UserId { get; private set; }
 
     public Driver? Driver { get; private set; }
 

@@ -9,5 +9,4 @@ public static class DomainErrorConstants
     public const string OutOfRangeCoordinatesMessage = "{0} should be between {1} and {2}";
 
     public const string InvalidCityMessage = "{0} do not belong to a valid city";
-
 }

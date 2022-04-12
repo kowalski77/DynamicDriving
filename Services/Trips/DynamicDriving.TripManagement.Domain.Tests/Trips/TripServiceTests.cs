@@ -4,7 +4,6 @@ using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
-using DynamicDriving.TripManagement.Domain.UsersAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.Tests.Trips;
 
@@ -17,7 +16,7 @@ public class TripServiceTests
         City city,
         Location location,
         Guid tripId,
-        User user, DateTime pickUp, Coordinates origin, Coordinates destination,
+        UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
         // Arrange
@@ -27,7 +26,7 @@ public class TripServiceTests
             .ReturnsAsync(location);
 
         // Act
-        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeTrue();
@@ -38,7 +37,7 @@ public class TripServiceTests
     public async Task Draft_trip_is_not_created_when_invalid_location_coordinates(
         [Frozen] Mock<ICityProvider> cityProviderMock,
         Guid tripId,
-        User user, DateTime pickUp, Coordinates origin, Coordinates destination,
+        UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
         // Arrange
@@ -46,7 +45,7 @@ public class TripServiceTests
             .ReturnsAsync((Maybe<City>)null!);
 
         // Act
-        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -60,7 +59,7 @@ public class TripServiceTests
         [Frozen] Mock<ILocationRepository> locationRepositoryMock,
         City city,
         Guid tripId,
-        User user, DateTime pickUp, Coordinates origin, Coordinates destination,
+        UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
         // Arrange
@@ -70,7 +69,7 @@ public class TripServiceTests
             .ReturnsAsync(new Maybe<Location>());
 
         // Act
-        var result = await sut.CreateDraftTripAsync(tripId, user, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -91,6 +90,9 @@ public class TripServiceTests
                 fixture.Register<ILocationService>(fixture.Create<LocationService>);
                 var coordinates = Coordinates.CreateInstance(10, 10);
                 fixture.Inject(coordinates.Value);
+
+                var userId = UserId.CreateInstance(Guid.NewGuid()).Value;
+                fixture.Inject(userId);
             }
         }
     }

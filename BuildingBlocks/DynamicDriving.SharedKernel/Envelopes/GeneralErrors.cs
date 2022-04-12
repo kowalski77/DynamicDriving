@@ -20,6 +20,11 @@ public static class GeneralErrors
 
     public static ErrorResult InternalServerError(string message)
     {
-        return new ErrorResult("internal.server.error", message);
+        return new ErrorResult(ErrorConstants.InternalServerError, message);
+    }
+
+    public static ErrorResult IdNotValid(string message)
+    {
+        return new ErrorResult(ErrorConstants.IdIsNullOrEmpty, message);
     }
 }

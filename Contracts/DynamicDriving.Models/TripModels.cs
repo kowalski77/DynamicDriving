@@ -6,6 +6,6 @@ public sealed record CreateDraftTripRequest(Guid TripId, Guid UserId, DateTime P
 
 public sealed record CreateDraftTripResponse(Guid TripId);
 
-public record TripByIdResponse(string UserName, string? DriverName, DateTime PickUpTime, TripByIdLocationResponse Origin, TripByIdLocationResponse Destination);
+public record TripByIdResponse(Guid UserId, string? DriverName, DateTime PickUpTime, TripByIdLocationResponse Origin, TripByIdLocationResponse Destination);
 
 public record TripByIdLocationResponse(string Name, string City, decimal Longitude, decimal Latitude);

@@ -1,6 +1,5 @@
 ﻿using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.UsersAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +11,6 @@ public static class PersistenceExtensions
     {
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ITripRepository, TripRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITripReadRepository, TripReadRepository>();
     }
 

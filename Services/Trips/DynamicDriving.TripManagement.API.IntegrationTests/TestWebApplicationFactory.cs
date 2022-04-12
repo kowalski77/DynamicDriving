@@ -1,7 +1,6 @@
 ﻿using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.UsersAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -60,8 +59,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     private static void SeedDatabase(TripManagementContext context)
     {
-        var userEntry = context.Users.Add(new User(Guid.Parse(IntegrationTestConstants.UserId), IntegrationTestConstants.UserName));
-
         var originEntry = context.Locations.Add(new Location(
             Guid.NewGuid(),
             IntegrationTestConstants.LocationName,
@@ -74,7 +71,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             new City(IntegrationTestConstants.LocationCityName),
             Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value));
 
-        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userEntry.Entity, DateTime.Now, originEntry.Entity, destinationEntry.Entity));
+        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originEntry.Entity, destinationEntry.Entity));
 
         context.SaveChanges();
     }

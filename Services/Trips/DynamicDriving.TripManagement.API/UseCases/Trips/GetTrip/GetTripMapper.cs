@@ -11,7 +11,7 @@ public static class GetTripMapper
         Guards.ThrowIfNull(source);
 
         return new TripByIdResponse(
-            source.UserName,
+            source.UserId,
             source.DriverName,
             source.PickUpTime,
             new TripByIdLocationResponse(source.Origin.Name, source.Origin.City, source.Origin.Latitude, source.Origin.Longitude),

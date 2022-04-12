@@ -20,7 +20,6 @@ public sealed class TripReadRepository : ITripReadRepository
             .Include(x => x.Origin).ThenInclude(x => x.City)
             .Include(x => x.Destination).ThenInclude(x => x.City)
             .Include(x => x.Driver)
-            .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
             .ConfigureAwait(false);
 

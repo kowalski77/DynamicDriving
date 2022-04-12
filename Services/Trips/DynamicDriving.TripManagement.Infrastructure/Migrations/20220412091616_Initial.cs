@@ -40,19 +40,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Drivers",
                 columns: table => new
                 {
@@ -130,12 +117,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Trips_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -162,11 +143,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 name: "IX_Trips_OriginId",
                 table: "Trips",
                 column: "OriginId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Trips_UserId",
-                table: "Trips",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -179,9 +155,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Locations");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Car");

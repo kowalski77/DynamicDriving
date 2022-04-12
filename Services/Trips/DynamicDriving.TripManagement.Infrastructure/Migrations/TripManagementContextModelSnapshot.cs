@@ -147,9 +147,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.Property<int>("TripStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DestinationId");
@@ -158,27 +155,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
                     b.HasIndex("OriginId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Trips");
-                });
-
-            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.UsersAggregate.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("SoftDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.DriversAggregate.Driver", b =>
@@ -246,11 +223,22 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DynamicDriving.TripManagement.Domain.UsersAggregate.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.OwnsOne("DynamicDriving.TripManagement.Domain.TripsAggregate.UserId", "UserId", b1 =>
+                        {
+                            b1.Property<Guid>("TripId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uniqueidentifier")
+                                .HasColumnName("UserId");
+
+                            b1.HasKey("TripId");
+
+                            b1.ToTable("Trips");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TripId");
+                        });
 
                     b.Navigation("Destination");
 
@@ -258,7 +246,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
                     b.Navigation("Origin");
 
-                    b.Navigation("User");
+                    b.Navigation("UserId")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
