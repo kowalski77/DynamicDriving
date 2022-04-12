@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.ResultModels;
-using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;

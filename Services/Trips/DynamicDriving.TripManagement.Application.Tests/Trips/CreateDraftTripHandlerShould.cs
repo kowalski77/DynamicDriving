@@ -1,7 +1,6 @@
 ﻿using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Application.Trips.Commands;
-using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
@@ -50,7 +49,7 @@ public class CreateDraftTripHandlerShould
 
         // Assert
         result.Success.Should().BeFalse();
-        result.ErrorResult!.Code.Should().Be(DomainErrorConstants.InvalidCityCode);
+        result.ErrorResult!.Code.Should().Be(LocationErrorConstants.InvalidCityCode);
         tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }

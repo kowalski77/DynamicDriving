@@ -1,5 +1,4 @@
-﻿using DynamicDriving.TripManagement.Domain.Common;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+﻿using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;

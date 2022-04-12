@@ -1,6 +1,6 @@
-﻿namespace DynamicDriving.TripManagement.Domain.Common;
+﻿namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
 
-public static class DomainErrorConstants
+public static class LocationErrorConstants
 {
     public const string InvalidCityCode = "city.not.valid";
 

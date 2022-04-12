@@ -1,5 +1,4 @@
-﻿using DynamicDriving.TripManagement.Domain.Common;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+﻿using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;

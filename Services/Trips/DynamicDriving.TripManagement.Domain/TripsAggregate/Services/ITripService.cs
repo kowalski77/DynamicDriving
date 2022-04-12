@@ -1,5 +1,5 @@
 ﻿using DynamicDriving.SharedKernel.Results;
-using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 

@@ -1,7 +1,6 @@
 ﻿#pragma warning disable 8618
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
-using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
 

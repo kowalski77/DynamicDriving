@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -49,8 +48,8 @@ public class TripServiceTests
 
         // Assert
         result.Success.Should().BeFalse();
-        result.Error!.Code.Should().Be(DomainErrorConstants.InvalidCityCode);
-        result.Error!.Message.Should().Be(string.Format(DomainErrorConstants.InvalidCoordinatesMessage, origin.Latitude, origin.Longitude));
+        result.Error!.Code.Should().Be(LocationErrorConstants.InvalidCityCode);
+        result.Error!.Message.Should().Be(string.Format(LocationErrorConstants.InvalidCoordinatesMessage, origin.Latitude, origin.Longitude));
     }
 
     [Theory, TripServiceDataSource]
@@ -73,8 +72,8 @@ public class TripServiceTests
 
         // Assert
         result.Success.Should().BeFalse();
-        result.Error!.Code.Should().Be(DomainErrorConstants.InvalidCityCode);
-        result.Error!.Message.Should().Be(string.Format(DomainErrorConstants.InvalidCityMessage, city.Name));
+        result.Error!.Code.Should().Be(LocationErrorConstants.InvalidCityCode);
+        result.Error!.Message.Should().Be(string.Format(LocationErrorConstants.InvalidCityMessage, city.Name));
     }
 
     private class TripServiceDataSourceAttribute : CustomDataSourceAttribute
