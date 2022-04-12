@@ -11,9 +11,24 @@ public class TripEntityTypeConfiguration : IEntityTypeConfiguration<Trip>
     {
         Guards.ThrowIfNull(builder);
 
-        builder.HasOne(x => x.Destination)
-            .WithOne()
-            .HasForeignKey<Trip>("DestinationId")
-            .OnDelete(DeleteBehavior.NoAction);
+        builder
+            .HasOne(x => x.Driver)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasOne(x => x.User)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(x => x.Destination)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(x => x.Origin)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

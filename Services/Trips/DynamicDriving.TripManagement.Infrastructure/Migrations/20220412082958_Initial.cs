@@ -116,24 +116,26 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         name: "FK_Trips_Drivers_DriverId",
                         column: x => x.DriverId,
                         principalTable: "Drivers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Trips_Locations_DestinationId",
                         column: x => x.DestinationId,
                         principalTable: "Locations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Trips_Locations_OriginId",
                         column: x => x.OriginId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Trips_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -149,8 +151,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Trips_DestinationId",
                 table: "Trips",
-                column: "DestinationId",
-                unique: true);
+                column: "DestinationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trips_DriverId",

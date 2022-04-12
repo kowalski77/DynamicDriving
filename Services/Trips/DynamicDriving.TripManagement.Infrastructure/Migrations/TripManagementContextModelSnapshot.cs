@@ -152,8 +152,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DestinationId")
-                        .IsUnique();
+                    b.HasIndex("DestinationId");
 
                     b.HasIndex("DriverId");
 
@@ -231,25 +230,26 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Trip", b =>
                 {
                     b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", "Destination")
-                        .WithOne()
-                        .HasForeignKey("DynamicDriving.TripManagement.Domain.TripsAggregate.Trip", "DestinationId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("DestinationId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DynamicDriving.TripManagement.Domain.DriversAggregate.Driver", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", "Origin")
                         .WithMany()
                         .HasForeignKey("OriginId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DynamicDriving.TripManagement.Domain.UsersAggregate.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Destination");
