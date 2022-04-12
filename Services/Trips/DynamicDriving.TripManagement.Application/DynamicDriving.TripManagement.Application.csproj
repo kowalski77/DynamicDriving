@@ -14,11 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cars\" />
-    <Folder Include="Locations\" />
+    <Folder Include="Drivers\" />
     <Folder Include="Behaviors\" />
+    <Folder Include="Cities\" />
     <Folder Include="Trips\Commands\" />
-    <Folder Include="Users\" />
   </ItemGroup>
 
 </Project>

@@ -26,7 +26,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "City",
+                name: "Cities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -36,7 +36,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +61,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Locations",
+                name: "Location",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -73,11 +73,11 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Locations", x => x.Id);
+                    table.PrimaryKey("PK_Location", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Locations_City_CityId",
+                        name: "FK_Location_Cities_CityId",
                         column: x => x.CityId,
-                        principalTable: "City",
+                        principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -106,15 +106,15 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Trips_Locations_DestinationId",
+                        name: "FK_Trips_Location_DestinationId",
                         column: x => x.DestinationId,
-                        principalTable: "Locations",
+                        principalTable: "Location",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Trips_Locations_OriginId",
+                        name: "FK_Trips_Location_OriginId",
                         column: x => x.OriginId,
-                        principalTable: "Locations",
+                        principalTable: "Location",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -125,8 +125,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_CityId",
-                table: "Locations",
+                name: "IX_Location_CityId",
+                table: "Location",
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
@@ -154,13 +154,13 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 name: "Drivers");
 
             migrationBuilder.DropTable(
-                name: "Locations");
+                name: "Location");
 
             migrationBuilder.DropTable(
                 name: "Car");
 
             migrationBuilder.DropTable(
-                name: "City");
+                name: "Cities");
         }
     }
 }

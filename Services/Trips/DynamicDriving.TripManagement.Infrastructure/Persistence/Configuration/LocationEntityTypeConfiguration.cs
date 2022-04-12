@@ -1,5 +1,5 @@
 ﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -22,6 +22,27 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.CitiesAggregate.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SoftDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.DriversAggregate.Car", b =>
                 {
                     b.Property<int>("Id")
@@ -76,28 +97,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.ToTable("Drivers");
                 });
 
-            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("SoftDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("City");
-                });
-
-            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", b =>
+            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,7 +117,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Location");
                 });
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Trip", b =>
@@ -169,9 +169,9 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", b =>
+            modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", b =>
                 {
-                    b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.City", "City")
+                    b.HasOne("DynamicDriving.TripManagement.Domain.CitiesAggregate.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -192,7 +192,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
                             b1.HasKey("LocationId");
 
-                            b1.ToTable("Locations");
+                            b1.ToTable("Location");
 
                             b1.WithOwner()
                                 .HasForeignKey("LocationId");
@@ -206,7 +206,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Trip", b =>
                 {
-                    b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", "Destination")
+                    b.HasOne("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -217,7 +217,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("DynamicDriving.TripManagement.Domain.LocationsAggregate.Location", "Origin")
+                    b.HasOne("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", "Origin")
                         .WithMany()
                         .HasForeignKey("OriginId")
                         .OnDelete(DeleteBehavior.Restrict)

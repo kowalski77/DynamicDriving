@@ -1,9 +1,9 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 
-namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
+namespace DynamicDriving.TripManagement.Domain.CitiesAggregate;
 
-public class City : Entity
+public class City : Entity, IAggregateRoot
 {
     public City(string name)
     {

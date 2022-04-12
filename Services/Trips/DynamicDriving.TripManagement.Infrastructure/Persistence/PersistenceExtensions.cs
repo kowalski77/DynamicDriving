@@ -1,4 +1,4 @@
-﻿using DynamicDriving.TripManagement.Domain.LocationsAggregate;
+﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,9 +9,10 @@ public static class PersistenceExtensions
 {
     public static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<ITripReadRepository, TripReadRepository>();
+
+        services.AddScoped<ICityRepository, CityRepository>();
     }
 
     public static void AddSqlPersistence(this IServiceCollection services, string connectionString)

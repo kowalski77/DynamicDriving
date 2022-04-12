@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Results;
 
-namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
+namespace DynamicDriving.TripManagement.Domain.Common;
 
 public sealed class Coordinates : ValueObject
 {
@@ -24,12 +24,12 @@ public sealed class Coordinates : ValueObject
     {
         if (latitude is < MinLatitude or > MaxLatitude)
         {
-            return Result.Fail<Coordinates>(LocationErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
+            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
         }
 
         if (longitude is < MinLongitude or > MaxLongitude)
         {
-            return Result.Fail<Coordinates>(LocationErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
+            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
         }
 
         return Result.Ok(new Coordinates(latitude, longitude));

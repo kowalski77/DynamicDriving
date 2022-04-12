@@ -1,10 +1,12 @@
 ﻿#pragma warning disable 8618
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.Common;
 
-namespace DynamicDriving.TripManagement.Domain.LocationsAggregate;
+namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
-public sealed class Location : Entity, IAggregateRoot
+public sealed class Location : Entity
 {
     private Location() { }
 

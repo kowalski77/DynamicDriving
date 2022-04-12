@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence.Configuration;
 using MediatR;
@@ -18,7 +18,7 @@ public sealed class TripManagementContext : TransactionContext
 
     public DbSet<Trip> Trips { get; set; } = default!;
 
-    public DbSet<Location> Locations { get; set; } = default!;
+    public DbSet<City> Cities { get; set; } = default!;
 
     public DbSet<Driver> Drivers { get; set; } = default!;
 

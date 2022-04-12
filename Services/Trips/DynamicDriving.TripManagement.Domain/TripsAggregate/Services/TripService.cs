@@ -1,17 +1,19 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Results;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate.Services;
+using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 public sealed class TripService : ITripService
 {
-    private readonly ILocationService locationService;
+    private readonly ICityValidator cityValidator;
+    private readonly ICoordinatesAgent coordinatesAgent;
 
-    public TripService(ILocationService locationService)
+    public TripService(ICityValidator cityValidator, ICoordinatesAgent coordinatesAgent)
     {
-        this.locationService = Guards.ThrowIfNull(locationService);
+        this.cityValidator = Guards.ThrowIfNull(cityValidator);
+        this.coordinatesAgent = Guards.ThrowIfNull(coordinatesAgent);
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
@@ -20,23 +22,69 @@ public sealed class TripService : ITripService
         Coordinates origin, Coordinates destination,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(origin);
-        ArgumentNullException.ThrowIfNull(destination);
+        Guards.ThrowIfNull(userId);
+        Guards.ThrowIfNull(origin);
+        Guards.ThrowIfNull(destination);
 
-        var originLocationResult = await this.locationService.ValidateAsync(origin, cancellationToken);
-        if (originLocationResult.Failure)
+        var validationResult = await this.ValidateCoordinatesAsync(origin, destination, cancellationToken);
+        if (validationResult.Failure)
         {
-            return Result.Fail<Trip>(originLocationResult.Error!);
+            return Result.Fail<Trip>(validationResult.Error!);
         }
 
-        var destinationLocationResult = await this.locationService.ValidateAsync(destination, cancellationToken);
-        if (destinationLocationResult.Failure)
+        var (result, originLocation, destinationLocation) = await this.GetLocationsAsync(origin, destination, cancellationToken);
+        if (result.Failure)
         {
-            return Result.Fail<Trip>(destinationLocationResult.Error!);
+            return Result.Fail<Trip>(result.Error!);
         }
 
-        var trip = new Trip(id, userId, pickUp, originLocationResult.Value, destinationLocationResult.Value);
+        var trip = new Trip(id, userId, pickUp, originLocation, destinationLocation);
 
         return Result.Ok(trip);
+    }
+
+    private async Task<Result> ValidateCoordinatesAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    {
+        var originCityResultTask = this.cityValidator.ValidateCityCoordinates(origin, cancellationToken);
+        var destinationCityResultTask = this.cityValidator.ValidateCityCoordinates(destination, cancellationToken);
+
+        await Task.WhenAll(originCityResultTask, destinationCityResultTask);
+
+        var originCityResult = await originCityResultTask;
+        if (originCityResult.Failure)
+        {
+            return originCityResult;
+        }
+
+        var destinationCityResult = await destinationCityResultTask;
+        if (destinationCityResult.Failure)
+        {
+            return destinationCityResult;
+        }
+
+        return Result.Ok();
+    }
+
+    private async Task<(Result, Location, Location)> GetLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    {
+        var originLocationResultTask = this.coordinatesAgent.GetLocationByCoordinatesAsync(origin, cancellationToken);
+        var destinationLocationResultTask = this.coordinatesAgent.GetLocationByCoordinatesAsync(destination, cancellationToken);
+
+        await Task.WhenAll(originLocationResultTask, destinationLocationResultTask);
+        var originLocationResult = await originLocationResultTask;
+
+        var result = Result.Ok();
+        if (originLocationResult.Failure)
+        {
+            result = originLocationResult;
+        }
+
+        var destinationLocationResult = await destinationLocationResultTask;
+        if (destinationLocationResult.Failure)
+        {
+            result = destinationLocationResult;
+        }
+
+        return (result, originLocationResult.Value, destinationLocationResult.Value);
     }
 }

@@ -2,7 +2,6 @@
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
