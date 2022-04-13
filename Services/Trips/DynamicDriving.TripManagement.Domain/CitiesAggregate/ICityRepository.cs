@@ -4,5 +4,5 @@ namespace DynamicDriving.TripManagement.Domain.CitiesAggregate;
 
 public interface ICityRepository
 {
-    Task<Maybe<City>> GetCityByName(string name, CancellationToken cancellationToken = default);
+    Task<Maybe<City>> GetCityByNameAsync(string name, CancellationToken cancellationToken = default);
 }

@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
@@ -36,7 +35,7 @@ public class LocationFactory : ILocationFactory
             return Result.Fail<Location>(CoordinatesErrors.LocationNameNotRetrieved(coordinates));
         }
 
-        var maybeCity = await this.cityRepository.GetCityByName(cityName, cancellationToken);
+        var maybeCity = await this.cityRepository.GetCityByNameAsync(cityName, cancellationToken);
         if (!maybeCity.TryGetValue(out var city))
         {
             return Result.Fail<Location>(CityErrors.CityNotFoundByName(cityName));

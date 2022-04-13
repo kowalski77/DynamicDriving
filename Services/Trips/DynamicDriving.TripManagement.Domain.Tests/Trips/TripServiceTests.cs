@@ -1,6 +1,5 @@
-﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate;
-using DynamicDriving.TripManagement.Domain.LocationsAggregate.Services;
+﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
@@ -10,70 +9,31 @@ public class TripServiceTests
 {
     [Theory, TripServiceDataSource]
     public async Task Draft_trip_is_created_when_valid_coordinates(
-        [Frozen] Mock<ICityProvider> cityProviderMock,
-        [Frozen] Mock<ILocationRepository> locationRepositoryMock,
+        [Frozen] Mock<ICoordinatesAgent> coordinatesAgentMock,
+        [Frozen] Mock<ICityRepository> cityRepositoryMock,
+        string cityName,
+        string locationName,
         City city,
-        Location location,
-        Guid tripId,
         UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
         TripService sut)
     {
         // Arrange
-        cityProviderMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>()))
+        coordinatesAgentMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync(cityName);
+        coordinatesAgentMock.Setup(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync(locationName);
+        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(cityName, CancellationToken.None))
             .ReturnsAsync(city);
-        locationRepositoryMock.Setup(x => x.GetLocationByCityNameAsync(city.Name, CancellationToken.None))
-            .ReturnsAsync(location);
 
         // Act
-        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
+        var result = await sut.CreateDraftTripAsync(Guid.NewGuid(), userId, pickUp, origin, destination);
 
         // Assert
         result.Success.Should().BeTrue();
-        result.Value.TripStatus.Should().Be(TripStatus.Draft);
-    }
-
-    [Theory, TripServiceDataSource]
-    public async Task Draft_trip_is_not_created_when_invalid_location_coordinates(
-        [Frozen] Mock<ICityProvider> cityProviderMock,
-        Guid tripId,
-        UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
-        TripService sut)
-    {
-        // Arrange
-        cityProviderMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>()))
-            .ReturnsAsync((Maybe<City>)null!);
-
-        // Act
-        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.Error!.Code.Should().Be(LocationErrorConstants.InvalidCityCode);
-        result.Error!.Message.Should().Be(string.Format(LocationErrorConstants.InvalidCoordinatesMessage, origin.Latitude, origin.Longitude));
-    }
-
-    [Theory, TripServiceDataSource]
-    public async Task Draft_trip_is_not_created_when_location_coordinates_does_not_belong_to_a_valid_city(
-        [Frozen] Mock<ICityProvider> cityProviderMock,
-        [Frozen] Mock<ILocationRepository> locationRepositoryMock,
-        City city,
-        Guid tripId,
-        UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination,
-        TripService sut)
-    {
-        // Arrange
-        cityProviderMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>()))
-            .ReturnsAsync(city);
-        locationRepositoryMock.Setup(x => x.GetLocationByCityNameAsync(city.Name, CancellationToken.None))
-            .ReturnsAsync(new Maybe<Location>());
-
-        // Act
-        var result = await sut.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, CancellationToken.None);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.Error!.Code.Should().Be(LocationErrorConstants.InvalidCityCode);
-        result.Error!.Message.Should().Be(string.Format(LocationErrorConstants.InvalidCityMessage, city.Name));
+        result.Value.Origin.Name.Should().Be(locationName);
+        result.Value.Destination.Name.Should().Be(locationName);
+        result.Value.PickUp.Should().Be(pickUp);
+        result.Value.UserId.Value.Should().Be(userId.Value);
     }
 
     private class TripServiceDataSourceAttribute : CustomDataSourceAttribute
@@ -86,12 +46,11 @@ public class TripServiceTests
         {
             public void Customize(IFixture fixture)
             {
-                fixture.Register<ILocationService>(fixture.Create<LocationService>);
+                fixture.Register<ILocationFactory>(fixture.Create<LocationFactory>);
                 var coordinates = Coordinates.CreateInstance(10, 10);
                 fixture.Inject(coordinates.Value);
-
-                var userId = UserId.CreateInstance(Guid.NewGuid()).Value;
-                fixture.Inject(userId);
+                var userId = UserId.CreateInstance(Guid.NewGuid());
+                fixture.Inject(userId.Value);
             }
         }
     }

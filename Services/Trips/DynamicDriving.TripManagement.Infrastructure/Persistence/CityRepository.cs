@@ -13,7 +13,7 @@ public sealed class CityRepository : ICityRepository
         this.context = Guards.ThrowIfNull(context);
     }
 
-    public async Task<Maybe<City>> GetCityByName(string name, CancellationToken cancellationToken = default)
+    public async Task<Maybe<City>> GetCityByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await this.context.Cities
             .FirstOrDefaultAsync(x => x.Name == name, cancellationToken)
