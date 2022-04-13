@@ -38,8 +38,6 @@ public class TripControllerTests
         var tripId = Guid.NewGuid();
         var model = new CreateDraftTripRequest(tripId, Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
-        var city = new City(IntegrationTestConstants.LocationCityName);
-        var location = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName, city, Coordinates.CreateInstance(10, 10).Value);
 
         var client = this.factory.WithWebHostBuilder(builder =>
         {
@@ -47,9 +45,9 @@ public class TripControllerTests
             {
                 var coordinatesAgentMock = new Mock<ICoordinatesAgent>();
                 coordinatesAgentMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
-                    .ReturnsAsync(Result.Ok(city));
+                    .ReturnsAsync(IntegrationTestConstants.LocationCityName);
                 coordinatesAgentMock.Setup(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
-                    .ReturnsAsync(Result.Ok(location));
+                    .ReturnsAsync(IntegrationTestConstants.LocationCityName);
 
                 services.AddScoped(_ => coordinatesAgentMock.Object);
             });
