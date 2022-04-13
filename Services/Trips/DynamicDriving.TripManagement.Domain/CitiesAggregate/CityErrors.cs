@@ -5,10 +5,10 @@ namespace DynamicDriving.TripManagement.Domain.CitiesAggregate;
 
 public static class CityErrors
 {
-    public static ErrorResult InvalidCity(string name)
+    public static ErrorResult CityNotFoundByName(string name)
     {
-        return new(
-            CityErrorConstants.InvalidCityCode, 
-            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.InvalidCityMessage, name));
+        return new ErrorResult(
+            CityErrorConstants.CityNameNotFoundCode,
+            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.CityNameNotFoundMessage, name));
     }
 }

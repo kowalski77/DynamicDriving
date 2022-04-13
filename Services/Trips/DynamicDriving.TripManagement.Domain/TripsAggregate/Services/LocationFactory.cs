@@ -7,7 +7,7 @@ using DynamicDriving.TripManagement.Domain.Common;
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 public class LocationFactory : ILocationFactory
-{    
+{
     private readonly ICoordinatesAgent coordinatesAgent;
     private readonly ICityRepository cityRepository;
 
@@ -19,22 +19,27 @@ public class LocationFactory : ILocationFactory
 
     public async Task<Result<Location>> CreateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
     {
-        var maybeCityName = await this.coordinatesAgent.GetCityByCoordinatesAsync(coordinates, cancellationToken);
+        var maybeCityNameTask = this.coordinatesAgent.GetCityByCoordinatesAsync(coordinates, cancellationToken);
+        var maybeLocationNameTask = this.coordinatesAgent.GetLocationByCoordinatesAsync(coordinates, cancellationToken);
+
+        await Task.WhenAll(maybeCityNameTask, maybeLocationNameTask);
+
+        var maybeCityName = await maybeCityNameTask;
         if (!maybeCityName.TryGetValue(out var cityName))
         {
-            return Result.Fail<Location>(new ErrorResult("", ""));
+            return Result.Fail<Location>(CoordinatesErrors.CityNameNotRetrieved(coordinates));
+        }
+
+        var maybeLocationName = await maybeLocationNameTask;
+        if (!maybeLocationName.TryGetValue(out var locationName))
+        {
+            return Result.Fail<Location>(CoordinatesErrors.LocationNameNotRetrieved(coordinates));
         }
 
         var maybeCity = await this.cityRepository.GetCityByName(cityName, cancellationToken);
         if (!maybeCity.TryGetValue(out var city))
         {
-            return Result.Fail<Location>(new ErrorResult("", ""));
-        }
-
-        var maybeLocationName = await this.coordinatesAgent.GetLocationByCoordinatesAsync(coordinates, cancellationToken);
-        if (!maybeLocationName.TryGetValue(out var locationName))
-        {
-            return Result.Fail<Location>(new ErrorResult("", ""));
+            return Result.Fail<Location>(CityErrors.CityNotFoundByName(cityName));
         }
 
         var location = new Location(Guid.NewGuid(), locationName, city, coordinates);

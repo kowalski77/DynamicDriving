@@ -2,7 +2,7 @@
 
 public static class CityErrorConstants
 {
-    public const string InvalidCityCode = "city.not.valid";
+    public const string CityNameNotFoundCode = "cityname.not.found";
 
-    public const string InvalidCityMessage = "{0} do not belong to a valid city";
+    public const string CityNameNotFoundMessage = "could not find city with the name {0} in database";
 }
