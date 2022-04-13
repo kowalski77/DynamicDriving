@@ -11,5 +11,6 @@ public static class DomainExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddScoped<ITripService, TripService>();
+        services.AddScoped<ILocationFactory, LocationFactory>();
     }
 }

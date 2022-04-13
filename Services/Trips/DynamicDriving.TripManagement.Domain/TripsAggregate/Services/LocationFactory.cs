@@ -6,18 +6,18 @@ using DynamicDriving.TripManagement.Domain.Common;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
-public class LocationBuilder
+public class LocationFactory : ILocationFactory
 {    
     private readonly ICoordinatesAgent coordinatesAgent;
     private readonly ICityRepository cityRepository;
 
-    public LocationBuilder(ICoordinatesAgent coordinatesAgent, ICityRepository cityRepository)
+    public LocationFactory(ICoordinatesAgent coordinatesAgent, ICityRepository cityRepository)
     {
         this.coordinatesAgent = Guards.ThrowIfNull(coordinatesAgent);
         this.cityRepository = Guards.ThrowIfNull(cityRepository);
     }
 
-    public async Task<Result<Location>> BuildAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
+    public async Task<Result<Location>> CreateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
     {
         var maybeCityName = await this.coordinatesAgent.GetCityByCoordinatesAsync(coordinates, cancellationToken);
         if (!maybeCityName.TryGetValue(out var cityName))
