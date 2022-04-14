@@ -4,6 +4,8 @@ public enum TripStatus
 {
     Draft,
     Ordered,
+    ToOrigin,
+    ToDestination,
     Canceled,
     Finished
 }

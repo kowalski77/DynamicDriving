@@ -1,6 +1,7 @@
 ﻿#pragma warning disable 8618
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
+using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -35,4 +36,22 @@ public sealed class Trip : Entity, IAggregateRoot
     public TripStatus TripStatus { get; private set; }
 
     public decimal Kilometers { get; private set; }
+
+    public Result CanAssignDriver()
+    {
+        return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ? 
+            Result.Ok() : 
+            Result.Fail(TripErrors.DriverAssignedFailed(this.TripStatus));
+    }
+
+    public void Assign(Driver driver)
+    {
+        var result = this.CanAssignDriver();
+        if (result.Failure)
+        {
+            throw new InvalidOperationException(result.Error!.Message);
+        }
+
+        this.Driver = driver;
+    }
 }
