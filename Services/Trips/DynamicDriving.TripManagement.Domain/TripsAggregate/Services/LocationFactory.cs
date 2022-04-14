@@ -26,23 +26,21 @@ public class LocationFactory : ILocationFactory
         var maybeCityName = await maybeCityNameTask;
         if (!maybeCityName.TryGetValue(out var cityName))
         {
-            return Result.Fail<Location>(CoordinatesErrors.CityNameNotRetrieved(coordinates));
+            return CoordinatesErrors.CityNameNotRetrieved(coordinates);
         }
 
         var maybeLocationName = await maybeLocationNameTask;
         if (!maybeLocationName.TryGetValue(out var locationName))
         {
-            return Result.Fail<Location>(CoordinatesErrors.LocationNameNotRetrieved(coordinates));
+            return CoordinatesErrors.LocationNameNotRetrieved(coordinates);
         }
 
         var maybeCity = await this.cityRepository.GetCityByNameAsync(cityName, cancellationToken);
         if (!maybeCity.TryGetValue(out var city))
         {
-            return Result.Fail<Location>(CityErrors.CityNotFoundByName(cityName));
+            return CityErrors.CityNotFoundByName(cityName);
         }
 
-        var location = new Location(Guid.NewGuid(), locationName, city, coordinates);
-
-        return Result.Ok(location);
+        return new Location(Guid.NewGuid(), locationName, city, coordinates);
     }
 }

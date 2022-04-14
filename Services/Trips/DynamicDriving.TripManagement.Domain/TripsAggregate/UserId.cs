@@ -17,8 +17,8 @@ public class UserId : ValueObject
     public static Result<UserId> CreateInstance(Guid value)
     {
         return value == Guid.Empty ? 
-            Result.Fail<UserId>(GeneralErrors.InternalServerError($"{nameof(UserId)} is not valid")) : 
-            Result.Ok(new UserId(value));
+            GeneralErrors.IdNotValid($"{nameof(UserId)} is not valid") : 
+            new UserId(value);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

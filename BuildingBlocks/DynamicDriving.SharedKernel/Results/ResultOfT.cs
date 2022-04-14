@@ -28,4 +28,19 @@ public sealed class Result<T> : Result
             return this.value;
         }
     }
+
+    public static implicit operator Result<T>(ErrorResult errorResult)
+    {
+        return new Result<T>(errorResult);
+    }
+
+    public static implicit operator Result<T>(T value)
+    {
+        return new(value);
+    }
+
+    public Result<T> ToResult()
+    {
+        throw new NotImplementedException();
+    }
 }

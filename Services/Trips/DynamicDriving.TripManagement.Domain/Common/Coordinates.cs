@@ -24,15 +24,15 @@ public sealed class Coordinates : ValueObject
     {
         if (latitude is < MinLatitude or > MaxLatitude)
         {
-            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude));
+            return CoordinatesErrors.OutOfRangeCoordinates(nameof(latitude), MinLatitude, MaxLatitude);
         }
 
         if (longitude is < MinLongitude or > MaxLongitude)
         {
-            return Result.Fail<Coordinates>(CoordinatesErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude));
+            return CoordinatesErrors.OutOfRangeCoordinates(nameof(longitude), MinLongitude, MaxLongitude);
         }
 
-        return Result.Ok(new Coordinates(latitude, longitude));
+        return new Coordinates(latitude, longitude);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

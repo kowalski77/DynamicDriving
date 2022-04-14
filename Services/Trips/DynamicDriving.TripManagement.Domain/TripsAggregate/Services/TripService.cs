@@ -28,18 +28,16 @@ public sealed class TripService : ITripService
         var distanceValidator = await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken);
         if (distanceValidator.Failure)
         {
-            return Result.Fail<Trip>(distanceValidator.Error!);
+            return distanceValidator.Error!;
         }
 
         var (result, originLocation, destinationLocation) = await this.CreateLocationsAsync(origin, destination, cancellationToken);
         if (result.Failure)
         {
-            return Result.Fail<Trip>(result.Error!);
+            return result.Error!;
         }
 
-        var trip = new Trip(id, userId, pickUp, originLocation, destinationLocation);
-
-        return Result.Ok(trip);
+        return new Trip(id, userId, pickUp, originLocation, destinationLocation);
     }
 
     private async Task<(Result, Location, Location)> CreateLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)

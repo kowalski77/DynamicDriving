@@ -28,11 +28,6 @@ public class Result
         return new(error);
     }
 
-    public static Result<T> Ok<T>(T value)
-    {
-        return new(value);
-    }
-
     public static Result<T> Fail<T>(ErrorResult error)
     {
         return new(error);
