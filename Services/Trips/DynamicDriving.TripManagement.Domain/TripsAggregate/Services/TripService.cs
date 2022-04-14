@@ -31,19 +31,32 @@ public sealed class TripService : ITripService
             return Result.Fail<Trip>(distanceValidator.Error!);
         }
 
+        var (result, originLocation, destinationLocation) = await this.CreateLocationsAsync(origin, destination, cancellationToken);
+        if (result.Failure)
+        {
+            return Result.Fail<Trip>(result.Error!);
+        }
+
+        var trip = new Trip(id, userId, pickUp, originLocation, destinationLocation);
+
+        return Result.Ok(trip);
+    }
+
+    private async Task<(Result, Location, Location)> CreateLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
+    {
         var originLocation = await this.locationFactory.CreateAsync(origin, cancellationToken);
+
+        Result result = Result.Ok();
         if (originLocation.Failure)
         {
-            return Result.Fail<Trip>(originLocation.Error!);
+            result= Result.Fail<Trip>(originLocation.Error!);
         }
         var destinationLocation = await this.locationFactory.CreateAsync(destination, cancellationToken);
         if (destinationLocation.Failure)
         {
-            return Result.Fail<Trip>(destinationLocation.Error!);
+            result =  Result.Fail<Trip>(destinationLocation.Error!);
         }
 
-        var trip = new Trip(id, userId, pickUp, originLocation.Value, destinationLocation.Value);
-
-        return Result.Ok(trip);
+        return (result, originLocation.Value, destinationLocation.Value);
     }
 }

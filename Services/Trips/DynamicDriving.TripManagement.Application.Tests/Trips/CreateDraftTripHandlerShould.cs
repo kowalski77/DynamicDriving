@@ -1,5 +1,4 @@
-﻿using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.SharedKernel.Results;
+﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
@@ -13,17 +12,24 @@ public class CreateDraftTripHandlerShould
 {
     [Theory, HandlerDataSource]
     public async Task Return_a_draft_trip_identifier_when_command_is_valid(
-        [Frozen] Mock<ITripService> tripServiceMock,
         [Frozen] Mock<ITripRepository> tripRepositoryMock,
+        [Frozen] Mock<ICityRepository> cityRepositoryMock,
+        [Frozen] Mock<ICoordinatesAgent> coordinatesAgentMock,
         CreateDraftTrip command,
-        Trip trip,
+        string cityName, string locationName,
+        City city,
         CreateDraftTripHandler sut)
     {
         // Arrange
-        tripServiceMock.Setup(x => x
-            .CreateDraftTripAsync(command.TripId, It.IsAny<UserId>(), command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
-            .ReturnsAsync(Result.Ok(trip));
-        tripRepositoryMock.Setup(x => x.Add(trip)).Returns(trip);
+        tripRepositoryMock.Setup(x => x.Add(It.IsAny<Trip>())).Returns<Trip>(x=>x);
+        coordinatesAgentMock.Setup(x => x.GetDistanceInKmBetweenCoordinates(It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync(5);
+        coordinatesAgentMock.Setup(x => x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync((Maybe<string>)cityName);
+        coordinatesAgentMock.Setup(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
+            .ReturnsAsync((Maybe<string>)locationName);
+        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(cityName, CancellationToken.None))
+            .ReturnsAsync(city);
 
         // Act
         var result = await sut.Handle(command, CancellationToken.None);
@@ -31,8 +37,8 @@ public class CreateDraftTripHandlerShould
         // Assert
         result.Success.Should().BeTrue();
         result.ErrorResult.Should().BeNull();
-        result.Value.Id.Should().Be(trip.Id);
-        tripRepositoryMock.Verify(x => x.Add(trip), Times.Once);
+        result.Value.Id.Should().NotBeEmpty();
+        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Once);
     }
 
@@ -42,17 +48,6 @@ public class CreateDraftTripHandlerShould
         CreateDraftTrip command,
         CreateDraftTripHandler sut)
     {
-        // Arrange
-        var commandWithOutOfRangeLatitude = command with { OriginLatitude = -150 };
-
-        // Act
-        var result = await sut.Handle(commandWithOutOfRangeLatitude, CancellationToken.None);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.ErrorResult!.Code.Should().Be(CoordinatesErrorConstants.OutOfRangeCoordinatesCode);
-        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
-        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }
 
     [Theory, HandlerDataSource]
@@ -63,19 +58,6 @@ public class CreateDraftTripHandlerShould
         CreateDraftTrip command,
         CreateDraftTripHandler sut)
     {
-        // Arrange
-        tripServiceMock.Setup(x => x.CreateDraftTripAsync(command.TripId, It.IsAny<UserId>(), command.PickUp, It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
-            .ReturnsAsync(Result.Fail<Trip>(new ErrorResult(errorCode, errorMessage)));
-
-        // Act
-        var result = await sut.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Success.Should().BeFalse();
-        result.ErrorResult!.Code.Should().Be(errorCode);
-        result.ErrorResult!.Message.Should().Be(errorMessage);
-        tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Never);
-        tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }
 
     private class HandlerDataSourceAttribute : CustomDataSourceAttribute
@@ -94,13 +76,9 @@ public class CreateDraftTripHandlerShould
                     .With(y => y.DestinationLatitude, 10)
                     .With(y => y.DestinationLongitude, 10));
 
-                var userId = UserId.CreateInstance(Guid.NewGuid()).Value;
-                var coordinates = Coordinates.CreateInstance(10, 10);
-                var originLocation = new Location(Guid.NewGuid(), fixture.Create<string>(), fixture.Create<City>(), coordinates.Value);
-                var destinationLocation = new Location(Guid.NewGuid(), fixture.Create<string>(), fixture.Create<City>(), coordinates.Value);
-
-                var trip = new Trip(Guid.NewGuid(), userId, fixture.Create<DateTime>(), originLocation, destinationLocation);
-                fixture.Inject(trip);
+                fixture.Register<ITripService>(fixture.Create<TripService>);
+                fixture.Register<ILocationFactory>(fixture.Create<LocationFactory>);
+                fixture.Register<ITripValidator>(fixture.Create<TripValidator>);
             }
         }
     }
