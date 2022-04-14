@@ -7,10 +7,12 @@ namespace DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 public sealed class TripService : ITripService
 {
     private readonly ILocationFactory locationFactory;
+    private readonly ITripValidator tripValidator;
 
-    public TripService(ILocationFactory locationFactory)
+    public TripService(ILocationFactory locationFactory, ITripValidator tripValidator)
     {
         this.locationFactory = Guards.ThrowIfNull(locationFactory);
+        this.tripValidator = Guards.ThrowIfNull(tripValidator);
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
@@ -22,6 +24,12 @@ public sealed class TripService : ITripService
         Guards.ThrowIfNull(userId);
         Guards.ThrowIfNull(origin);
         Guards.ThrowIfNull(destination);
+
+        var distanceValidator = await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken);
+        if (distanceValidator.Failure)
+        {
+            return Result.Fail<Trip>(distanceValidator.Error!);
+        }
 
         var originLocation = await this.locationFactory.CreateAsync(origin, cancellationToken);
         if (originLocation.Failure)

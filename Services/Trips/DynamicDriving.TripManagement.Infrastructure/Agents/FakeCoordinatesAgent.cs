@@ -29,4 +29,9 @@ public sealed class FakeCoordinatesAgent : ICoordinatesAgent
 
         return Task.FromResult((Maybe<string>)"Sabadell");
     }
+
+    public Task<decimal> GetDistanceInKmBetweenCoordinates(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult<decimal>(5);
+    }
 }

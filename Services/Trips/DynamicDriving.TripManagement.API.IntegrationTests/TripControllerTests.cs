@@ -4,10 +4,7 @@ using System.Text;
 using System.Text.Json;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.SharedKernel.Results;
-using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
-using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +45,8 @@ public class TripControllerTests
                     .ReturnsAsync(IntegrationTestConstants.LocationCityName);
                 coordinatesAgentMock.Setup(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), CancellationToken.None))
                     .ReturnsAsync(IntegrationTestConstants.LocationCityName);
+                coordinatesAgentMock.Setup(x => x.GetDistanceInKmBetweenCoordinates(It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), CancellationToken.None))
+                    .ReturnsAsync(5);
 
                 services.AddScoped(_ => coordinatesAgentMock.Object);
             });
