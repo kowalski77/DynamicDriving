@@ -21,15 +21,28 @@ public class Result
 
     public bool Failure => !this.Success;
 
-    public static Result Ok() => new();
+    public static Result Ok()
+    {
+        return new();
+    }
 
     public static Result Fail(ErrorResult error)
     {
-        return new(error);
+        return new Result(error);
+    }
+
+    public static implicit operator Result(ErrorResult error)
+    {
+        return new Result(error);
     }
 
     public static Result<T> Fail<T>(ErrorResult error)
     {
-        return new(error);
+        return new Result<T>(error);
+    }
+
+    public Result ToResult()
+    {
+        throw new NotImplementedException();
     }
 }

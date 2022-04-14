@@ -8,11 +8,11 @@ public static class ResultModelExtensions
     {
         var errorCollection = (from result in results
                 where result.Failure
-                select Result.Fail(result.Error!))
+                select result.Error!)
             .ToList();
 
         return errorCollection.Any() ? 
-            ResultModel.Fail(errorCollection.Select(x => x.Error!)) : 
+            ResultModel.Fail(errorCollection.Select(x => x!)) : 
             ResultModel.Ok();
     }
 

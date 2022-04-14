@@ -19,7 +19,7 @@ public class TripValidator : ITripValidator
         var kilometers = await this.coordinatesAgent.GetDistanceInKmBetweenCoordinates(origin, destination, cancellationToken);
 
         return kilometers < MinimumDistanceBetweenLocations ? 
-            Result.Fail(TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations)) : 
+            TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations) : 
             Result.Ok();
     }
 }

@@ -41,7 +41,7 @@ public sealed class Trip : Entity, IAggregateRoot
     {
         return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ? 
             Result.Ok() : 
-            Result.Fail(TripErrors.DriverAssignedFailed(this.TripStatus));
+            TripErrors.DriverAssignedFailed(this.TripStatus);
     }
 
     public void Assign(Driver driver)
