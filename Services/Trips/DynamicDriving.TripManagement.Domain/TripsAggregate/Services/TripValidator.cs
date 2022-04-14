@@ -14,7 +14,8 @@ public class TripValidator : ITripValidator
         this.coordinatesAgent = Guards.ThrowIfNull(coordinatesAgent);
     }
 
-    public async Task<Result> ValidateTripDistanceAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
+    public async Task<Result> ValidateTripDistanceAsync(Coordinates origin, Coordinates destination, 
+        CancellationToken cancellationToken = default)
     {
         var kilometers = await this.coordinatesAgent.GetDistanceInKmBetweenCoordinates(origin, destination, cancellationToken);
 

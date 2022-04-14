@@ -40,19 +40,21 @@ public sealed class TripService : ITripService
         return new Trip(id, userId, pickUp, originLocation, destinationLocation);
     }
 
-    private async Task<(Result, Location, Location)> CreateLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
+    private async Task<(Result, Location, Location)> CreateLocationsAsync(Coordinates origin, Coordinates destination, 
+        CancellationToken cancellationToken = default)
     {
-        var originLocation = await this.locationFactory.CreateAsync(origin, cancellationToken);
-
         Result result = Result.Ok();
+
+        var originLocation = await this.locationFactory.CreateAsync(origin, cancellationToken);
         if (originLocation.Failure)
         {
-            result= Result.Fail<Trip>(originLocation.Error!);
+            result = originLocation.Error!;
         }
+
         var destinationLocation = await this.locationFactory.CreateAsync(destination, cancellationToken);
         if (destinationLocation.Failure)
         {
-            result =  Result.Fail<Trip>(destinationLocation.Error!);
+            result = destinationLocation.Error!;
         }
 
         return (result, originLocation.Value, destinationLocation.Value);
