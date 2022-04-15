@@ -14,6 +14,28 @@ public static class ResultExtensions
             Result.Ok();
     }
 
+    public static async Task<Result> OnSuccess(this Result result, Func<Task<Result>> func)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(func);
+
+        return result.Success ? 
+            await func().ConfigureAwait(false) 
+            : result.Error!;
+    }
+
+    public static async Task<Result<(T, TK)>> OnSuccess<T,TK>(this Task<Result> result, Func<Task<Result<(T, TK)>>> func)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(func);
+
+        var awaitedResult = await result.ConfigureAwait(false);
+
+        return awaitedResult.Success ? 
+            await func().ConfigureAwait(false) : 
+            awaitedResult.Error!;
+    }
+
     public static async Task<Result<T>> OnSuccess<T>(this Result result, Func<Task<Result<T>>> func)
     {
         ArgumentNullException.ThrowIfNull(result);

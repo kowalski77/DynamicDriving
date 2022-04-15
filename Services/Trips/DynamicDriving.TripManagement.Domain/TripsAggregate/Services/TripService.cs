@@ -25,12 +25,16 @@ public sealed class TripService : ITripService
         Guards.ThrowIfNull(origin);
         Guards.ThrowIfNull(destination);
 
-        var distanceValidator = await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken);
-        if (distanceValidator.Failure)
-        {
-            return distanceValidator.Error!;
-        }
+        var result = await Result.Init
+            .OnSuccess(async () => await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken))
+            .OnSuccess(async () => await this.CreateLocationsAsync(origin, destination, cancellationToken))
+            .OnSuccess(locations => new Trip(id, userId, pickUp, locations.Item1, locations.Item2));
 
+        return result;
+    }
+
+    private async Task<Result<(Location, Location)>> CreateLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    {
         var originLocation = await this.locationFactory.CreateAsync(origin, cancellationToken);
         if (originLocation.Failure)
         {
@@ -43,6 +47,6 @@ public sealed class TripService : ITripService
             return destinationLocation.Error!;
         }
 
-        return new Trip(id, userId, pickUp, originLocation.Value, destinationLocation.Value);
+        return (originLocation.Value, destinationLocation.Value);
     }
 }
