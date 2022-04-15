@@ -27,12 +27,12 @@ public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
         return resultModel;
     }
 
-    private async Task<Result<Trip>> GetTripByIdAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Result<Trip>> GetTripByIdAsync(Guid tripId, CancellationToken cancellationToken)
     {
-        var maybeTrip = await this.tripRepository.GetAsync(id, cancellationToken);
+        var maybeTrip = await this.tripRepository.GetAsync(tripId, cancellationToken);
 
         return !maybeTrip.TryGetValue(out var trip) ? 
-            GeneralErrors.NotFound(id, nameof(Trip.Id)) :
+            GeneralErrors.NotFound(tripId, nameof(tripId)) :
             trip;
     }
 

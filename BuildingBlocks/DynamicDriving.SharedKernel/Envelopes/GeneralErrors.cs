@@ -5,7 +5,7 @@ public static class GeneralErrors
     public static ErrorResult NotFound(Guid id, string argument)
     {
         var forId = id == Guid.Empty ? "" : $" for Id '{id}'";
-        return new ErrorResult(ErrorConstants.RecordNotFound, $"Record {argument} not found with id: {forId}");
+        return new ErrorResult(ErrorConstants.RecordNotFound, $"Record {argument} not found {forId}");
     }
 
     public static ErrorResult ValueIsRequired()

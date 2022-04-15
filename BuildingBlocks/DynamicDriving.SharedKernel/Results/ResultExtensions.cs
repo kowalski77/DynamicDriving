@@ -57,4 +57,16 @@ public static class ResultExtensions
             mapper(awaitedResult.Value) : 
             awaitedResult.Error!;
     }
+
+    public static async Task<Result> OnSuccess<T>(this Task<Result<T>> result, Func<T, Task<Result>> func)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(func);
+
+        var awaitedResult = await result.ConfigureAwait(false);
+
+        return awaitedResult.Success ?
+            await func(awaitedResult.Value).ConfigureAwait(false) : 
+            awaitedResult.Error!;
+    }
 }
