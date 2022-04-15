@@ -25,7 +25,7 @@ public class Result
 
     public static Result Ok()
     {
-        return new();
+        return new Result();
     }
 
     public static Result Fail(ErrorResult error)

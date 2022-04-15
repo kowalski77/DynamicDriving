@@ -21,7 +21,7 @@ public sealed class Result<T> : Result
     {
         get
         {
-            if (!this.Success)
+            if (this.Failure)
             {
                 throw new InvalidOperationException("The result object has no value.");
             }
@@ -37,6 +37,6 @@ public sealed class Result<T> : Result
 
     public static implicit operator Result<T>(T value)
     {
-        return new(value);
+        return new Result<T>(value);
     }
 }
