@@ -45,8 +45,10 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -92,6 +94,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     PickUp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OriginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DestinationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TripStatus = table.Column<int>(type: "int", nullable: false),
                     Kilometers = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)

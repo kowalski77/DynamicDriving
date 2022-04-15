@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20220412124105_Initial")]
+    [Migration("20220415084936_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,7 +82,6 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -168,7 +167,31 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("DynamicDriving.TripManagement.Domain.Common.Coordinates", "CurrentCoordinates", b1 =>
+                        {
+                            b1.Property<Guid>("DriverId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Latitude")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Latitude");
+
+                            b1.Property<decimal>("Longitude")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Longitude");
+
+                            b1.HasKey("DriverId");
+
+                            b1.ToTable("Drivers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DriverId");
+                        });
+
                     b.Navigation("Car");
+
+                    b.Navigation("CurrentCoordinates")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", b =>
@@ -225,6 +248,27 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.OwnsOne("DynamicDriving.TripManagement.Domain.Common.Coordinates", "CurrentCoordinates", b1 =>
+                        {
+                            b1.Property<Guid>("TripId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Latitude")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Latitude");
+
+                            b1.Property<decimal>("Longitude")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Longitude");
+
+                            b1.HasKey("TripId");
+
+                            b1.ToTable("Trips");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TripId");
+                        });
+
                     b.OwnsOne("DynamicDriving.TripManagement.Domain.TripsAggregate.UserId", "UserId", b1 =>
                         {
                             b1.Property<Guid>("TripId")
@@ -241,6 +285,9 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("TripId");
                         });
+
+                    b.Navigation("CurrentCoordinates")
+                        .IsRequired();
 
                     b.Navigation("Destination");
 
