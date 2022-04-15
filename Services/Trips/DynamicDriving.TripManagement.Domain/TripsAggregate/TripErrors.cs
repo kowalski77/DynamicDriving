@@ -21,4 +21,11 @@ public static class TripErrors
                 TripErrorConstants.MinimumDistanceBetweenLocationsMessage, 
                 distance.ToString(CultureInfo.InvariantCulture)));
     }
+
+    public static ErrorResult ConfirmFailed(TripStatus status)
+    {
+        return new ErrorResult(
+            TripErrorConstants.ConfirmFailedCode,
+            string.Format(CultureInfo.InvariantCulture, TripErrorConstants.ConfirmFailedMessage, status.ToString()));
+    }
 }

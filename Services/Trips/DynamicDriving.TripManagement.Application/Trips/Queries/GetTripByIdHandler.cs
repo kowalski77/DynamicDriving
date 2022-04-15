@@ -33,6 +33,6 @@ public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, IResultMod
 
         return maybeTrip.TryGetValue(out var trip) ? 
             ResultModel.Ok(trip) : 
-            ResultModel.Fail<Trip>(GeneralErrors.NotFound(id));
+            ResultModel.Fail<Trip>(GeneralErrors.NotFound(id, nameof(Trip.Id)));
     }
 }

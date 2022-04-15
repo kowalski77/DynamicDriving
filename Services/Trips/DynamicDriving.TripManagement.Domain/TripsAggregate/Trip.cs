@@ -41,6 +41,24 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public decimal Kilometers { get; private set; }
 
+    public Result CanConfirm()
+    {
+        return this.TripStatus is TripStatus.Draft ? 
+            Result.Ok() : 
+            TripErrors.ConfirmFailed(this.TripStatus);
+    }
+
+    public void Confirm()
+    {
+        var result = this.CanConfirm();
+        if (result.Failure)
+        {
+            throw new InvalidOperationException(result.Error!.Message);
+        }
+
+        this.TripStatus = TripStatus.Ordered;
+    }
+
     public Result CanAssignDriver()
     {
         return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ? 
