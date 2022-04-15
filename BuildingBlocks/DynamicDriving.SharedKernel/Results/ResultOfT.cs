@@ -1,4 +1,5 @@
-﻿using DynamicDriving.SharedKernel.Envelopes;
+﻿#pragma warning disable CA2225
+using DynamicDriving.SharedKernel.Envelopes;
 
 namespace DynamicDriving.SharedKernel.Results;
 
@@ -37,10 +38,5 @@ public sealed class Result<T> : Result
     public static implicit operator Result<T>(T value)
     {
         return new(value);
-    }
-
-    public Result<T> ToResult()
-    {
-        throw new NotImplementedException();
     }
 }

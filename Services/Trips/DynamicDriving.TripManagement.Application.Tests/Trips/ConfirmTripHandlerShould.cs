@@ -24,7 +24,7 @@ public class ConfirmTripHandlerShould
         // Assert
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Once);
-        result.ErrorResult.Should().BeNull();
+        result.Error.Should().BeNull();
         result.Success.Should().BeTrue();
     }
 

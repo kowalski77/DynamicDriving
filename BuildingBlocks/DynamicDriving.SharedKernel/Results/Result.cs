@@ -21,6 +21,8 @@ public class Result
 
     public bool Failure => !this.Success;
 
+    public static Result Init => Ok();
+
     public static Result Ok()
     {
         return new();
@@ -34,6 +36,11 @@ public class Result
     public static implicit operator Result(ErrorResult error)
     {
         return new Result(error);
+    }
+
+    public static Result<T> Ok<T>(T value)
+    {
+        return new Result<T>(value);
     }
 
     public static Result<T> Fail<T>(ErrorResult error)

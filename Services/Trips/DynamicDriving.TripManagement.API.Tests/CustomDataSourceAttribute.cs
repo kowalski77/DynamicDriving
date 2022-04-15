@@ -1,7 +1,4 @@
 ﻿using System;
-using AutoFixture;
-using AutoFixture.AutoMoq;
-using AutoFixture.Xunit2;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DynamicDriving.TripManagement.API.Tests;

@@ -36,28 +36,10 @@ public class CreateDraftTripHandlerShould
 
         // Assert
         result.Success.Should().BeTrue();
-        result.ErrorResult.Should().BeNull();
+        result.Error.Should().BeNull();
         result.Value.Id.Should().NotBeEmpty();
         tripRepositoryMock.Verify(x => x.Add(It.IsAny<Trip>()), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Once);
-    }
-
-    [Theory, HandlerDataSource]
-    public async Task Return_error_when_coordinates_are_not_valid(
-        [Frozen] Mock<ITripRepository> tripRepositoryMock,
-        CreateDraftTrip command,
-        CreateDraftTripHandler sut)
-    {
-    }
-
-    [Theory, HandlerDataSource]
-    public async Task Return_error_when_cannot_create_a_draft_trip(
-        [Frozen] Mock<ITripRepository> tripRepositoryMock,
-        [Frozen] Mock<ITripService> tripServiceMock,
-        string errorCode, string errorMessage,
-        CreateDraftTrip command,
-        CreateDraftTripHandler sut)
-    {
     }
 
     private class HandlerDataSourceAttribute : CustomDataSourceAttribute

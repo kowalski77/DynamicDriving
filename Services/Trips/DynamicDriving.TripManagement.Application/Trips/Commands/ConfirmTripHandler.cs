@@ -1,13 +1,13 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Mediator;
-using DynamicDriving.SharedKernel.ResultModels;
+using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, IResultModel>
+public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
 {
     private readonly ITripRepository tripRepository;
 
@@ -16,37 +16,37 @@ public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, IResultModel>
         this.tripRepository = Guards.ThrowIfNull(tripRepository);
     }
 
-    public async Task<IResultModel> Handle(ConfirmTrip request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ConfirmTrip request, CancellationToken cancellationToken)
     {
         Guards.ThrowIfNull(request);
 
-        var resultModel = await ResultModel.Init
+        var resultModel = await Result.Init
             .OnSuccess(async () => await this.GetTripByIdAsync(request.TripId, cancellationToken))
             .OnSuccess(async trip => await this.ConfirmTripAsync(trip, cancellationToken));
 
         return resultModel;
     }
 
-    private async Task<IResultModel<Trip>> GetTripByIdAsync(Guid id, CancellationToken cancellationToken)
+    private async Task<Result<Trip>> GetTripByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var maybeTrip = await this.tripRepository.GetAsync(id, cancellationToken);
 
         return !maybeTrip.TryGetValue(out var trip) ? 
-            ResultModel.Fail<Trip>(GeneralErrors.NotFound(id, nameof(Trip.Id))) : 
-            ResultModel.Ok(trip);
+            GeneralErrors.NotFound(id, nameof(Trip.Id)) :
+            trip;
     }
 
-    private async Task<IResultModel> ConfirmTripAsync(Trip trip, CancellationToken cancellationToken)
+    private async Task<Result> ConfirmTripAsync(Trip trip, CancellationToken cancellationToken)
     {
         var result = trip.CanConfirm();
-        if (!result.Success)
+        if (result.Failure)
         {
-            return ResultModel.Fail(result.Error);
+            return result.Error!;
         }
 
         trip.Confirm();
         await this.tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        return ResultModel.Ok();
+        return Result.Ok();
     }
 }

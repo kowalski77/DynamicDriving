@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Mediator\" />
     <Folder Include="Validators\" />
-    <Folder Include="ResultModels\" />
     <Folder Include="Results\" />
   </ItemGroup>
 

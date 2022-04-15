@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.SharedKernel.ResultModels;
+using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
@@ -23,7 +23,7 @@ public class CreateDraftTripShould
     {
         // Arrange
         mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
-            .ReturnsAsync(ResultModel.Ok(draftTripDto));
+            .ReturnsAsync(Result.Ok(draftTripDto));
 
         // Act
         var actionResult = await sut.CreateDraftTrip(request);
@@ -44,7 +44,7 @@ public class CreateDraftTripShould
     {
         // Arrange
         mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
-            .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
+            .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
 
         // Act
         var actionResult = await sut.CreateDraftTrip(request);
@@ -66,7 +66,7 @@ public class CreateDraftTripShould
     {
         // Arrange
         mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
-            .ReturnsAsync(ResultModel.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
+            .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
         var actionResult = await sut.CreateDraftTrip(request);
