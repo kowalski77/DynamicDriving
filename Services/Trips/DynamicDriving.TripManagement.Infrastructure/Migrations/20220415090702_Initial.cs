@@ -123,6 +123,16 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
+                values: new object[] { new Guid("0a9625e6-a59d-47b3-b7a2-588a8d31cc3a"), true, "Sabadell", false });
+
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
+                values: new object[] { new Guid("cd5896ad-67de-4c16-bfbe-6ec29a50789c"), true, "Barcelona", false });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_CarId",
                 table: "Drivers",
