@@ -14,7 +14,7 @@ public class TripsController : ApplicationController
     {
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id:guid}/confirmation")]
     [ProducesResponseType(typeof(SuccessEnvelope), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]

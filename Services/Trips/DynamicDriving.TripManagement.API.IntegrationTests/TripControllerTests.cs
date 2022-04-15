@@ -75,4 +75,17 @@ public class TripControllerTests
         var result = (SuccessEnvelope<TripByIdResponse>)(await response.Content.ReadFromJsonAsync(typeof(SuccessEnvelope<TripByIdResponse>), JsonSerializerOptions))!;
         result.Data.Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task Trip_is_confirmed()
+    {
+        // Arrange
+        var client = this.factory.CreateDefaultClient();
+
+        // Act
+        var response = await client.PutAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}/confirmation", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }
