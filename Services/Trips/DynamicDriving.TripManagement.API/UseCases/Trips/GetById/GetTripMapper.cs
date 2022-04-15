@@ -2,7 +2,7 @@
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 
-namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetTrip;
+namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 
 public static class GetTripMapper
 {

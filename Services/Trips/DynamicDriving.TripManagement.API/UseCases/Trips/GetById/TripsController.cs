@@ -6,7 +6,7 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetTrip;
+namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 
 [Route("api/v1/[controller]")]
 public class TripsController : ApplicationController
@@ -24,6 +24,6 @@ public class TripsController : ApplicationController
 
         var resultModel = await this.Mediator.Send(new GetTripById(id)).ConfigureAwait(false);
 
-        return FromResultModel(resultModel, dto => dto.AsResponse());
+        return FromResult(resultModel, dto => dto.AsResponse());
     }
 }

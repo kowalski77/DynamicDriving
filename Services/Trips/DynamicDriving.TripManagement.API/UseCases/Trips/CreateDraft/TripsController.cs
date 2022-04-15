@@ -24,10 +24,10 @@ public class TripsController : ApplicationController
         var command = request.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
-        return this.CreatedResultModel(
+        return this.CreatedResult(
             result,
             dto => dto.AsResponse(),
-            nameof(GetTrip.TripsController.GetTripById),
+            nameof(GetById.TripsController.GetTripById),
             () => new { id = result.Value.Id });
     }
 }

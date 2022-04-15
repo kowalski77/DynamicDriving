@@ -24,7 +24,7 @@ public class ApplicationController : ControllerBase
         return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.BadRequest);
     }
 
-    protected static IActionResult FromResultModel<T>(Result<T> result)
+    protected static IActionResult FromResult<T>(Result<T> result)
         where T : class
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -39,7 +39,7 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
-    protected IActionResult CreatedResultModel<T, TR>(Result<T> result, Func<T, TR> converter, string routeName, Func<object> routeValues)
+    protected IActionResult CreatedResult<T, TR>(Result<T> result, Func<T, TR> converter, string routeName, Func<object> routeValues)
         where T : class
         where TR : class
     {
@@ -57,7 +57,7 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
-    protected static IActionResult FromResultModel<T, TR>(Result<T> result, Func<T, TR> converter)
+    protected static IActionResult FromResult<T, TR>(Result<T> result, Func<T, TR> converter)
         where T : class
         where TR : class
     {
@@ -74,7 +74,7 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
-    protected IActionResult FromResultModel(Result result)
+    protected IActionResult FromResult(Result result)
     {
         ArgumentNullException.ThrowIfNull(result);
 
