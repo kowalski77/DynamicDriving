@@ -21,7 +21,7 @@ public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
         Guards.ThrowIfNull(request);
 
         var resultModel = await Result.Init
-            .OnSuccess(async () => await this.GetTripByIdAsync(request.TripId, cancellationToken))
+            .Do(async () => await this.GetTripByIdAsync(request.TripId, cancellationToken))
             .OnSuccess(async trip => await this.ConfirmTripAsync(trip, cancellationToken));
 
         return resultModel;

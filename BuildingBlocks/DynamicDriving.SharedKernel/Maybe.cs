@@ -32,15 +32,8 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
 
     public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none)
     {
-        if (some == null)
-        {
-            throw new ArgumentNullException(nameof(some));
-        }
-
-        if (none == null)
-        {
-            throw new ArgumentNullException(nameof(none));
-        }
+        ArgumentNullException.ThrowIfNull(some);
+        ArgumentNullException.ThrowIfNull(none);
 
         return this.hasValue ?
             some(this.value) :
@@ -55,10 +48,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
     public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> convert)
         where TResult : class
     {
-        if (convert == null)
-        {
-            throw new ArgumentNullException(nameof(convert));
-        }
+        ArgumentNullException.ThrowIfNull(convert);
 
         return !this.hasValue ? new Maybe<TResult>() : convert(this.value);
     }

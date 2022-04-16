@@ -21,7 +21,7 @@ public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<Tri
         Guards.ThrowIfNull(request);
 
         var resultModel = await Result.Init
-            .OnSuccess(async () => await this.GetTripById(request.Id, cancellationToken))
+            .Do(async () => await this.GetTripById(request.Id, cancellationToken))
             .OnSuccess(trip => trip.AsDto());
 
         return resultModel;

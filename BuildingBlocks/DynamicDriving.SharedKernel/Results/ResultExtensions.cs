@@ -2,6 +2,20 @@
 
 public static class ResultExtensions
 {
+    public static Result<T> Do<T>(this Result _, Func<Result<T>> func)
+    {
+        ArgumentNullException.ThrowIfNull(func);
+
+        return func();
+    }
+
+    public static async Task<Result<T>> Do<T>(this Result _, Func<Task<Result<T>>> func)
+    {
+        ArgumentNullException.ThrowIfNull(func);
+
+        return await func().ConfigureAwait(false);
+    }
+
     public static Result Validate(this Result _, params Result[] results)
     {
         var errorCollection = (from result in results
