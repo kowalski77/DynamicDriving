@@ -31,9 +31,9 @@ public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
     {
         var maybeTrip = await this.tripRepository.GetAsync(tripId, cancellationToken);
 
-        return !maybeTrip.TryGetValue(out var trip) ? 
-            GeneralErrors.NotFound(tripId, nameof(tripId)) :
-            trip;
+        return maybeTrip.HasValue ?
+            maybeTrip.Value : 
+            GeneralErrors.NotFound(tripId, nameof(tripId));
     }
 
     private async Task<Result> ConfirmTripAsync(Trip trip, CancellationToken cancellationToken)

@@ -1,56 +1,63 @@
 ﻿namespace DynamicDriving.SharedKernel;
 
 public readonly struct Maybe<T> : IEquatable<Maybe<T>>
-    where T : class
 {
-    private readonly T value;
-    private readonly bool hasValue;
+    private readonly T value = default!;
 
     private Maybe(T value)
     {
         this.value = value;
-        this.hasValue = true;
+        this.HasValue = true;
     }
 
-    public static implicit operator Maybe<T>(T? value)
-    {
-        return value == null ? new Maybe<T>() : new Maybe<T>(value);
-    }
+    public T Value => this.ValueOrThrow();
 
-    public bool TryGetValue(out T tryValue)
-    {
-        if (this.hasValue)
-        {
-            tryValue = this.value;
-            return true;
-        }
+    public bool HasValue { get; }
 
-        tryValue = default!;
-
-        return false;
-    }
+    public bool HasNoValue => !this.HasValue;
 
     public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none)
     {
         ArgumentNullException.ThrowIfNull(some);
         ArgumentNullException.ThrowIfNull(none);
 
-        return this.hasValue ?
-            some(this.value) :
-            none();
+        return this.HasValue ? some(this.value) : none();
     }
 
-    public T ValueOr(T defaultValue)
+    public static implicit operator Maybe<T>(T value)
     {
-        return this.hasValue ? this.value : defaultValue;
+        return value == null ? new Maybe<T>() : new Maybe<T>(value);
     }
 
-    public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> convert)
-        where TResult : class
+    public static implicit operator Maybe<T>(Maybe value)
+    {
+        return None;
+    }
+
+    public static Maybe<T> None => new();
+
+    public Maybe<TResult> Map<TResult>(Func<T, TResult> convert)
     {
         ArgumentNullException.ThrowIfNull(convert);
 
-        return !this.hasValue ? new Maybe<TResult>() : convert(this.value);
+        return !this.HasValue ? new Maybe<TResult>() : convert(this.value);
+    }
+
+    public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> convert)
+    {
+        ArgumentNullException.ThrowIfNull(convert);
+
+        return !this.HasValue ? new Maybe<TResult>() : convert(this.value);
+    }
+
+    public T ValueOrThrow(string? errorMessage = null)
+    {
+        if (this.HasValue)
+        {
+            return this.value;
+        }
+
+        throw new InvalidOperationException(errorMessage);
     }
 
     public Maybe<T> ToMaybe()
@@ -58,14 +65,19 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
         throw new NotImplementedException();
     }
 
-    public override int GetHashCode()
+    public bool Equals(Maybe<T> other)
     {
-        return EqualityComparer<T>.Default.GetHashCode(this.value);
+        return this.HasValue == other.HasValue && EqualityComparer<T>.Default.Equals(this.value, other.value);
     }
 
     public override bool Equals(object? obj)
     {
         return obj is Maybe<T> other && this.Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this.HasValue, this.value);
     }
 
     public static bool operator ==(Maybe<T> left, Maybe<T> right)
@@ -75,11 +87,11 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
 
     public static bool operator !=(Maybe<T> left, Maybe<T> right)
     {
-        return !(left == right);
+        return !left.Equals(right);
     }
+}
 
-    public bool Equals(Maybe<T> other)
-    {
-        return EqualityComparer<T>.Default.Equals(this.value, other.value);
-    }
+public struct Maybe
+{
+    public static Maybe None => new();
 }

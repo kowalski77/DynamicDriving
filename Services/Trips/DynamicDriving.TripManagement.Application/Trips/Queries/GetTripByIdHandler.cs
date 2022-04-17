@@ -27,12 +27,12 @@ public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<Tri
         return resultModel;
     }
 
-    private async Task<Result<Trip>> GetTripById(Guid id, CancellationToken cancellationToken)
+    private async Task<Result<Trip>> GetTripById(Guid tripId, CancellationToken cancellationToken)
     {
-        var maybeTrip = await this.repository.GetById(id, cancellationToken);
+        var maybeTrip = await this.repository.GetById(tripId, cancellationToken);
 
-        return maybeTrip.TryGetValue(out var trip) ? 
-            trip : 
-            GeneralErrors.NotFound(id, nameof(Trip.Id));
+        return maybeTrip.HasValue ?
+            maybeTrip.Value : 
+            GeneralErrors.NotFound(tripId, nameof(tripId));
     }
 }

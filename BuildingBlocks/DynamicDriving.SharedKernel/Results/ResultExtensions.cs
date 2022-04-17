@@ -2,6 +2,13 @@
 
 public static class ResultExtensions
 {
+    public static Result Do(this Result _, Func<Result> func)
+    {
+        ArgumentNullException.ThrowIfNull(func);
+
+        return func();
+    }
+
     public static Result<T> Do<T>(this Result _, Func<Result<T>> func)
     {
         ArgumentNullException.ThrowIfNull(func);
