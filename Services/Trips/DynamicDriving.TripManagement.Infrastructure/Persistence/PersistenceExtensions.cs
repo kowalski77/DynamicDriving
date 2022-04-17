@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -34,5 +35,7 @@ public static class PersistenceExtensions
                     sqlOptions.MigrationsAssembly(typeof(TripManagementContext).GetTypeInfo().Assembly.GetName().Name);
                     sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(30), null);
                 }));
+
+        services.AddScoped<IDbContext, TripManagementContext>();
     }
 }

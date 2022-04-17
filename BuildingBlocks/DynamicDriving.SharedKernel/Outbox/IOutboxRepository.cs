@@ -7,8 +7,6 @@ public interface IOutboxRepository
     Task SaveMessageAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
         where TIntegrationEvent : class;
 
-    Task MarkMessageAsInProgressAsync(Guid messageId, CancellationToken cancellationToken = default);
-
     Task MarkMessageAsPublishedAsync(Guid messageId, CancellationToken cancellationToken = default);
 
     Task MarkMessageAsFailedAsync(Guid messageId, CancellationToken cancellationToken = default);

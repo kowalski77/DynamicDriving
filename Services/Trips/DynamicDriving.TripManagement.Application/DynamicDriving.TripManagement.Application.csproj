@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Events\DynamicDriving.Events.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.Domain\DynamicDriving.TripManagement.Domain.csproj" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
     <Folder Include="Drivers\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Cities\" />
+    <Folder Include="Outbox\" />
     <Folder Include="Trips\Commands\" />
   </ItemGroup>
 

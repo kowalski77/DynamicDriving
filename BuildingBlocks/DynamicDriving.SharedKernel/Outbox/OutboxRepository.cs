@@ -34,11 +34,6 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
         await this.context.SaveEntitiesAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task MarkMessageAsInProgressAsync(Guid messageId, CancellationToken cancellationToken = default)
-    {
-        await this.UpdateStatusAsync(messageId, EventState.InProgress, cancellationToken).ConfigureAwait(false);
-    }
-
     public async Task MarkMessageAsPublishedAsync(Guid messageId, CancellationToken cancellationToken = default)
     {
         await this.UpdateStatusAsync(messageId, EventState.Published, cancellationToken).ConfigureAwait(false);
@@ -74,7 +69,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
         var message = this.context.OutboxMessages!.Single(x => x.Id == messageId);
         message.State = eventState;
 
-        this.context.OutboxMessages!.Update(message);
+        this.context.OutboxMessages.Update(message);
 
         await this.context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -91,6 +86,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
         return outboxMessage;
     }
 
+    // TODO: check if dispose is called
     public void Dispose()
     {
         this.context.Dispose();
