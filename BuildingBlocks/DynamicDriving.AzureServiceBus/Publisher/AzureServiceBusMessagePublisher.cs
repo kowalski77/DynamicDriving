@@ -8,8 +8,8 @@ namespace DynamicDriving.AzureServiceBus.Publisher;
 public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
 {
     private static readonly ConcurrentDictionary<Type, ServiceBusSender> ServiceBusSenders = new();
-    private readonly IIntegrationEventSerializer integrationEventSerializer;
 
+    private readonly IIntegrationEventSerializer integrationEventSerializer;
     private readonly ServiceBusClient serviceBusClient;
 
     public AzureServiceBusMessagePublisher(

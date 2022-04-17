@@ -1,4 +1,6 @@
-﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+﻿using System.Reflection;
+using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,5 +26,13 @@ public static class PersistenceExtensions
                 sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(30), null);
             });
         });
+
+        services.AddDbContext<OutboxContext>(options =>
+            options.UseSqlServer(connectionString,
+                sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(TripManagementContext).GetTypeInfo().Assembly.GetName().Name);
+                    sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(30), null);
+                }));
     }
 }

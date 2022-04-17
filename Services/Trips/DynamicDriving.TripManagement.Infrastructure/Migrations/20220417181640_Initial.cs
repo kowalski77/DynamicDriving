@@ -126,12 +126,12 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("0a9625e6-a59d-47b3-b7a2-588a8d31cc3a"), true, "Sabadell", false });
+                values: new object[] { new Guid("2ce0b4ab-e554-4649-90be-aabd11d120a2"), true, "Sabadell", false });
 
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("cd5896ad-67de-4c16-bfbe-6ec29a50789c"), true, "Barcelona", false });
+                values: new object[] { new Guid("83dc56a7-1528-4b65-ad67-6e749c956cee"), true, "Barcelona", false });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_CarId",

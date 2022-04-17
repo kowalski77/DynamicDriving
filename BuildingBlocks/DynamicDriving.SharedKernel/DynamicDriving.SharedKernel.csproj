@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Mediator\" />
+    <Folder Include="Outbox\" />
     <Folder Include="Validators\" />
     <Folder Include="Results\" />
   </ItemGroup>
@@ -18,6 +19,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 

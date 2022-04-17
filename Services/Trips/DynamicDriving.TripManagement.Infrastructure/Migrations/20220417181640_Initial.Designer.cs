@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DynamicDriving.TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20220415090702_Initial")]
+    [Migration("20220417181640_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,14 +47,14 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a9625e6-a59d-47b3-b7a2-588a8d31cc3a"),
+                            Id = new Guid("2ce0b4ab-e554-4649-90be-aabd11d120a2"),
                             Active = true,
                             Name = "Sabadell",
                             SoftDeleted = false
                         },
                         new
                         {
-                            Id = new Guid("cd5896ad-67de-4c16-bfbe-6ec29a50789c"),
+                            Id = new Guid("83dc56a7-1528-4b65-ad67-6e749c956cee"),
                             Active = true,
                             Name = "Barcelona",
                             SoftDeleted = false
