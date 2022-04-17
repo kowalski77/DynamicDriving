@@ -55,7 +55,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.API.Tests", "Services\Trips\DynamicDriving.TripManagement.API.Tests\DynamicDriving.TripManagement.API.Tests.csproj", "{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripManagement.API.IntegrationTests", "Services\Trips\DynamicDriving.TripManagement.API.IntegrationTests\DynamicDriving.TripManagement.API.IntegrationTests.csproj", "{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripManagement.API.IntegrationTests", "Services\Trips\DynamicDriving.TripManagement.API.IntegrationTests\DynamicDriving.TripManagement.API.IntegrationTests.csproj", "{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E8E85D14-48B5-41E1-9CB8-BAC6980A7309}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.DriverManagement.API", "Services\Drivers\DynamicDriving.DriverManagement.API\DynamicDriving.DriverManagement.API.csproj", "{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +133,10 @@ Global
 		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +165,9 @@ Global
 		{8DB578E2-5468-48FE-89EF-0C8B488C71DC} = {7F9E813C-C546-45F0-9316-321947A711C4}
 		{70F42EB0-C2FC-4279-BEC8-E9AB4CB7EBC0} = {7F9E813C-C546-45F0-9316-321947A711C4}
 		{29DA3465-CDAF-449D-979E-D1B7DD84D0E1} = {7F9E813C-C546-45F0-9316-321947A711C4}
+		{72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9} = {374CDF69-A802-4237-992B-89C1F0A314B2}
+		{E8E85D14-48B5-41E1-9CB8-BAC6980A7309} = {72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}
+		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA} = {72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}
