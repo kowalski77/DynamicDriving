@@ -2,6 +2,8 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using DynamicDriving.EventBus;
+using DynamicDriving.Events;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
@@ -80,12 +82,21 @@ public class TripControllerTests
     public async Task Trip_is_confirmed()
     {
         // Arrange
-        var client = this.factory.CreateDefaultClient();
+        var publisherMock = new Mock<IEventBusMessagePublisher>();
+        var client = this.factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                publisherMock.Setup(x => x.PublishAsync(It.IsAny<TripConfirmed>(), CancellationToken.None)).Returns(Task.CompletedTask);
+                services.AddSingleton(_ => publisherMock.Object);
+            });
+        }).CreateClient();
 
         // Act
         var response = await client.PutAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}/confirmation", null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(x => x.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
     }
 }
