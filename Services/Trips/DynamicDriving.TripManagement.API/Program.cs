@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
