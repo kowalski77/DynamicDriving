@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using AutoFixture;
-using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.EventBus.Serializers;
 using FluentAssertions;
 using Xunit;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.Events;
 
 namespace DynamicDriving.BuildingBlocks.Tests.AzureServiceBus;

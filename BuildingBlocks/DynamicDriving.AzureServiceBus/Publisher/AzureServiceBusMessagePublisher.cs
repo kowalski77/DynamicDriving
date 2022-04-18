@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Azure.Messaging.ServiceBus;
-using DynamicDriving.AzureServiceBus.Serializers;
 using DynamicDriving.EventBus;
+using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus.Publisher;

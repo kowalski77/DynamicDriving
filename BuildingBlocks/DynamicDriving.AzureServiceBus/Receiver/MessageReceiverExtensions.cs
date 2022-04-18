@@ -1,5 +1,5 @@
-﻿using DynamicDriving.AzureServiceBus.Serializers;
-using DynamicDriving.AzureServiceBus.Serializers.Contexts;
+﻿using DynamicDriving.EventBus.Serializers;
+using DynamicDriving.EventBus.Serializers.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;

@@ -2,8 +2,8 @@
 
 using DynamicDriving.AzureServiceBus;
 using DynamicDriving.AzureServiceBus.Publisher;
-using DynamicDriving.AzureServiceBus.Serializers;
-using DynamicDriving.AzureServiceBus.Serializers.Contexts;
+using DynamicDriving.EventBus.Serializers;
+using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using Microsoft.Extensions.Configuration;
 

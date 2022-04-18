@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using DynamicDriving.Events;
 
-namespace DynamicDriving.AzureServiceBus.Serializers;
+namespace DynamicDriving.EventBus.Serializers;
 
 public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
 {

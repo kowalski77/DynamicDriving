@@ -1,5 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
-using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.EventBus.Serializers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;

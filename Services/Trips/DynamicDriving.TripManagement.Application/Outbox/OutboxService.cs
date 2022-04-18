@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
@@ -10,14 +11,17 @@ namespace DynamicDriving.TripManagement.Application.Outbox;
 public sealed class OutboxService : IOutboxService
 {
     private readonly IDbContext context;
+    private readonly IEventBusMessagePublisher eventBusMessagePublisher;
     private readonly IOutboxRepository outboxRepository;
 
-    public OutboxService(IDbContext context, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
+    public OutboxService(IDbContext context, IEventBusMessagePublisher eventBusMessagePublisher, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
     {
         Guards.ThrowIfNull(context);
+        Guards.ThrowIfNull(eventBusMessagePublisher);
         Guards.ThrowIfNull(outboxRepositoryFactory);
 
         this.context = context;
+        this.eventBusMessagePublisher = eventBusMessagePublisher;
         this.outboxRepository = outboxRepositoryFactory(context.DatabaseFacade.GetDbConnection());
     }
 
@@ -47,7 +51,7 @@ public sealed class OutboxService : IOutboxService
         {
             var message = OutboxSerializer.Deserialize<IIntegrationEvent>(outboxMessage, typeof(TripConfirmed).Assembly);
 
-            // publish...
+            await this.eventBusMessagePublisher.PublishAsync(message, cancellationToken).ConfigureAwait(false);
 
             await this.outboxRepository.MarkMessageAsPublishedAsync(outboxMessage.Id, cancellationToken).ConfigureAwait(false);
         }

@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization.Metadata;
 using DynamicDriving.Events;
 
-namespace DynamicDriving.AzureServiceBus.Serializers.Contexts;
+namespace DynamicDriving.EventBus.Serializers.Contexts;
 
 public class TripConfirmedContextFactory : IEventContextFactory
 {

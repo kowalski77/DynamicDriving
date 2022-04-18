@@ -1,6 +1,6 @@
 ﻿using DynamicDriving.Events;
 
-namespace DynamicDriving.AzureServiceBus.Serializers;
+namespace DynamicDriving.EventBus.Serializers;
 
 public interface IIntegrationEventSerializer
 {

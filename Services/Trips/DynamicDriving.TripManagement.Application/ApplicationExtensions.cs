@@ -1,8 +1,7 @@
 ﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.AzureServiceBus.Publisher;
-using DynamicDriving.AzureServiceBus.Serializers;
-using DynamicDriving.AzureServiceBus.Serializers.Contexts;
 using DynamicDriving.EventBus;
+using DynamicDriving.EventBus.Serializers;
+using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.TripManagement.Application.Behaviors;
@@ -26,14 +25,10 @@ public static class ApplicationExtensions
 
         services.AddScoped<IOutboxService>(sp => new OutboxService(
             sp.GetRequiredService<IDbContext>(),
+            sp.GetRequiredService<IEventBusMessagePublisher>(),
             dc => new OutboxRepository(dc)));
 
-        services.AddSingleton<IEventBusMessagePublisher>(_ => new AzureServiceBusMessagePublisher(new IntegrationEventSerializer(new IEventContextFactory[]
-        {
-            new TripConfirmedContextFactory()
-        }), new AzureServiceBusOptions
-        {
-            StorageConnectionString = configuration["StorageConnectionString"]
-        }));
+        // TODO: refactor
+        services.AddAzureServiceBus(new IEventContextFactory[] { new TripConfirmedContextFactory() }, configuration);
     }
 }

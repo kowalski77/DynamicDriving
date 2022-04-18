@@ -1,7 +1,6 @@
 ﻿using DynamicDriving.AzureServiceBus.Publisher;
-using DynamicDriving.AzureServiceBus.Serializers;
-using DynamicDriving.AzureServiceBus.Serializers.Contexts;
 using DynamicDriving.EventBus;
+using DynamicDriving.EventBus.Serializers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,12 +8,10 @@ namespace DynamicDriving.AzureServiceBus;
 
 public static class AzureServiceBusExtensions
 {
-    public static IServiceCollection AddAzureServiceBus(this IServiceCollection services, IConfiguration configuration)
+    // TODO: refactor
+    public static IServiceCollection AddAzureServiceBus(this IServiceCollection services, IEventContextFactory[] eventContextFactories, IConfiguration configuration)
     {
-        services.AddSingleton<IEventBusMessagePublisher>(_ => new AzureServiceBusMessagePublisher(new IntegrationEventSerializer(new IEventContextFactory[]
-        {
-            new TripConfirmedContextFactory()
-        }), new AzureServiceBusOptions
+        services.AddSingleton<IEventBusMessagePublisher>(_ => new AzureServiceBusMessagePublisher(new IntegrationEventSerializer(eventContextFactories), new AzureServiceBusOptions
         {
             StorageConnectionString = configuration["StorageConnectionString"]
         }));
