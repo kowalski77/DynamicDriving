@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Contracts\DynamicDriving.Events\DynamicDriving.Events.csproj" />
+    <Folder Include="Receiver\" />
+    <Folder Include="Serializers\Contexts\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Receiver\" />
-    <Folder Include="Serializers\Contexts\" />
+    <ProjectReference Include="..\DynamicDriving.EventBus\DynamicDriving.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

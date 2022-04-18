@@ -1,11 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Azure.Messaging.ServiceBus;
 using DynamicDriving.AzureServiceBus.Serializers;
+using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus.Publisher;
 
-public sealed class AzureServiceBusMessagePublisher : IAsyncDisposable
+public sealed class AzureServiceBusMessagePublisher : IEventBusMessagePublisher, IAsyncDisposable
 {
     private static readonly ConcurrentDictionary<Type, ServiceBusSender> ServiceBusSenders = new();
 
