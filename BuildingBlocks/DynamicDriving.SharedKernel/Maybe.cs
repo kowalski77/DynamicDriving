@@ -24,7 +24,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
         return this.HasValue ? some(this.value) : none();
     }
 
-    public static implicit operator Maybe<T>(T value)
+    public static implicit operator Maybe<T>(T? value)
     {
         return value == null ? new Maybe<T>() : new Maybe<T>(value);
     }

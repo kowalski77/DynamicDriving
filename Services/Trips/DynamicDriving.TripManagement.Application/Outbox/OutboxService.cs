@@ -24,6 +24,8 @@ public sealed class OutboxService : IOutboxService
     public async Task AddIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
         where TIntegrationEvent : class, IIntegrationEvent
     {
+        Guards.ThrowIfNull(integrationEvent);
+
         await this.outboxRepository.SaveMessageAsync(integrationEvent, this.context.GetCurrentTransaction(), cancellationToken).ConfigureAwait(false);
     }
 

@@ -4,6 +4,7 @@ using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
+using DynamicDriving.TripManagement.Domain.TripsAggregate.Events;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
@@ -57,6 +58,8 @@ public sealed class Trip : Entity, IAggregateRoot
         }
 
         this.TripStatus = TripStatus.Ordered;
+
+        this.AddDomainEvent(new TripConfirmed(this.Id, this.PickUp, this.CurrentCoordinates));
     }
 
     public Result CanAssignDriver()

@@ -1,9 +1,11 @@
-﻿using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+﻿using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,8 +36,12 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             using var scope = this.serviceProvider.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
+            var outboxContext = scope.ServiceProvider.GetRequiredService<OutboxContext>();
+
             context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
+            outboxContext.Database.Migrate();
+
             SeedDatabase(context);
         });
 
