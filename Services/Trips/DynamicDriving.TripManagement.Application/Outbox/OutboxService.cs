@@ -45,6 +45,18 @@ public sealed class OutboxService : IOutboxService
         }
     }
 
+    public async Task PublishPendingIntegrationEventsAsync(CancellationToken cancellationToken = default)
+    {
+        var pendingOutboxMessages = await this.outboxRepository.GetNotPublishedAsync(cancellationToken).ConfigureAwait(false);
+        if (pendingOutboxMessages.HasValue)
+        {
+            foreach (var outboxMessage in pendingOutboxMessages.Value)
+            {
+                await this.TryPublishIntegrationEventsAsync(outboxMessage, cancellationToken).ConfigureAwait(false);
+            }
+        }
+    }
+
     private async Task TryPublishIntegrationEventsAsync(OutboxMessage outboxMessage, CancellationToken cancellationToken = default)
     {
         try

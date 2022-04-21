@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.TripManagement.API.HostedServices;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
@@ -23,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+//builder.Services.AddHostedService<OutboxHostedService>();
 
 var app = builder.Build();
 

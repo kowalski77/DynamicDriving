@@ -8,4 +8,6 @@ public interface IOutboxService
         where TIntegrationEvent : class, IIntegrationEvent;
 
     Task PublishIntegrationEventsAsync(Guid transactionId, CancellationToken cancellationToken = default);
+
+    Task PublishPendingIntegrationEventsAsync(CancellationToken cancellationToken = default);
 }
