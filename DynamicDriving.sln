@@ -65,7 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.DriverManage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.EventBus", "BuildingBlocks\DynamicDriving.EventBus\DynamicDriving.EventBus.csproj", "{1107AD2D-3EB1-4D1F-9BC0-05BB64529AAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.DriverManagement.Core", "Services\Drivers\DynamicDriving.DriverManagement.Core\DynamicDriving.DriverManagement.Core.csproj", "{DC49E81E-46A1-41F8-9D3D-2EC20880EC29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.DriverManagement.Core", "Services\Drivers\DynamicDriving.DriverManagement.Core\DynamicDriving.DriverManagement.Core.csproj", "{DC49E81E-46A1-41F8-9D3D-2EC20880EC29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.DriverManagement.Infrastructure", "Services\Drivers\DynamicDriving.DriverManagement.Infrastructure\DynamicDriving.DriverManagement.Infrastructure.csproj", "{BE432575-7621-4710-99E7-775C4F8CB3C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,10 @@ Global
 		{DC49E81E-46A1-41F8-9D3D-2EC20880EC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC49E81E-46A1-41F8-9D3D-2EC20880EC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC49E81E-46A1-41F8-9D3D-2EC20880EC29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE432575-7621-4710-99E7-775C4F8CB3C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE432575-7621-4710-99E7-775C4F8CB3C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE432575-7621-4710-99E7-775C4F8CB3C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE432575-7621-4710-99E7-775C4F8CB3C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +188,7 @@ Global
 		{F5521DBC-8853-4D4A-8B39-3E1570DBB1DA} = {72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}
 		{1107AD2D-3EB1-4D1F-9BC0-05BB64529AAD} = {F53D37A0-B1B1-4F03-8523-CF6807136AEF}
 		{DC49E81E-46A1-41F8-9D3D-2EC20880EC29} = {72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}
+		{BE432575-7621-4710-99E7-775C4F8CB3C2} = {72D6019F-CFDA-4FC5-A865-4F52EB8DFBA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

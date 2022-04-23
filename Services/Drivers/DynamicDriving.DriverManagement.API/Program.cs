@@ -1,15 +1,30 @@
+﻿using DynamicDriving.AzureServiceBus.Receiver;
+using DynamicDriving.DriverManagement.API.Translators;
+using DynamicDriving.DriverManagement.Core.Trips.Commands;
+using DynamicDriving.DriverManagement.Infrastructure;
+using DynamicDriving.Events;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
+builder.Services.AddTranslator<TripConfirmed, ExamCreatedTranslator>(); //TODO: Register all by assembly
+builder.Services.AddAzureServiceBusReceiver(cfg =>
+{
+    cfg.StorageConnectionString = builder.Configuration["StorageConnectionString"];
+    cfg.MessageProcessors = new[]
+    {
+        new MessageProcessor("tripconfirmed", typeof(TripConfirmed)) // TODO: rethink
+    };
+});
+builder.Services.AddInfrastructure();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,9 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

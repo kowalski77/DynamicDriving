@@ -15,6 +15,8 @@ public static class EventsMapper
             source.TripId, 
             source.PickUp, 
             source.Origin.Latitude, 
-            source.Origin.Longitude);
+            source.Origin.Longitude,
+            source.Destination.Latitude,
+            source.Destination.Longitude);
     }
 }

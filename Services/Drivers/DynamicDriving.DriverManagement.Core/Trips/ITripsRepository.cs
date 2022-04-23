@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
+﻿namespace DynamicDriving.DriverManagement.Core.Trips;
 
 public interface ITripsRepository
 {

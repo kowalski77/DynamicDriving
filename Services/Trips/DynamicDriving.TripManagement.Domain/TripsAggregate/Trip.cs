@@ -59,7 +59,7 @@ public sealed class Trip : Entity, IAggregateRoot
 
         this.TripStatus = TripStatus.Ordered;
 
-        this.AddDomainEvent(new TripConfirmed(this.Id, this.PickUp, this.CurrentCoordinates));
+        this.AddDomainEvent(new TripConfirmed(this.Id, this.PickUp, this.Origin.Coordinates, this.Destination.Coordinates));
     }
 
     public Result CanAssignDriver()

@@ -17,7 +17,7 @@ public static class MessageReceiverExtensions
         services.AddScoped(typeof(IConsumer<>), typeof(Consumer<>));
         services.AddScoped<IIntegrationEventSerializer, IntegrationEventSerializer>(_ => new IntegrationEventSerializer(new IEventContextFactory[]
         {
-            new PingContextFactory()
+            new PingContextFactory(), new TripConfirmedContextFactory() // TODO: rethink
         }));
 
         services.AddSingleton(sp =>
