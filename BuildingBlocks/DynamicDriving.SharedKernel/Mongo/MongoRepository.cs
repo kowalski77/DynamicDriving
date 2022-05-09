@@ -16,45 +16,45 @@ public class MongoRepository<T> : IMongoRepository<T>
         this.dbCollection = database.GetCollection<T>(collectionName);
     }
 
-    public async Task<IReadOnlyCollection<T>> GetAllAsync()
+    public async Task<IReadOnlyCollection<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await this.dbCollection.Find(this.filterBuilder.Empty).ToListAsync().ConfigureAwait(false);
+        return await this.dbCollection.Find(this.filterBuilder.Empty).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<T>> GetAllAsync(Expression<Func<T, bool>> filter)
+    public async Task<IReadOnlyCollection<T>> GetAllAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
     {
-        return await this.dbCollection.Find(filter).ToListAsync().ConfigureAwait(false);
+        return await this.dbCollection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> GetAsync(Guid id)
+    public async Task<T> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var filter = this.filterBuilder.Eq(entity => entity.Id, id);
-        return await this.dbCollection.Find(filter).FirstOrDefaultAsync().ConfigureAwait(false);
+        return await this.dbCollection.Find(filter).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> GetAsync(Expression<Func<T, bool>> filter)
+    public async Task<T> GetAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
     {
-        return await this.dbCollection.Find(filter).FirstOrDefaultAsync().ConfigureAwait(false);
+        return await this.dbCollection.Find(filter).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task CreateAsync(T entity)
+    public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
         Guards.ThrowIfNull(entity);
 
-        await this.dbCollection.InsertOneAsync(entity).ConfigureAwait(false);
+        await this.dbCollection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         Guards.ThrowIfNull(entity);
 
         var filter = this.filterBuilder.Eq(existingEntity => existingEntity.Id, entity.Id);
-        await this.dbCollection.ReplaceOneAsync(filter, entity).ConfigureAwait(false);
+        await this.dbCollection.ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task RemoveAsync(Guid id)
+    public async Task RemoveAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var filter = this.filterBuilder.Eq(entity => entity.Id, id);
-        await this.dbCollection.DeleteOneAsync(filter).ConfigureAwait(false);
+        await this.dbCollection.DeleteOneAsync(filter, cancellationToken).ConfigureAwait(false);
     }
 }
