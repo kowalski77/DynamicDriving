@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.SharedKernel;
-using DynamicDriving.SharedKernel.Mongo;
 using MediatR;
 
 namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
@@ -8,11 +7,11 @@ public sealed record CreateTrip(Guid Id, DateTime PickUp, decimal OriginLatitude
 
 public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
 {
-    private readonly IMongoRepository<Trip> mongoRepository;
+    private readonly ITripRepository tripRepository;
 
-    public CreateTripHandler(IMongoRepository<Trip> mongoRepository)
+    public CreateTripHandler(ITripRepository tripRepository)
     {
-        this.mongoRepository = Guards.ThrowIfNull(mongoRepository);
+        this.tripRepository = Guards.ThrowIfNull(tripRepository);
     }
 
     public async Task Handle(CreateTrip request, CancellationToken cancellationToken)
@@ -23,6 +22,6 @@ public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
         var destinationCoordinates = new Coordinates(request.DestinationLatitude, request.DestinationLongitude);
         var trip = new Trip(request.Id, request.PickUp, originCoordinates, destinationCoordinates);
 
-        await this.mongoRepository.CreateAsync(trip, cancellationToken);
+        await this.tripRepository.CreateAsync(trip, cancellationToken);
     }
 }

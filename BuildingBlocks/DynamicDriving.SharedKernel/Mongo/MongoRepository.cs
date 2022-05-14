@@ -3,13 +3,13 @@ using MongoDB.Driver;
 
 namespace DynamicDriving.SharedKernel.Mongo;
 
-public class MongoRepository<T> : IMongoRepository<T>
+public abstract class MongoRepository<T> : IMongoRepository<T>
     where T : class, IEntity
 {
     private readonly IMongoCollection<T> dbCollection;
     private readonly FilterDefinitionBuilder<T> filterBuilder = Builders<T>.Filter;
 
-    public MongoRepository(IMongoDatabase database)
+    protected MongoRepository(IMongoDatabase database)
     {
         Guards.ThrowIfNull(database);
 

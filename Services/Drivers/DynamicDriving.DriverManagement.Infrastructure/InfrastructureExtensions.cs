@@ -15,7 +15,7 @@ public static class InfrastructureExtensions
 
         var mongoOptions = configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
         services.AddMongo(mongoOptions);
-        services.AddScoped<IMongoRepository<Trip>, MongoRepository<Trip>>();
+        services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
 
         return services;
