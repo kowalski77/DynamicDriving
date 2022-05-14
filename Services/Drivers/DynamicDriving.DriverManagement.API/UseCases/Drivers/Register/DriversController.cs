@@ -5,30 +5,25 @@ using DynamicDriving.SharedKernel.Envelopes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
+namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 
 [Route("api/v1/[controller]")]
-public class TripsController : ApplicationController
+public class DriversController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    public DriversController(IMediator mediator) : base(mediator)
     {
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(SuccessEnvelope<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
+    public async Task<IActionResult> RegisterDriver([FromBody] RegisterDriverRequest request)
     {
         Guards.ThrowIfNull(request);
 
         var command = request.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
-        return this.CreatedResult(
-            result,
-            dto => dto.AsResponse(),
-            nameof(GetById.TripsController.GetTripById),
-            () => new { id = result.Value.Id });
+        return FromResult(result, value => new RegisterDriverResponse(value));
     }
 }

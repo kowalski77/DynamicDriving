@@ -5,7 +5,7 @@ using DynamicDriving.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DynamicDriving.TripManagement.API.Support;
+namespace DynamicDriving.SharedKernel.Apis;
 
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
@@ -58,7 +58,6 @@ public class ApplicationController : ControllerBase
     }
 
     protected static IActionResult FromResult<T, TR>(Result<T> result, Func<T, TR> converter)
-        where T : class
         where TR : class
     {
         ArgumentNullException.ThrowIfNull(result);
@@ -74,7 +73,7 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
-    protected IActionResult FromResult(Result result)
+    protected static IActionResult FromResult(Result result)
     {
         ArgumentNullException.ThrowIfNull(result);
 

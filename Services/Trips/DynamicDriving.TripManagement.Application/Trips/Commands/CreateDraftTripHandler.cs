@@ -21,7 +21,7 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, Re
 
     public async Task<Result<DraftTripDto>> Handle(CreateDraftTrip request, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(request);
+        Guards.ThrowIfNull(request);
 
         var originCoordinates = Coordinates.CreateInstance(request.OriginLatitude, request.OriginLongitude);
         var destinationCoordinates = Coordinates.CreateInstance(request.DestinationLatitude, request.DestinationLongitude);

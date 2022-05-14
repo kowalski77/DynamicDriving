@@ -1,4 +1,5 @@
-﻿using DynamicDriving.DriverManagement.Core.Trips;
+﻿using DynamicDriving.DriverManagement.Core.Drivers;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mongo;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ public static class InfrastructureExtensions
         var mongoOptions = configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
         services.AddMongo(mongoOptions);
         services.AddScoped<IMongoRepository<Trip>, MongoRepository<Trip>>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
 
         return services;
     }

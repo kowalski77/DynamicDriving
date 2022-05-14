@@ -9,11 +9,11 @@ public class MongoRepository<T> : IMongoRepository<T>
     private readonly IMongoCollection<T> dbCollection;
     private readonly FilterDefinitionBuilder<T> filterBuilder = Builders<T>.Filter;
 
-    public MongoRepository(IMongoDatabase database, string collectionName)
+    public MongoRepository(IMongoDatabase database)
     {
         Guards.ThrowIfNull(database);
 
-        this.dbCollection = database.GetCollection<T>(collectionName);
+        this.dbCollection = database.GetCollection<T>(typeof(T).Name);
     }
 
     public async Task<IReadOnlyCollection<T>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -41,7 +41,20 @@ public class MongoRepository<T> : IMongoRepository<T>
     {
         Guards.ThrowIfNull(entity);
 
-        await this.dbCollection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await this.dbCollection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        catch (MongoWriteException e)
+        {
+            if (e.InnerException is MongoBulkWriteException && 
+                e.InnerException.Message.Contains("DuplicateKey", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DuplicateIdException($"{typeof(T).Name} with id: {entity.Id} already exists");
+            }
+
+            throw;
+        }
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)

@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +22,8 @@ public class TripsController : ApplicationController
     {
         Guards.ThrowIfEmpty(id);
 
-        var resultModel = await this.Mediator.Send(new GetTripById(id)).ConfigureAwait(false);
+        var result = await this.Mediator.Send(new GetTripById(id)).ConfigureAwait(false);
 
-        return FromResult(resultModel, dto => dto.AsResponse());
+        return FromResult(result, dto => dto.AsResponse());
     }
 }

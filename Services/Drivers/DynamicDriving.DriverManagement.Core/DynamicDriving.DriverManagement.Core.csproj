@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Drivers\Commands\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +25,6 @@ public class TripsController : ApplicationController
         var command = new ConfirmTrip(id);
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
-        return this.FromResult(result);
+        return FromResult(result);
     }
 }

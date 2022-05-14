@@ -1,8 +1,8 @@
-﻿using DynamicDriving.SharedKernel.Mongo;
+﻿namespace DynamicDriving.Models;
 
-namespace DynamicDriving.DriverManagement.Core.Drivers;
+public record RegisterDriverRequest(Guid Id, string Name, Car Car, bool IsAvailable);
 
-public record Driver(Guid Id, string Name, Car Car, bool IsAvailable) : IEntity;
+public record RegisterDriverResponse(Guid DriverId);
 
 public record Car(Guid Id, string Model, CarType CarType);
 
