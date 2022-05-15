@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using DynamicDriving.AzureServiceBus.Receiver;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.Events;
+using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -39,13 +41,14 @@ public class CommandHandlerTests
         });
         _ = client.CreateDefaultClient();
 
-        var message = this.factory.Fixture.Create<TripConfirmed>();
+        var tripConfirmedEvent = this.factory.Fixture.Create<TripConfirmed>();
         var consumer = this.factory.GetConsumer<TripConfirmed>();
 
         // Act
-        await consumer.ExecuteAsync(message);
+        await consumer.ExecuteAsync(tripConfirmedEvent);
 
         // Assert
-
+        var trip = await this.factory.GetTripByIdAsync(tripConfirmedEvent.Id);
+        trip.Should().NotBeNull();
     }
 }

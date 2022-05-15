@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using DynamicDriving.AzureServiceBus.Receiver;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel.Mongo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -19,10 +21,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public IConsumer<T> GetConsumer<T>()
     {
-        using var scope = this.serviceProvider.CreateScope();
-        var consumer = this.serviceProvider.GetRequiredService<IConsumer<T>>();
+        return this.serviceProvider.GetRequiredService<IConsumer<T>>();
+    }
 
-        return consumer;
+    public async Task<Trip> GetTripByIdAsync(Guid id)
+    {
+        var repository = this.serviceProvider.GetRequiredService<ITripRepository>();
+
+        return await repository.GetAsync(id);
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
