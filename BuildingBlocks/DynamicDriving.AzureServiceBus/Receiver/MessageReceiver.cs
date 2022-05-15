@@ -2,7 +2,7 @@
 
 namespace DynamicDriving.AzureServiceBus.Receiver;
 
-public sealed class MessageReceiver : IAsyncDisposable
+public sealed class MessageReceiver : IMessageReceiver, IAsyncDisposable
 {
     private readonly List<ServiceBusProcessor> serviceBusProcessors = new();
     private readonly IServiceProvider serviceProvider;

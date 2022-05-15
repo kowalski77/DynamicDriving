@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -52,3 +53,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

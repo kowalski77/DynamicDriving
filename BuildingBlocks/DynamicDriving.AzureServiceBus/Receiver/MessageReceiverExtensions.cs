@@ -20,7 +20,7 @@ public static class MessageReceiverExtensions
             new PingContextFactory(), new TripConfirmedContextFactory() // TODO: rethink
         }));
 
-        services.AddSingleton(sp =>
+        services.AddSingleton<IMessageReceiver>(sp =>
         {
             var messageReceiverEndPoint = new MessageReceiver(sp);
             foreach (var processorRegistration in options.MessageProcessors)

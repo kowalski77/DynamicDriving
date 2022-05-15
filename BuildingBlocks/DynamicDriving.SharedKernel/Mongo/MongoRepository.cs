@@ -41,20 +41,7 @@ public abstract class MongoRepository<T> : IMongoRepository<T>
     {
         Guards.ThrowIfNull(entity);
 
-        try
-        {
-            await this.dbCollection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
-        }
-        catch (MongoWriteException e)
-        {
-            if (e.InnerException is MongoBulkWriteException && 
-                e.InnerException.Message.Contains("DuplicateKey", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new DuplicateIdException($"{typeof(T).Name} with id: {entity.Id} already exists");
-            }
-
-            throw;
-        }
+        await this.dbCollection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)

@@ -4,9 +4,9 @@ namespace DynamicDriving.AzureServiceBus.Receiver;
 
 public class ServiceBusReceiverHostedService : IHostedService
 {
-    private readonly MessageReceiver messageReceiver;
+    private readonly IMessageReceiver messageReceiver;
 
-    public ServiceBusReceiverHostedService(MessageReceiver messageReceiver)
+    public ServiceBusReceiverHostedService(IMessageReceiver messageReceiver)
     {
         this.messageReceiver = messageReceiver ?? throw new ArgumentNullException(nameof(messageReceiver));
     }
