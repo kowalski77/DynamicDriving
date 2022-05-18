@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.API.Translators;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
+using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.DriverManagement.Infrastructure;
 using DynamicDriving.Events;
@@ -33,6 +34,7 @@ builder.Services.AddAzureServiceBusReceiver(cfg =>
         new MessageProcessor("tripconfirmed", typeof(TripConfirmed)) // TODO: rethink
     };
 });
+builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();

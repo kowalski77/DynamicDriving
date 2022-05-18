@@ -1,23 +1,51 @@
 ﻿using DynamicDriving.DriverManagement.Core.Drivers;
+using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Mongo;
+using DynamicDriving.SharedKernel.Results;
 
 namespace DynamicDriving.DriverManagement.Core.Trips;
 
-public record Trip(Guid Id, DateTime PickUp, Coordinates Origin, Coordinates Destination) : IEntity
+public class Trip : IEntity
 {
-    public TripStatus TripStatus { get; init; } = TripStatus.Unassigned;
+    public Trip(Guid id, DateTime pickUp, Coordinates origin, Coordinates destination)
+    {
+        this.Id = id;
+        this.Origin = Guards.ThrowIfNull(origin);
+        this.Destination = Guards.ThrowIfNull(destination);
+        this.PickUp = pickUp;
+        this.TripStatus = TripStatus.Unassigned;
+    }
 
-    public Driver? Driver { get; init; }
-}
+    public Coordinates Origin { get; private set; }
 
-public record Coordinates(decimal Latitude, decimal Longitude);
+    public Coordinates Destination { get; private set;}
 
-public enum TripStatus
-{
-    Unassigned,
-    Assigned,
-    ToOrigin,
-    ToDestination,
-    Canceled,
-    Finished
+    public DateTime PickUp { get; private set;}
+
+    public TripStatus TripStatus { get; private set;}
+
+    public Driver? Driver { get; private set; }
+
+    public Guid Id { get; }
+
+    public Result CanAssignDriver()
+    {
+        return this.TripStatus != TripStatus.Unassigned ? 
+            new ErrorResult("", ""): 
+            Result.Ok();
+    }
+
+    public void Assign(Driver driver)
+    {
+        Guards.ThrowIfNull(driver);
+
+        var result = this.CanAssignDriver();
+        if (result.Failure)
+        {
+            throw new InvalidOperationException(result.Error!.Message);
+        }
+
+        this.Driver = driver;
+    }
 }

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\DynamicDriving.DriverManagement.Infrastructure\DynamicDriving.DriverManagement.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\Drivers\Edit\" />
+  </ItemGroup>
+
 </Project>

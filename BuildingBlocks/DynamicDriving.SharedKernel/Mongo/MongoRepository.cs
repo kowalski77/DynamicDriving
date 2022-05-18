@@ -26,13 +26,13 @@ public abstract class MongoRepository<T> : IMongoRepository<T>
         return await this.dbCollection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var filter = this.filterBuilder.Eq(entity => entity.Id, id);
         return await this.dbCollection.Find(filter).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> GetAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
+    public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
     {
         return await this.dbCollection.Find(filter).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
     }

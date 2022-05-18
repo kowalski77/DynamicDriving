@@ -18,8 +18,8 @@ public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
     {
         Guards.ThrowIfNull(request);
 
-        var originCoordinates = new Coordinates(request.OriginLatitude, request.OriginLongitude);
-        var destinationCoordinates = new Coordinates(request.DestinationLatitude, request.DestinationLongitude);
+        var originCoordinates = Coordinates.CreateInstance(request.OriginLatitude, request.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(request.DestinationLatitude, request.DestinationLongitude);
         var trip = new Trip(request.Id, request.PickUp, originCoordinates, destinationCoordinates);
 
         await this.tripRepository.CreateAsync(trip, cancellationToken);

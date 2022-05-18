@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using DynamicDriving.AzureServiceBus.Receiver;
-using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;

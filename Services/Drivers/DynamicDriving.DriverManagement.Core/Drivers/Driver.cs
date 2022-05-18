@@ -2,20 +2,21 @@
 
 namespace DynamicDriving.DriverManagement.Core.Drivers;
 
-public record Driver(Guid Id, string Name, Car Car, bool IsAvailable) : IEntity;
-
-public record Car(Guid Id, string Model, CarType CarType);
-
-public enum CarType
+public class Driver : IEntity
 {
-    None,
-    Sedan,
-    Coupe,
-    SportsCar,
-    StationWagon,
-    HatchBack,
-    Convertible,
-    Suv,
-    Minivan,
-    Pickup
+    public Driver(Guid id, string name, Car car, bool isAvailable)
+    {
+        this.Id = id;
+        this.Name = name;
+        this.Car = car;
+        this.IsAvailable = isAvailable;
+    }
+
+    public Guid Id { get; private set;}
+
+    public string Name { get; private set;}
+
+    public Car Car { get;  private set;}
+
+    public bool IsAvailable { get; private set;}
 }
