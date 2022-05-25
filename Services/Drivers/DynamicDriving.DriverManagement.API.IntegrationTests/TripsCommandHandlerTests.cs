@@ -31,4 +31,15 @@ public class TripsCommandHandlerTests
         var trip = await this.factory.GetTripByIdAsync(tripConfirmedEvent.Id);
         trip.Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task Driver_is_assigned_successfully_to_an_existing_trip()
+    {
+        // Arrange
+        _ = this.factory.Client;
+
+        // Act
+
+        // Assert
+    }
 }

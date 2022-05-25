@@ -4,9 +4,9 @@ using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using MediatR;
 
-namespace DynamicDriving.DriverManagement.API.Translators;
+namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
-public class ExamCreatedTranslator : ITranslator<TripConfirmed>
+public class TripConfirmedTranslator : ITranslator<TripConfirmed>
 {
     public INotification Translate(TripConfirmed message)
     {

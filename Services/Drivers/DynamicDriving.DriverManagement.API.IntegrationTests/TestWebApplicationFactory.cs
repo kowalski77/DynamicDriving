@@ -89,7 +89,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var mongoDatabase = this.serviceProvider.GetRequiredService<IMongoDatabase>();
 
         var tripCollection = mongoDatabase.GetCollection<Trip>(nameof(Trip));
-        tripCollection.InsertOne(this.Fixture.Create<Trip>());
+
+        var trip = new Trip(Guid.Parse(IntegrationTestConstants.TripId), DateTime.Now, this.Fixture.Create<Coordinates>(), this.Fixture.Create<Coordinates>());
+        tripCollection.InsertOne(trip);
 
         var driverCollection = mongoDatabase.GetCollection<Driver>(nameof(Driver));
         var driver = new Driver(Guid.NewGuid(), this.Fixture.Create<string>(), this.Fixture.Create<Car>(), true);

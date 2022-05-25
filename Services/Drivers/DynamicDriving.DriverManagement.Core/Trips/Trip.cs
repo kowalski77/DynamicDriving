@@ -27,7 +27,7 @@ public class Trip : IEntity
 
     public Driver? Driver { get; private set; }
 
-    public Guid Id { get; }
+    public Guid Id { get; private set; }
 
     public Result CanAssignDriver()
     {

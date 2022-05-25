@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.AzureServiceBus.Receiver;
-using DynamicDriving.DriverManagement.API.Translators;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
+using DynamicDriving.DriverManagement.API.UseCases.Trips;
+using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.DriverManagement.Infrastructure;
@@ -25,7 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
-builder.Services.AddTranslator<TripConfirmed, ExamCreatedTranslator>(); //TODO: Register all by assembly
+builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>(); //TODO: Register all by assembly
 builder.Services.AddAzureServiceBusReceiver(cfg =>
 {
     cfg.StorageConnectionString = builder.Configuration["StorageConnectionString"];
