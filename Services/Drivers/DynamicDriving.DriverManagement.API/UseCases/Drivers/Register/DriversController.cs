@@ -1,4 +1,5 @@
-﻿using DynamicDriving.Models;
+﻿using DynamicDriving.DriverManagement.Core.Drivers.Commands;
+using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
@@ -21,7 +22,7 @@ public class DriversController : ApplicationController
     {
         Guards.ThrowIfNull(request);
 
-        var command = request.AsCommand();
+        RegisterDriver command = request.AsCommand();
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
         return FromResult(result, value => new RegisterDriverResponse(value));
