@@ -46,6 +46,7 @@ public class Trip : IEntity
             throw new InvalidOperationException(result.Error!.Message);
         }
 
+        this.TripStatus = TripStatus.Assigned;
         this.Driver = driver;
     }
 }

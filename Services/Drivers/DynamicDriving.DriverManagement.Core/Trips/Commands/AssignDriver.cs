@@ -6,9 +6,9 @@ using DynamicDriving.SharedKernel.Results;
 
 namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
 
-public sealed record AssignDriver(Guid TripId) : ICommand<Result>;
+public sealed record AssignDriver(Guid TripId) : ICommand<Result<AssignDriverDto>>;
 
-public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result>
+public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<AssignDriverDto>>
 {
     private readonly ITripRepository tripRepository;
     private readonly IDriverService driverService;
@@ -19,32 +19,31 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result>
         this.tripRepository = Guards.ThrowIfNull(tripRepository);
     }
 
-    public async Task<Result> Handle(AssignDriver request, CancellationToken cancellationToken)
+    public async Task<Result<AssignDriverDto>> Handle(AssignDriver request, CancellationToken cancellationToken)
     {
         Guards.ThrowIfNull(request);
 
         var trip = await this.tripRepository.GetAsync(request.TripId, cancellationToken);
         if (trip is null)
         {
-            return Result.Fail(new ErrorResult("", ""));
+            return GeneralErrors.NotFound(request.TripId, nameof(Trip));
         }
 
         var canAssignResult = trip.CanAssignDriver();
         if (canAssignResult.Failure)
         {
-            return canAssignResult;
+            return canAssignResult.Error!;
         }
 
         var driver = await this.driverService.GetFirstAvailableDriverAsync(cancellationToken);
         if (driver is null)
         {
-            return new ErrorResult("", "");
+            return TripErrors.NoDriverAvailable();
         }
 
         trip.Assign(driver);
-
         await this.tripRepository.UpdateAsync(trip, cancellationToken);
 
-        return Result.Ok();
+        return Result.Ok(new AssignDriverDto(trip.Id, driver.Id));
     }
 }

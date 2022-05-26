@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Drivers\Edit\" />
+    <Folder Include="UseCases\Trips\Assign\" />
   </ItemGroup>
 
 </Project>

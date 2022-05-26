@@ -11,7 +11,7 @@ using Xunit;
 namespace DynamicDriving.DriverManagement.API.IntegrationTests;
 
 [Collection(IntegrationTestConstants.TestWebApplicationFactoryCollection)]
-public class DriverControllerTests
+public class DriversControllerTests
 {
     private const string DriversEndpoint = "/api/v1/Drivers";
 
@@ -19,7 +19,7 @@ public class DriverControllerTests
 
     private readonly TestWebApplicationFactory factory;
 
-    public DriverControllerTests(TestWebApplicationFactory factory)
+    public DriversControllerTests(TestWebApplicationFactory factory)
     {
         this.factory = factory;
     }
@@ -33,9 +33,10 @@ public class DriverControllerTests
 
         // Act
         var responseMessage = await this.factory.Client.PostAsJsonAsync(DriversEndpoint, request);
-
+        
         // Assert
-        var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<RegisterDriverResponse>>(JsonSerializerOptions);
-        response!.Data.DriverId.Should().Be(driverId);
+        responseMessage.EnsureSuccessStatusCode();
+        var envelope = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<RegisterDriverResponse>>(JsonSerializerOptions);
+        envelope!.Data.DriverId.Should().Be(driverId);
     }
 }

@@ -4,6 +4,10 @@ public record RegisterDriverRequest(Guid Id, string Name, Car Car, bool IsAvaila
 
 public record RegisterDriverResponse(Guid DriverId);
 
+public record AssignDriverRequest(Guid TripId);
+
+public record AssignDriverResponse(Guid TripId, Guid DriverId);
+
 public record Car(Guid Id, string Model, CarType CarType);
 
 public enum CarType
