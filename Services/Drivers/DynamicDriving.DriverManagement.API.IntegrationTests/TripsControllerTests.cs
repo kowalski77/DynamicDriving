@@ -28,8 +28,9 @@ public class TripsControllerTests
     public async Task Driver_is_assigned_successfully_to_an_existing_trip()
     {
         // Arrange
+        var tripId = Guid.Parse(IntegrationTestConstants.TripId);
         var request = this.factory.Fixture.Build<AssignDriverRequest>()
-            .With(x => x.TripId, Guid.Parse(IntegrationTestConstants.TripId))
+            .With(x => x.TripId, tripId)
             .Create();
 
         // Act
@@ -39,6 +40,8 @@ public class TripsControllerTests
         responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<AssignDriverResponse>>(JsonSerializerOptions);
         response!.Data.TripId.Should().Be(IntegrationTestConstants.TripId);
-        response.Data.DriverId.Should().NotBeEmpty();
+
+        var trip = await this.factory.GetTripByIdAsync(tripId);
+        trip!.Driver?.Id.Should().Be(response.Data.DriverId);
     }
 }
