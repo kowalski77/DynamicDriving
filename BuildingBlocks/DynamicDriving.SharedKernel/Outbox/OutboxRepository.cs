@@ -11,10 +11,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
 
     public OutboxRepository(DbConnection dbConnection)
     {
-        if (dbConnection == null)
-        {
-            throw new ArgumentNullException(nameof(dbConnection));
-        }
+        Guards.ThrowIfNull(dbConnection);
 
         this.context = new OutboxContext(new DbContextOptionsBuilder<OutboxContext>()
             .UseSqlServer(dbConnection).Options);
@@ -46,7 +43,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
 
     public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(Guid transactionId, CancellationToken cancellationToken = default)
     {
-        var outboxMessages = await (this.context.OutboxMessages!)
+        var outboxMessages = await (this.context.OutboxMessages)
             .Where(e => e.Id == transactionId && e.State == EventState.NotPublished)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -56,7 +53,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
 
     public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(CancellationToken cancellationToken = default)
     {
-        var outboxMessages = await (this.context.OutboxMessages!)
+        var outboxMessages = await (this.context.OutboxMessages)
             .Where(e => e.State == EventState.NotPublished || e.State == EventState.PublishedFailed)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -66,7 +63,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
 
     private async Task UpdateStatusAsync(Guid messageId, EventState eventState, CancellationToken cancellationToken = default)
     {
-        var message = this.context.OutboxMessages!.Single(x => x.Id == messageId);
+        var message = this.context.OutboxMessages.First(x => x.Id == messageId);
         message.State = eventState;
 
         this.context.OutboxMessages.Update(message);

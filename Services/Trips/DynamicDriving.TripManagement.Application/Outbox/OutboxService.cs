@@ -67,7 +67,7 @@ public sealed class OutboxService : IOutboxService
 
             await this.outboxRepository.MarkMessageAsPublishedAsync(outboxMessage.Id, cancellationToken).ConfigureAwait(false);
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
             await this.outboxRepository.MarkMessageAsFailedAsync(outboxMessage.Id, cancellationToken).ConfigureAwait(false);
         }
