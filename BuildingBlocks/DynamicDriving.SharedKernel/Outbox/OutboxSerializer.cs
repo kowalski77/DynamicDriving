@@ -1,16 +1,14 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace DynamicDriving.SharedKernel.Outbox;
 
 public static class OutboxSerializer
 {
-    public static async Task<T> DeserializeAsync<T>(OutboxMessage outboxMessage, Assembly assembly)
+    public static async Task<T> DeserializeAsync<T>(OutboxMessage outboxMessage)
     {
         Guards.ThrowIfNull(outboxMessage);
-        Guards.ThrowIfNull(assembly);
 
-        var type = assembly.GetType(outboxMessage.Type) ?? 
+        var type = typeof(T).Assembly.GetType(outboxMessage.Type) ?? 
                    throw new InvalidOperationException($"Could not find type {outboxMessage.Type}");
 
         using var stream = new MemoryStream();
