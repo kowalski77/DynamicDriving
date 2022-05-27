@@ -62,7 +62,7 @@ public sealed class OutboxService : IOutboxService
     {
         try
         {
-            var message = OutboxSerializer.Deserialize<IIntegrationEvent>(outboxMessage, typeof(TripConfirmed).Assembly);
+            var message = await OutboxSerializer.DeserializeAsync<IIntegrationEvent>(outboxMessage, typeof(TripConfirmed).Assembly);
 
             await this.eventBusMessagePublisher.PublishAsync(message, cancellationToken).ConfigureAwait(false);
 
