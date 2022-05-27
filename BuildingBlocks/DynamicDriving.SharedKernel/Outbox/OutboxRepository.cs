@@ -20,8 +20,8 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
     public async Task SaveMessageAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
         where TIntegrationEvent : class
     {
-        ArgumentNullException.ThrowIfNull(integrationEvent);
-        ArgumentNullException.ThrowIfNull(transaction);
+        Guards.ThrowIfNull(integrationEvent);
+        Guards.ThrowIfNull(transaction);
 
         await this.context.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken).ConfigureAwait(false);
 
