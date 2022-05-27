@@ -17,4 +17,15 @@ public static class OutboxSerializer
 
         return result;
     }
+
+    public static async Task<T> DeserializeAsync<T>(OutboxMessage outboxMessage)
+    {
+        ArgumentNullException.ThrowIfNull(outboxMessage);
+
+        await using var openStream = File.OpenRead(outboxMessage.Data);
+        var result = await JsonSerializer.DeserializeAsync<T>(openStream).ConfigureAwait(false) ?? 
+                     throw new InvalidOperationException($"Could not find type {outboxMessage.Type}");
+
+        return result;
+    }
 }

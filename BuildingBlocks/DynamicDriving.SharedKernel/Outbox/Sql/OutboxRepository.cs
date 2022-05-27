@@ -44,7 +44,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
     public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(Guid transactionId, CancellationToken cancellationToken = default)
     {
         var outboxMessages = await (this.context.OutboxMessages)
-            .Where(e => e.Id == transactionId && e.State == EventState.NotPublished)
+            .Where(e => e.TransactionId == transactionId && e.State == EventState.NotPublished)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 

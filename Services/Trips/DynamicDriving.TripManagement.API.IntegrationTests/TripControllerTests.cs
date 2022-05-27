@@ -97,6 +97,6 @@ public class TripControllerTests
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(x => x.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
+        publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(y => y.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
     }
 }

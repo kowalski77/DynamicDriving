@@ -4,18 +4,16 @@ using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DynamicDriving.TripManagement.Infrastructure.Migrations
+namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20220417181640_Initial")]
-    partial class Initial
+    partial class TripManagementContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,14 +45,14 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2ce0b4ab-e554-4649-90be-aabd11d120a2"),
+                            Id = new Guid("54c7059e-0925-45ed-b323-9deab2e4faee"),
                             Active = true,
                             Name = "Sabadell",
                             SoftDeleted = false
                         },
                         new
                         {
-                            Id = new Guid("83dc56a7-1528-4b65-ad67-6e749c956cee"),
+                            Id = new Guid("3153d4c8-b0df-40ce-b9fe-27052f87bbc0"),
                             Active = true,
                             Name = "Barcelona",
                             SoftDeleted = false

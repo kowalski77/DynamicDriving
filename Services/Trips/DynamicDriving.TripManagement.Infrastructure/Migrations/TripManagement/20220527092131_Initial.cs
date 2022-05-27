@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DynamicDriving.TripManagement.Infrastructure.Migrations
+namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
 {
     public partial class Initial : Migration
     {
@@ -126,12 +126,12 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("2ce0b4ab-e554-4649-90be-aabd11d120a2"), true, "Sabadell", false });
+                values: new object[] { new Guid("3153d4c8-b0df-40ce-b9fe-27052f87bbc0"), true, "Barcelona", false });
 
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("83dc56a7-1528-4b65-ad67-6e749c956cee"), true, "Barcelona", false });
+                values: new object[] { new Guid("54c7059e-0925-45ed-b323-9deab2e4faee"), true, "Sabadell", false });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_CarId",
