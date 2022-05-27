@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DynamicDriving.SharedKernel.Outbox;
+namespace DynamicDriving.SharedKernel.Outbox.Sql;
 
 public interface IOutboxRepository
 {

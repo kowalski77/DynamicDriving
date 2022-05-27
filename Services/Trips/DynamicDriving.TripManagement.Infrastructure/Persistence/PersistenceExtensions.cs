@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using Microsoft.EntityFrameworkCore;

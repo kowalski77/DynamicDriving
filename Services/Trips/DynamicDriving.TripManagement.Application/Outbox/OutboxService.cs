@@ -4,6 +4,7 @@ using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.SharedKernel.Outbox.Sql;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDriving.TripManagement.Application.Outbox;

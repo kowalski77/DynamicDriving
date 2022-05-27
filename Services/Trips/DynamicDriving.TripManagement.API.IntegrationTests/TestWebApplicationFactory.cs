@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;

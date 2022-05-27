@@ -4,6 +4,7 @@ using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
+using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Application.Behaviors;
 using DynamicDriving.TripManagement.Application.Outbox;
 using DynamicDriving.TripManagement.Application.Trips.Commands;

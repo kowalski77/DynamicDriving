@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DynamicDriving.SharedKernel.Outbox;
+namespace DynamicDriving.SharedKernel.Outbox.Sql;
 
 public class OutboxMessageEntityTypeConfiguration : IEntityTypeConfiguration<OutboxMessage>
 {

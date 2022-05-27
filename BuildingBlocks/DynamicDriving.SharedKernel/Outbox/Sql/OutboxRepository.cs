@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DynamicDriving.SharedKernel.Outbox;
+namespace DynamicDriving.SharedKernel.Outbox.Sql;
 
 public sealed class OutboxRepository : IOutboxRepository, IDisposable
 {
@@ -63,7 +63,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
 
     private async Task UpdateStatusAsync(Guid messageId, EventState eventState, CancellationToken cancellationToken = default)
     {
-        var message = this.context.OutboxMessages.First(x => x.Id == messageId);
+        var message = await this.context.OutboxMessages.FirstAsync(x => x.Id == messageId, cancellationToken).ConfigureAwait(false);
         message.State = eventState;
 
         this.context.OutboxMessages.Update(message);

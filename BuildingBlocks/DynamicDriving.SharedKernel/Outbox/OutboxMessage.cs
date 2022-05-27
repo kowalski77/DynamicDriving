@@ -4,6 +4,8 @@ public sealed class OutboxMessage
 {
     public Guid Id { get; private set; }
 
+    public Guid TransactionId { get; set; }
+
     public DateTime OccurredOn { get; private set; }
 
     public string Type { get; private set; } 
@@ -13,12 +15,13 @@ public sealed class OutboxMessage
     public EventState State { get; internal set; }
 
     internal OutboxMessage(
-        Guid id,
+        Guid transactionId,
         DateTime occurredOn, 
         string type, 
         string data)
     {
-        this.Id = id;
+        this.Id = Guid.NewGuid();
+        this.TransactionId = transactionId;
         this.OccurredOn = occurredOn;
         this.Type = type;
         this.Data = data;

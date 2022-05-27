@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel.DomainDriven;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicDriving.SharedKernel.Outbox;
+namespace DynamicDriving.SharedKernel.Outbox.Sql;
 
 public class OutboxContext : DbContext, IUnitOfWork
 {

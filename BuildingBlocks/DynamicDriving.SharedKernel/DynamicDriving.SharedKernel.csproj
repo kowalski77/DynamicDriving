@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Mediator\" />
-    <Folder Include="Outbox\" />
     <Folder Include="Validators\" />
     <Folder Include="Results\" />
   </ItemGroup>
