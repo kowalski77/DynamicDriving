@@ -6,6 +6,7 @@ using AutoFixture;
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
+using DynamicDriving.EventBus;
 using DynamicDriving.SharedKernel.Mongo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -31,6 +32,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             {
                 builder.ConfigureTestServices(services =>
                 {
+                    // Receiver
                     var serviceBusClientFactory = new Mock<IServiceBusClientFactory>();
                     services.AddScoped(_ => serviceBusClientFactory.Object);
                     var messageReceiver = new Mock<IMessageReceiver>();
@@ -38,6 +40,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
                     var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
                     services.Remove(hostedServiceDescriptor);
+
+                    // Publisher
+                    services.AddSingleton(_ => this.PublisherMock.Object);
                 });
             }).CreateDefaultClient();
         });
@@ -46,6 +51,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     public IFixture Fixture { get; } = new Fixture();
 
     public HttpClient Client => this.httpClient.Value;
+
+    public Mock<IEventBusMessagePublisher> PublisherMock { get; } = new();
 
     public IConsumer<T> GetConsumer<T>()
     {
