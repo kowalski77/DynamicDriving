@@ -5,7 +5,6 @@ using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.Results;
-using Driver = DynamicDriving.Events.Driver;
 
 namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
 
@@ -49,7 +48,7 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<A
         trip.Assign(driver);
         await this.tripRepository.UpdateAsync(trip, cancellationToken);
 
-        var driverAssigned = new DriverAssigned(Guid.NewGuid(), request.TripId, new Driver(driver.Id, driver.Name, driver.Car.Model));
+        var driverAssigned = new DriverAssigned(Guid.NewGuid(), request.TripId, driver.Id);
         await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken);
 
         return Result.Ok(new AssignDriverDto(trip.Id, driver.Id));

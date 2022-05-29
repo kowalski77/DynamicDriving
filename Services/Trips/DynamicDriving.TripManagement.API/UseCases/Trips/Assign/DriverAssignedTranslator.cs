@@ -12,10 +12,6 @@ public class DriverAssignedTranslator : ITranslator<DriverAssigned>
     {
         Guards.ThrowIfNull(message);
 
-        return new AssignDriver(
-            message.TripId, 
-            message.Driver.Id, 
-            message.Driver.Name, 
-            message.Driver.Car);
+        return new AssignDriver(message.TripId, message.DriverId);
     }
 }

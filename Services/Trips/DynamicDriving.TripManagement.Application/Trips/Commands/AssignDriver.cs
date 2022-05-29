@@ -2,7 +2,7 @@
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public sealed record AssignDriver(Guid TripId, Guid DriverId, string DriverName, string Car) : INotification;
+public sealed record AssignDriver(Guid TripId, Guid DriverId) : INotification;
 
 public sealed class AssignDriverHandler : INotificationHandler<AssignDriver>
 {
