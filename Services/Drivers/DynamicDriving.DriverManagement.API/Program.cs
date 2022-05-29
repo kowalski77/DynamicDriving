@@ -1,6 +1,5 @@
 ﻿using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
-using DynamicDriving.DriverManagement.API.UseCases.Trips;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;

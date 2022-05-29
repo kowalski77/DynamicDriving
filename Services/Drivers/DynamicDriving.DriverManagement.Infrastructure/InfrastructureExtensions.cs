@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.DriverManagement.Core.Drivers;
+using DynamicDriving.DriverManagement.Core.Outbox;
 using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mongo;
@@ -17,6 +18,7 @@ public static class InfrastructureExtensions
         services.AddMongo(mongoOptions);
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         return services;
     }

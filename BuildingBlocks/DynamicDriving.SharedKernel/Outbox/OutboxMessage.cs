@@ -12,9 +12,9 @@ public sealed class OutboxMessage
 
     public string Data { get; private set; }
 
-    public EventState State { get; internal set; }
+    public EventState State { get; set; }
 
-    internal OutboxMessage(
+    public OutboxMessage(
         Guid transactionId,
         DateTime occurredOn, 
         string type, 
