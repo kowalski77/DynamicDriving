@@ -2,18 +2,23 @@
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
 using DynamicDriving.EventBus.Serializers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.AzureServiceBus;
 
 public static class AzureServiceBusExtensions
 {
-    public static IServiceCollection AddAzureServiceBusPublisher(this IServiceCollection services, IEventContextFactory[] eventContextFactories, IConfiguration configuration)
+    public static IServiceCollection AddAzureServiceBusPublisher(this IServiceCollection services, Action<AzureServiceBusOptions> configure)
     {
-        services.AddSingleton<IEventBusMessagePublisher>(_ => new AzureServiceBusMessagePublisher(new IntegrationEventSerializer(eventContextFactories), new AzureServiceBusOptions
+        ArgumentNullException.ThrowIfNull(configure);
+
+        var options = new AzureServiceBusOptions();
+        configure.Invoke(options);
+
+        services.AddSingleton<IEventBusMessagePublisher>(_ => 
+            new AzureServiceBusMessagePublisher(new IntegrationEventSerializer(options.EventContextFactories), new AzureServiceBusOptions
         {
-            StorageConnectionString = configuration["StorageConnectionString"]
+            StorageConnectionString = options.StorageConnectionString
         }));
 
         return services;

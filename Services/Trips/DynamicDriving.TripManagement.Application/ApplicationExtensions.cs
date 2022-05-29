@@ -18,7 +18,7 @@ namespace DynamicDriving.TripManagement.Application;
 public static class ApplicationExtensions
 {
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
-    { 
+    {
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddMediatR(typeof(CreateDraftTripHandler).Assembly);
@@ -29,7 +29,10 @@ public static class ApplicationExtensions
             sp.GetRequiredService<IEventBusMessagePublisher>(),
             dc => new OutboxRepository(dc)));
 
-        // TODO: refactor
-        services.AddAzureServiceBusPublisher(new IEventContextFactory[] { new TripConfirmedContextFactory() }, configuration);
+        services.AddAzureServiceBusPublisher(configure =>
+        {
+            configure.EventContextFactories = new[] { new TripConfirmedContextFactory() };
+            configure.StorageConnectionString = configuration["StorageConnectionString"];
+        });
     }
 }
