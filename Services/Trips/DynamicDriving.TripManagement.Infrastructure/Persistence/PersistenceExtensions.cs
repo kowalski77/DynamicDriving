@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using DynamicDriving.SharedKernel.DomainDriven;
-using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +15,7 @@ public static class PersistenceExtensions
     {
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<ITripReadRepository, TripReadRepository>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
 
         services.AddScoped<ICityRepository, CityRepository>();
     }

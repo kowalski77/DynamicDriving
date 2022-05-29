@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Drivers\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Cities\" />
+    <Folder Include="Drivers\Commands\" />
     <Folder Include="Outbox\" />
     <Folder Include="Trips\Events\" />
   </ItemGroup>
