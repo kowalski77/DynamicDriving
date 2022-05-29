@@ -1,4 +1,6 @@
-﻿using DynamicDriving.AzureServiceBus.Receiver;
+﻿using DynamicDriving.AzureServiceBus;
+using DynamicDriving.AzureServiceBus.Receiver;
+using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using MediatR;
 
@@ -7,13 +9,14 @@ builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddMediatR(typeof(PingNotification).Assembly);
 builder.Services.AddTranslator<Ping, PingTranslator>();
-builder.Services.AddAzureServiceBusReceiver(cfg =>
+builder.Services.AddAzureServiceBusReceiver(configure =>
             {
-                cfg.StorageConnectionString = builder.Configuration["StorageConnectionString"];
-                cfg.MessageProcessors = new[]
+                configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
+                configure.MessageProcessors = new[]
                 {
-                    new MessageProcessor("ping", typeof(Ping))
+                    new MessageProcessor(typeof(Ping))
                 };
+                configure.EventContextFactories = new[] { new PingContextFactory() };
             });
 
 var app = builder.Build();

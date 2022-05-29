@@ -7,9 +7,9 @@ namespace DynamicDriving.EventBus.Serializers;
 
 public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
 {
-    private readonly IEventContextFactory[] eventContextFactories;
+    private readonly IEnumerable<IEventContextFactory> eventContextFactories;
 
-    public IntegrationEventSerializer(IEventContextFactory[] eventContextFactories)
+    public IntegrationEventSerializer(IEnumerable<IEventContextFactory> eventContextFactories)
     {
         this.eventContextFactories = eventContextFactories ??
                                      throw new ArgumentNullException(nameof(eventContextFactories));

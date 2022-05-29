@@ -30,6 +30,6 @@ public static class ApplicationExtensions
             dc => new OutboxRepository(dc)));
 
         // TODO: refactor
-        services.AddAzureServiceBus(new IEventContextFactory[] { new TripConfirmedContextFactory() }, configuration);
+        services.AddAzureServiceBusPublisher(new IEventContextFactory[] { new TripConfirmedContextFactory() }, configuration);
     }
 }

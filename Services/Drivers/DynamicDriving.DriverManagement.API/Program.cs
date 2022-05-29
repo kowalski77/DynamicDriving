@@ -1,9 +1,11 @@
-﻿using DynamicDriving.AzureServiceBus.Receiver;
+﻿using DynamicDriving.AzureServiceBus;
+using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.DriverManagement.Infrastructure;
+using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.Envelopes;
 using FluentValidation.AspNetCore;
@@ -25,15 +27,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
-builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>(); //TODO: Register all by assembly
-builder.Services.AddAzureServiceBusReceiver(cfg =>
+builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>();
+
+builder.Services.AddAzureServiceBusReceiver(configure =>
 {
-    cfg.StorageConnectionString = builder.Configuration["StorageConnectionString"];
-    cfg.MessageProcessors = new[]
+    configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
+    configure.MessageProcessors = new[]
     {
-        new MessageProcessor("tripconfirmed", typeof(TripConfirmed)) // TODO: rethink
+        new MessageProcessor(typeof(TripConfirmed))
     };
+    configure.EventContextFactories = new[] { new TripConfirmedContextFactory() };
 });
+
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 

@@ -2,9 +2,11 @@
 
 public class MessageProcessor
 {
-    public MessageProcessor(string queue, Type type)
+    public MessageProcessor(Type type)
     {
-        this.Queue = queue;
+        ArgumentNullException.ThrowIfNull(type);
+
+        this.Queue = type.Name;
         this.Type = type;
     }
 
