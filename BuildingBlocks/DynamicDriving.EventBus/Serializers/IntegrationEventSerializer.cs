@@ -15,6 +15,7 @@ public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
                                      throw new ArgumentNullException(nameof(eventContextFactories));
     }
 
+    // TODO: to async
     public string Serialize(IIntegrationEvent integrationEvent)
     {
         ArgumentNullException.ThrowIfNull(integrationEvent);

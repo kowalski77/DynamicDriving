@@ -39,6 +39,12 @@ builder.Services.AddAzureServiceBusReceiver(configure =>
     configure.EventContextFactories = new[] { new TripConfirmedContextFactory() };
 });
 
+builder.Services.AddAzureServiceBusPublisher(configure =>
+{
+    configure.EventContextFactories = new[] { new DriverAssignedContextFactory() };
+    configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
+});
+
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 

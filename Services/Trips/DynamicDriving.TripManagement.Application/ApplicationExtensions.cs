@@ -1,9 +1,9 @@
 ﻿using DynamicDriving.AzureServiceBus;
+using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
-using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.EventBus.Serializers.Contexts;
+using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.DomainDriven;
-using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Application.Behaviors;
 using DynamicDriving.TripManagement.Application.Outbox;
@@ -33,6 +33,16 @@ public static class ApplicationExtensions
         {
             configure.EventContextFactories = new[] { new TripConfirmedContextFactory() };
             configure.StorageConnectionString = configuration["StorageConnectionString"];
+        });
+
+        services.AddAzureServiceBusReceiver(configure =>
+        {
+            configure.StorageConnectionString = configuration["StorageConnectionString"];
+            configure.MessageProcessors = new[]
+            {
+                new MessageProcessor(typeof(DriverAssigned))
+            };
+            configure.EventContextFactories = new[] { new DriverAssignedContextFactory() };
         });
     }
 }

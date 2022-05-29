@@ -49,7 +49,7 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<A
         trip.Assign(driver);
         await this.tripRepository.UpdateAsync(trip, cancellationToken);
 
-        var driverAssigned = new DriverAssignedToTrip(Guid.NewGuid(), request.TripId, new Driver(driver.Id, driver.Name, driver.Car.Model));
+        var driverAssigned = new DriverAssigned(Guid.NewGuid(), request.TripId, new Driver(driver.Id, driver.Name, driver.Car.Model));
         await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken);
 
         return Result.Ok(new AssignDriverDto(trip.Id, driver.Id));
