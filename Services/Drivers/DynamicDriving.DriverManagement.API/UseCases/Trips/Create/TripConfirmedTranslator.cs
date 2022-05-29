@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
-public class TripConfirmedTranslator : ITranslator<TripConfirmed>
+public sealed class TripConfirmedTranslator : ITranslator<TripConfirmed>
 {
     public INotification Translate(TripConfirmed message)
     {

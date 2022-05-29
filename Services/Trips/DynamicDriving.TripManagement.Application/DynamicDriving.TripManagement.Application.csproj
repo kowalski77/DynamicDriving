@@ -20,7 +20,6 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Cities\" />
     <Folder Include="Outbox\" />
-    <Folder Include="Trips\Commands\" />
     <Folder Include="Trips\Events\" />
   </ItemGroup>
 
