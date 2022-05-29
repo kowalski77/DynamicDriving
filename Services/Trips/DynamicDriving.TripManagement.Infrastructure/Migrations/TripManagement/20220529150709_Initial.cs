@@ -15,9 +15,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CarType = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -47,8 +46,8 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -126,12 +125,12 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("3153d4c8-b0df-40ce-b9fe-27052f87bbc0"), true, "Barcelona", false });
+                values: new object[] { new Guid("12e45640-ff42-4999-b998-e77950b213a6"), true, "Sabadell", false });
 
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[] { new Guid("54c7059e-0925-45ed-b323-9deab2e4faee"), true, "Sabadell", false });
+                values: new object[] { new Guid("d28f8831-6582-406b-bb00-e70f9694e56c"), true, "Barcelona", false });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_CarId",

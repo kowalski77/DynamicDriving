@@ -1,4 +1,6 @@
-﻿using DynamicDriving.SharedKernel;
+﻿using DynamicDriving.DriverManagement.Core.Outbox;
+using DynamicDriving.Events;
+using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.Results;
 
@@ -11,10 +13,12 @@ public record CarModel(string Model, CarType CarType);
 public class RegisterDriverHandler : ICommandHandler<RegisterDriver, Result<Guid>>
 {
     private readonly IDriverRepository driverRepository;
+    private readonly IOutboxService outboxService;
 
-    public RegisterDriverHandler(IDriverRepository driverRepository)
+    public RegisterDriverHandler(IDriverRepository driverRepository, IOutboxService outboxService)
     {
         this.driverRepository = Guards.ThrowIfNull(driverRepository);
+        this.outboxService = Guards.ThrowIfNull(outboxService);
     }
 
     public async Task<Result<Guid>> Handle(RegisterDriver request, CancellationToken cancellationToken)
@@ -25,6 +29,9 @@ public class RegisterDriverHandler : ICommandHandler<RegisterDriver, Result<Guid
         var driver = new Driver(request.Id, request.Name, car, request.IsAvailable);
 
         await this.driverRepository.CreateAsync(driver, cancellationToken);
+
+        var driverCreated = new DriverCreated(Guid.NewGuid(), driver.Id, driver.Name, car.Model, car.CarType.ToString());
+        await this.outboxService.PublishIntegrationEventAsync(driverCreated, cancellationToken);
 
         return Result.Ok(driver.Id);
     }

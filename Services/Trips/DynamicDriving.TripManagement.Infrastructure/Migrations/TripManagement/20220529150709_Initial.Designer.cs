@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20220527092131_Initial")]
+    [Migration("20220529150709_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,14 +47,14 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
                     b.HasData(
                         new
                         {
-                            Id = new Guid("54c7059e-0925-45ed-b323-9deab2e4faee"),
+                            Id = new Guid("12e45640-ff42-4999-b998-e77950b213a6"),
                             Active = true,
                             Name = "Sabadell",
                             SoftDeleted = false
                         },
                         new
                         {
-                            Id = new Guid("3153d4c8-b0df-40ce-b9fe-27052f87bbc0"),
+                            Id = new Guid("d28f8831-6582-406b-bb00-e70f9694e56c"),
                             Active = true,
                             Name = "Barcelona",
                             SoftDeleted = false
@@ -69,14 +69,11 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Brand")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CarType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Model")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -206,8 +203,7 @@ namespace DynamicDriving.TripManagement.Infrastructure.Migrations.TripManagement
 
                     b.Navigation("Car");
 
-                    b.Navigation("CurrentCoordinates")
-                        .IsRequired();
+                    b.Navigation("CurrentCoordinates");
                 });
 
             modelBuilder.Entity("DynamicDriving.TripManagement.Domain.TripsAggregate.Location", b =>

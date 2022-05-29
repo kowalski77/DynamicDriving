@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using DynamicDriving.Events;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace DynamicDriving.DriverManagement.API.IntegrationTests;
@@ -33,10 +36,11 @@ public class DriversControllerTests
 
         // Act
         var responseMessage = await this.factory.Client.PostAsJsonAsync(DriversEndpoint, request);
-        
+
         // Assert
         responseMessage.EnsureSuccessStatusCode();
         var envelope = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<RegisterDriverResponse>>(JsonSerializerOptions);
         envelope!.Data.DriverId.Should().Be(driverId);
+        this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverCreated>(y => y.DriverId == driverId), CancellationToken.None), Times.Once);
     }
 }

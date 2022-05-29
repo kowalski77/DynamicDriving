@@ -7,18 +7,15 @@ public sealed class Car : Entity
 {
     private Car() { }
 
-    public Car(string brand, string model, CarType carType)
+    public Car(string name, string description)
     {
-        this.Brand = brand;
-        this.Model = model;
-        this.CarType = carType;
+        this.Name = name;
+        this.Description = description;
     }
 
     public int Id { get; private set; }
 
-    public string Brand { get; private set; }
+    public string Name { get; private set; }
 
-    public string Model { get; private set; }
-
-    public CarType CarType { get; private set; }
+    public string Description { get; private set; }
 }

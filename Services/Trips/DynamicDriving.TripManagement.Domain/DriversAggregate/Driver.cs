@@ -9,12 +9,12 @@ public sealed class Driver : Entity, IAggregateRoot
 {
     public Driver() { }
 
-    public Driver(string name, string description, Car car, Coordinates currentCoordinates)
+    public Driver(Guid id, string name, string description, Car car)
     {
+        this.Id = id;
         this.Name = Guards.ThrowIfNullOrEmpty(name);
         this.Description = description;
         this.Car = Guards.ThrowIfNull(car);
-        this.CurrentCoordinates = Guards.ThrowIfNull(currentCoordinates);
     }
 
     public Guid Id { get; private set; } = Guid.NewGuid();
@@ -25,5 +25,5 @@ public sealed class Driver : Entity, IAggregateRoot
 
     public Car Car { get; private set; }
 
-    public Coordinates CurrentCoordinates { get; private set; }
+    public Coordinates? CurrentCoordinates { get; private set; }
 }
