@@ -3,11 +3,12 @@ using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
+public sealed record ConfirmTrip(Guid TripId) : ICommand<Result>;
+
+public sealed class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Result>
 {
     private readonly ITripRepository tripRepository;
 

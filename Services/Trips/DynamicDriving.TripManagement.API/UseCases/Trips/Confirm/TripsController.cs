@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
+using DynamicDriving.TripManagement.Application.Trips.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

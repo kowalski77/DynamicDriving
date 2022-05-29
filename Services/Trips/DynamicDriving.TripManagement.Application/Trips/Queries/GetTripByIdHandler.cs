@@ -2,10 +2,11 @@
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Queries;
 using MediatR;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Queries;
+
+public record GetTripById(Guid Id) : IRequest<Result<TripByIdDto>>;
 
 public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<TripByIdDto>>
 {

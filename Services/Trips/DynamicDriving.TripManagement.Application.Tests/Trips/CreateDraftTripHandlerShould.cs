@@ -3,7 +3,6 @@ using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 namespace DynamicDriving.TripManagement.Application.Tests.Trips;

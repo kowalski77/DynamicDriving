@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
+using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Commands;
 
 namespace DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 
