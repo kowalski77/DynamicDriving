@@ -32,16 +32,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    // Receiver
-                    var serviceBusClientFactory = new Mock<IServiceBusClientFactory>();
-                    services.AddScoped(_ => serviceBusClientFactory.Object);
-                    var messageReceiver = new Mock<IMessageReceiver>();
-                    services.AddSingleton(_ => messageReceiver.Object);
-
                     var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
                     services.Remove(hostedServiceDescriptor);
 
-                    // Publisher
                     services.AddSingleton(_ => this.PublisherMock.Object);
                 });
             }).CreateDefaultClient();

@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.AzureServiceBus;
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
+using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.DomainDriven;
@@ -40,9 +41,14 @@ public static class ApplicationExtensions
             configure.StorageConnectionString = configuration["StorageConnectionString"];
             configure.MessageProcessors = new[]
             {
+                new MessageProcessor(typeof(DriverCreated)),
                 new MessageProcessor(typeof(DriverAssigned))
             };
-            configure.EventContextFactories = new[] { new DriverAssignedContextFactory() };
+            configure.EventContextFactories = new IEventContextFactory[]
+            {
+                new DriverCreatedContextFactory(),
+                new DriverAssignedContextFactory()
+            };
         });
     }
 }

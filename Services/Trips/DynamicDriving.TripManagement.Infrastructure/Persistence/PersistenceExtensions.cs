@@ -16,7 +16,6 @@ public static class PersistenceExtensions
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<ITripReadRepository, TripReadRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
-
         services.AddScoped<ICityRepository, CityRepository>();
     }
 

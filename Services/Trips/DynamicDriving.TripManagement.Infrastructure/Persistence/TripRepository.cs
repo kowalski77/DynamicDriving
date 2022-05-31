@@ -1,7 +1,6 @@
 ﻿using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
-using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDriving.TripManagement.Infrastructure.Persistence;
 
@@ -16,11 +15,15 @@ public sealed class TripRepository : BaseRepository<Trip>, ITripRepository
 
     public override async Task<Maybe<Trip>> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var trip = await this.context.Trips
-            .Include(x => x.Origin).ThenInclude(x => x.City)
-            .Include(x => x.Destination).ThenInclude(x => x.City)
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
-            .ConfigureAwait(false);
+        var trip = await this.context.Trips.FindAsync(new object?[] { id }, cancellationToken).ConfigureAwait(false);
+        if (trip is null)
+        {
+            return trip;
+        }
+
+        await this.context.Entry(trip).Reference(x => x.Origin).LoadAsync(cancellationToken).ConfigureAwait(false);
+        await this.context.Entry(trip).Reference(x => x.Destination).LoadAsync(cancellationToken).ConfigureAwait(false);
+        await this.context.Entry(trip).Reference(x => x.Driver).LoadAsync(cancellationToken).ConfigureAwait(false);
 
         return trip;
     }
