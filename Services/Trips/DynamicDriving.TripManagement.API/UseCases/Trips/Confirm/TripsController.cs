@@ -22,7 +22,7 @@ public class TripsController : ApplicationController
     {
         Guards.ThrowIfEmpty(id);
 
-        var command = new ConfirmTrip(id);
+        ConfirmTrip command = new(id);
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
         return FromResult(result);
