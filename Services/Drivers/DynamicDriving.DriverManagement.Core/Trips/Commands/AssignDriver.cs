@@ -45,8 +45,8 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<A
             return TripErrors.NoDriverAvailable();
         }
 
-        trip.Assign(driver);
-        await this.tripRepository.UpdateAsync(trip, cancellationToken);
+        var updatedTrip = trip.With(driver);
+        await this.tripRepository.UpdateAsync(updatedTrip, cancellationToken);
 
         var driverAssigned = new DriverAssigned(Guid.NewGuid(), request.TripId, driver.Id);
         await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken);

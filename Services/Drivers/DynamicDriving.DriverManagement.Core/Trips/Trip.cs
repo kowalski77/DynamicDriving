@@ -25,7 +25,7 @@ public class Trip : IEntity
 
     public TripStatus TripStatus { get; private set;}
 
-    public Driver? Driver { get; private set; }
+    public Driver? Driver { get; private init; }
 
     public Guid Id { get; private set; }
 
@@ -36,7 +36,7 @@ public class Trip : IEntity
             Result.Ok();
     }
 
-    public void Assign(Driver driver)
+    public Trip With(Driver driver)
     {
         Guards.ThrowIfNull(driver);
 
@@ -45,8 +45,12 @@ public class Trip : IEntity
         {
             throw new InvalidOperationException(result.Error!.Message);
         }
+        
+        var trip = new Trip(this.Id, this.PickUp, this.Origin, this.Destination)
+        {
+            Driver = driver
+        };
 
-        this.TripStatus = TripStatus.Assigned;
-        this.Driver = driver;
+        return trip;
     }
 }
