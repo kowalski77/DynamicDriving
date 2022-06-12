@@ -52,6 +52,7 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
     {
         builder.ConfigureHostConfiguration(config =>
             {
+                config.AddUserSecrets(typeof(TripsWebApplicationFactory).Assembly);
                 config.AddJsonFile("appsettings.Trips.json", false);
                 config.AddEnvironmentVariables("ASPNETCORE");
             })

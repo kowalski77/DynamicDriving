@@ -19,6 +19,7 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
     {
         builder.ConfigureHostConfiguration(config =>
             {
+                config.AddUserSecrets(typeof(DriversWebApplicationFactory).Assembly);
                 config.AddJsonFile("appsettings.Drivers.json", false);
                 config.AddEnvironmentVariables("ASPNETCORE");
             })
