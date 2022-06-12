@@ -30,8 +30,13 @@ public class OutboxService : IOutboxService
         {
             await this.eventBusMessagePublisher.PublishAsync(integrationEvent, cancellationToken).ConfigureAwait(false);
         }
-        catch (OperationCanceledException)
+        catch (Exception e)
         {
+            if (e is not OperationCanceledException)
+            {
+                throw;
+            }
+
             var outboxMessage = integrationEvent.ToFailedOutboxMessage();
             await this.outboxRepository.SaveAsync(outboxMessage, cancellationToken);
         }

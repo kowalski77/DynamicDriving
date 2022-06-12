@@ -24,7 +24,7 @@ public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
         var eventContextFactory = this.eventContextFactories.FirstOrDefault(x => x.ContextType == integrationEventType);
         if (eventContextFactory is null)
         {
-            throw new InvalidOperationException($"There is no context factory register for type {integrationEventType}");
+            throw new EventContextFactoryException($"There is no context factory register for type {integrationEventType}");
         }
 
         var serializedIntegrationEvent = JsonSerializer.Serialize(integrationEvent, integrationEventType, eventContextFactory.GetContext());
@@ -39,7 +39,7 @@ public sealed class IntegrationEventSerializer : IIntegrationEventSerializer
         var eventContextFactory = this.eventContextFactories.FirstOrDefault(x => x.ContextType == typeof(T));
         if (eventContextFactory is null)
         {
-            throw new InvalidOperationException($"There is no context factory register for type {typeof(T)}");
+            throw new EventContextFactoryException($"There is no context factory register for type {typeof(T)}");
         }
 
         var message = await JsonSerializer.DeserializeAsync(data, (JsonTypeInfo<T>)eventContextFactory.GetJsonTypeInfo())

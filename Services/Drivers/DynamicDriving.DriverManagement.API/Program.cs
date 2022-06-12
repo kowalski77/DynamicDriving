@@ -5,6 +5,7 @@ using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.DriverManagement.Infrastructure;
+using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.Envelopes;
@@ -41,7 +42,11 @@ builder.Services.AddAzureServiceBusReceiver(configure =>
 
 builder.Services.AddAzureServiceBusPublisher(configure =>
 {
-    configure.EventContextFactories = new[] { new DriverAssignedContextFactory() };
+    configure.EventContextFactories = new IEventContextFactory[]
+    {
+        new DriverCreatedContextFactory(),
+        new DriverAssignedContextFactory()
+    };
     configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
 });
 
