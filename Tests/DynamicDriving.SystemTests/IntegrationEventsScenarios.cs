@@ -10,12 +10,13 @@ namespace DynamicDriving.SystemTests;
 public class IntegrationEventsScenarios : IClassFixture<WebApplicationFixture>
 {
     private const string DriversEndpoint = "/api/v1/Drivers";
-    private readonly IFixture fixture = new Fixture();
 
+    private readonly IFixture fixture;
     private readonly WebApplicationFixture webApplicationFixture;
 
     public IntegrationEventsScenarios(WebApplicationFixture webApplicationFixture)
     {
+        this.fixture = new Fixture();
         this.webApplicationFixture = webApplicationFixture;
     }
 
