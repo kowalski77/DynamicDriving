@@ -1,6 +1,5 @@
 ﻿using DynamicDriving.AzureServiceBus;
 using DynamicDriving.AzureServiceBus.Receiver;
-using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using MediatR;
 
@@ -16,7 +15,6 @@ builder.Services.AddAzureServiceBusReceiver(configure =>
                 {
                     new MessageProcessor(typeof(Ping))
                 };
-                configure.EventContextFactories = new[] { new PingContextFactory() };
             });
 
 var app = builder.Build();

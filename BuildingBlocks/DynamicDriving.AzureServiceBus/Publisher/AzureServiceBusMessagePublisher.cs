@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
+using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using DynamicDriving.EventBus;
-using DynamicDriving.EventBus.Serializers;
 using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus.Publisher;
@@ -9,18 +9,12 @@ namespace DynamicDriving.AzureServiceBus.Publisher;
 public sealed class AzureServiceBusMessagePublisher : IEventBusMessagePublisher, IAsyncDisposable
 {
     private static readonly ConcurrentDictionary<Type, ServiceBusSender> ServiceBusSenders = new();
-
-    private readonly IIntegrationEventSerializer integrationEventSerializer;
     private readonly ServiceBusClient serviceBusClient;
 
-    public AzureServiceBusMessagePublisher(
-        IIntegrationEventSerializer integrationEventSerializer,
-        AzureServiceBusOptions options)
+    public AzureServiceBusMessagePublisher(AzureServiceBusOptions options)
     {
-        ArgumentNullException.ThrowIfNull(integrationEventSerializer);
         ArgumentNullException.ThrowIfNull(options);
 
-        this.integrationEventSerializer = integrationEventSerializer;
         this.serviceBusClient = new ServiceBusClient(options.StorageConnectionString);
     }
 
@@ -40,7 +34,7 @@ public sealed class AzureServiceBusMessagePublisher : IEventBusMessagePublisher,
         var integrationEventType = integrationEvent.GetType();
         var sender = ServiceBusSenders.GetOrAdd(integrationEventType, this.serviceBusClient.CreateSender(integrationEventType.Name));
 
-        var serializedIntegrationEvent = this.integrationEventSerializer.Serialize(integrationEvent);
+        var serializedIntegrationEvent = JsonSerializer.Serialize(integrationEvent, integrationEventType);
         await sender.SendMessageAsync(new ServiceBusMessage(serializedIntegrationEvent), cancellationToken).ConfigureAwait(false);
     }
 }

@@ -1,5 +1,6 @@
-﻿using Azure.Messaging.ServiceBus;
-using DynamicDriving.EventBus.Serializers;
+﻿using System.Runtime.Serialization;
+using System.Text.Json;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;
@@ -26,12 +27,10 @@ public sealed class ProcessorFactory<T> : ProcessorFactoryWrapper
 
     private async Task OnProcessMessageAsync(ProcessMessageEventArgs arg)
     {
+        var message = await JsonSerializer.DeserializeAsync<T>(arg.Message.Body.ToStream()).ConfigureAwait(false) ?? 
+                      throw new SerializationException($"Could not deserialize type of {typeof(T)}");
+
         using var scope = this.serviceProvider.CreateScope();
-
-        var serializer = scope.ServiceProvider.GetRequiredService<IIntegrationEventSerializer>();
-        var message = await serializer.DeserializeAsync<T>(arg.Message.Body.ToStream())
-            .ConfigureAwait(false);
-
         var consumer = scope.ServiceProvider.GetRequiredService<IConsumer<T>>();
 
         await consumer.ExecuteAsync(message).ConfigureAwait(false);

@@ -1,8 +1,6 @@
 ﻿using DynamicDriving.AzureServiceBus;
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
-using DynamicDriving.EventBus.Serializers;
-using DynamicDriving.EventBus.Serializers.Contexts;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox.Sql;
@@ -32,7 +30,6 @@ public static class ApplicationExtensions
 
         services.AddAzureServiceBusPublisher(configure =>
         {
-            configure.EventContextFactories = new[] { new TripConfirmedContextFactory() };
             configure.StorageConnectionString = configuration["StorageConnectionString"];
         });
 
@@ -43,11 +40,6 @@ public static class ApplicationExtensions
             {
                 new MessageProcessor(typeof(DriverCreated)),
                 new MessageProcessor(typeof(DriverAssigned))
-            };
-            configure.EventContextFactories = new IEventContextFactory[]
-            {
-                new DriverCreatedContextFactory(),
-                new DriverAssignedContextFactory()
             };
         });
     }
