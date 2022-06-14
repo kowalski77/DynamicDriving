@@ -35,6 +35,13 @@ public sealed class AzureServiceBusMessagePublisher : IEventBusMessagePublisher,
         var sender = ServiceBusSenders.GetOrAdd(integrationEventType, this.serviceBusClient.CreateSender(integrationEventType.Name));
 
         var serializedIntegrationEvent = JsonSerializer.Serialize(integrationEvent, integrationEventType);
-        await sender.SendMessageAsync(new ServiceBusMessage(serializedIntegrationEvent), cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await sender.SendMessageAsync(new ServiceBusMessage(serializedIntegrationEvent), cancellationToken).ConfigureAwait(false);
+        }
+        catch (ServiceBusException e)
+        {
+            throw new EventBusException($"Could not publish the message with id: {integrationEvent.Id}", e);
+        }
     }
 }

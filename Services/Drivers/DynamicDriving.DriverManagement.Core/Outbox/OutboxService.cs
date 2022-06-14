@@ -32,7 +32,7 @@ public class OutboxService : IOutboxService
         }
         catch (Exception e)
         {
-            if (e is not OperationCanceledException)
+            if (e is not (OperationCanceledException or EventBusException))
             {
                 throw;
             }
