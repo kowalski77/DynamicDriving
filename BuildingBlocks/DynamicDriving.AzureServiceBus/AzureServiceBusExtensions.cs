@@ -1,4 +1,5 @@
-﻿using DynamicDriving.AzureServiceBus.Publisher;
+﻿using System.Reflection;
+using DynamicDriving.AzureServiceBus.Publisher;
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,10 +36,7 @@ public static class AzureServiceBusExtensions
         services.AddSingleton<IMessageReceiver>(sp =>
         {
             var messageReceiverEndPoint = new MessageReceiver(sp);
-            foreach (var processorRegistration in options.MessageProcessors)
-            {
-                messageReceiverEndPoint.AddProcessor(processorRegistration.Queue, processorRegistration.Type);
-            }
+            messageReceiverEndPoint.AddProcessorsForAssembly(options.IntegrationEventsAssembly);
 
             return messageReceiverEndPoint;
         });

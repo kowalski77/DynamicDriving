@@ -36,11 +36,7 @@ public static class ApplicationExtensions
         services.AddAzureServiceBusReceiver(configure =>
         {
             configure.StorageConnectionString = configuration["StorageConnectionString"];
-            configure.MessageProcessors = new[]
-            {
-                new MessageProcessor(typeof(DriverCreated)),
-                new MessageProcessor(typeof(DriverAssigned))
-            };
+            configure.IntegrationEventsAssembly = typeof(DriverCreated).Assembly;
         });
     }
 }

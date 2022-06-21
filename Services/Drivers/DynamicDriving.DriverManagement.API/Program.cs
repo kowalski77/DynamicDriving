@@ -28,18 +28,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
 builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>();
 
+var storageConnectionString = builder.Configuration["StorageConnectionString"];
 builder.Services.AddAzureServiceBusReceiver(configure =>
 {
-    configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
-    configure.MessageProcessors = new[]
-    {
-        new MessageProcessor(typeof(TripConfirmed))
-    };
+    configure.StorageConnectionString = storageConnectionString;
+    configure.IntegrationEventsAssembly = typeof(TripConfirmed).Assembly;
 });
 
 builder.Services.AddAzureServiceBusPublisher(configure =>
 {
-    configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
+    configure.StorageConnectionString = storageConnectionString;
 });
 
 builder.Services.AddCore();

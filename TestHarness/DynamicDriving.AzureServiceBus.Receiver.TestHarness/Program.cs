@@ -11,10 +11,7 @@ builder.Services.AddTranslator<Ping, PingTranslator>();
 builder.Services.AddAzureServiceBusReceiver(configure =>
             {
                 configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
-                configure.MessageProcessors = new[]
-                {
-                    new MessageProcessor(typeof(Ping))
-                };
+                configure.IntegrationEventsAssembly = typeof(Ping).Assembly;
             });
 
 var app = builder.Build();

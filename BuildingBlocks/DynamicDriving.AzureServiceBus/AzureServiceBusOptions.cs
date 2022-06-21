@@ -1,4 +1,4 @@
-﻿using DynamicDriving.AzureServiceBus.Receiver;
+﻿using System.Reflection;
 
 namespace DynamicDriving.AzureServiceBus;
 
@@ -6,5 +6,5 @@ public class AzureServiceBusOptions
 {
     public string StorageConnectionString { get; set; } = default!;
 
-    public IEnumerable<MessageProcessor> MessageProcessors { get; set; } = new List<MessageProcessor>();
+    public Assembly IntegrationEventsAssembly { get; set; } = default!;
 }

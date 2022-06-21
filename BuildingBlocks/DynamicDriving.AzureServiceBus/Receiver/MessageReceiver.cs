@@ -1,4 +1,6 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using System.Reflection;
+using Azure.Messaging.ServiceBus;
+using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;
 
@@ -20,7 +22,20 @@ public sealed class MessageReceiver : IMessageReceiver, IAsyncDisposable
         }
     }
 
-    public void AddProcessor(string queue, Type type)
+    public void AddProcessorsForAssembly(Assembly assembly)
+    {
+        ArgumentNullException.ThrowIfNull(assembly);
+
+        var integrationEvenTypes = assembly.GetTypes()
+            .Where(x => typeof(IIntegrationEvent).IsAssignableFrom(x));
+
+        foreach (var integrationEvenType in integrationEvenTypes)
+        {
+            this.AddProcessor(integrationEvenType);
+        }
+    }
+
+    private void AddProcessor(Type type)
     {
         var processorFactoryWrapper = this.GetProcessorFactoryWrapper(type);
         if (processorFactoryWrapper is null)
@@ -28,7 +43,7 @@ public sealed class MessageReceiver : IMessageReceiver, IAsyncDisposable
             return;
         }
 
-        this.serviceBusProcessors.Add(processorFactoryWrapper.CreateProcessor(queue));
+        this.serviceBusProcessors.Add(processorFactoryWrapper.CreateProcessor(type.Name));
     }
 
     public async Task StartAsync()
@@ -50,7 +65,7 @@ public sealed class MessageReceiver : IMessageReceiver, IAsyncDisposable
     private ProcessorFactoryWrapper? GetProcessorFactoryWrapper(Type type)
     {
         var processorFactoryWrapper = Activator.CreateInstance(
-                typeof(ProcessorFactory<>).MakeGenericType(type), 
+                typeof(ProcessorFactory<>).MakeGenericType(type),
                 this.serviceProvider)
             as ProcessorFactoryWrapper;
 
