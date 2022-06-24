@@ -35,7 +35,7 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         // Assert
         response.EnsureSuccessStatusCode();
 
-        await Retry.Handle<InvalidOperationException>(1000, 5)
+        await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
                 var driver = await this.webApplicationFixture.Trips.GetDriverByIdAsync(driverId);
@@ -56,7 +56,7 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         // Assert
         response.EnsureSuccessStatusCode();
 
-        await Retry.Handle<XunitException>(1000, 2)
+        await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
                 var trip = await this.webApplicationFixture.Trips.GetTripByIdAsync(tripId);

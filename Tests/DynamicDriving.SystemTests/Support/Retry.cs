@@ -37,6 +37,7 @@ public class RetryOfT<T> : Retry
         {
             try
             {
+                await Task.Delay(this.Milliseconds);
                 await action();
                 return;
             }
@@ -48,7 +49,6 @@ public class RetryOfT<T> : Retry
                 }
 
                 retries++;
-                await Task.Delay(this.Milliseconds);
             }
         }
     }

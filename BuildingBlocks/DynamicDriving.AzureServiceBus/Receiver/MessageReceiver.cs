@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using Azure.Messaging.ServiceBus;
-using DynamicDriving.Events;
+﻿using Azure.Messaging.ServiceBus;
 
 namespace DynamicDriving.AzureServiceBus.Receiver;
 
