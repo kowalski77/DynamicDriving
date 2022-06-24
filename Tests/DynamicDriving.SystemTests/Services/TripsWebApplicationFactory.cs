@@ -1,6 +1,11 @@
 ﻿extern alias Trips;
+
+using AutoFixture;
 using DynamicDriving.SharedKernel.Outbox.Sql;
+using DynamicDriving.TripManagement.Domain.CitiesAggregate;
+using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
+using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -15,6 +20,7 @@ namespace DynamicDriving.SystemTests.Services;
 public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
 {
     private IServiceProvider serviceProvider = default!;
+    private readonly IFixture fixture = new Fixture();
 
     public TripsWebApplicationFactory()
     {
@@ -26,6 +32,13 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
     public async Task<Driver> GetDriverByIdAsync(Guid id)
     {
         var repository = this.serviceProvider.GetRequiredService<IDriverRepository>();
+
+        return (await repository.GetAsync(id)).Value;
+    }
+
+    public async Task<Trip> GetTripByIdAsync(Guid id)
+    {
+        var repository = this.serviceProvider.GetRequiredService<ITripRepository>();
 
         return (await repository.GetAsync(id)).Value;
     }
@@ -43,18 +56,33 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
             context.Database.EnsureDeleted();
             context.Database.Migrate();
             outboxContext.Database.Migrate();
+            this.SeedDatabase(context);
         });
 
         base.ConfigureWebHost(builder);
     }
 
+    private void SeedDatabase(TripManagementContext context)
+    {
+        var cityEntry = context.Cities.Add(new City(this.fixture.Create<string>()));
+        var originLocation = new Location(Guid.NewGuid(), this.fixture.Create<string>(), cityEntry.Entity, Coordinates.CreateInstance(10, 10).Value);
+        var destinationLocation = new Location(Guid.NewGuid(), this.fixture.Create<string>(), cityEntry.Entity, Coordinates.CreateInstance(20, 20).Value);
+
+        context.Trips.Add(new Trip(Guid.Parse(SystemTestsConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originLocation, destinationLocation));
+
+        var driver = new Driver(Guid.Parse(SystemTestsConstants.DriverId), this.fixture.Create<string>(), this.fixture.Create<string>(), this.fixture.Create<Car>());
+        context.Drivers.Add(driver);
+
+        context.SaveChanges();
+    }
+
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureHostConfiguration(config =>
+            builder.ConfigureHostConfiguration(config =>
             {
-                config.AddUserSecrets(typeof(TripsWebApplicationFactory).Assembly);
-                config.AddJsonFile("appsettings.Trips.json", false);
-                config.AddEnvironmentVariables("ASPNETCORE");
+                config.AddUserSecrets(typeof(TripsWebApplicationFactory).Assembly)
+                .AddJsonFile("appsettings.Trips.json", false)
+                .AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Trips");
 

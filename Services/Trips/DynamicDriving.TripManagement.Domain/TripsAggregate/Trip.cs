@@ -44,8 +44,8 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public Result CanConfirm()
     {
-        return this.TripStatus is TripStatus.Draft ? 
-            Result.Ok() : 
+        return this.TripStatus is TripStatus.Draft ?
+            Result.Ok() :
             TripErrors.ConfirmFailed(this.TripStatus);
     }
 
@@ -64,8 +64,8 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public Result CanAssignDriver()
     {
-        return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ? 
-            Result.Ok() : 
+        return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ?
+            Result.Ok() :
             TripErrors.DriverAssignedFailed(this.TripStatus);
     }
 

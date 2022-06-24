@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.DomainDriven;
@@ -36,7 +35,7 @@ public static class ApplicationExtensions
         services.AddAzureServiceBusReceiver(configure =>
         {
             configure.StorageConnectionString = configuration["StorageConnectionString"];
-            configure.IntegrationEventsAssembly = typeof(DriverCreated).Assembly;
+            configure.IntegrationEventTypes = new[] { typeof(DriverCreated), typeof(DriverAssigned) };
         });
     }
 }

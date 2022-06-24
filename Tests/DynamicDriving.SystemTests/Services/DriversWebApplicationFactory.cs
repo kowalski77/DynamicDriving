@@ -1,4 +1,8 @@
 ﻿extern alias Drivers;
+
+using AutoFixture;
+using DynamicDriving.DriverManagement.Core.Drivers;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel.Mongo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,6 +17,7 @@ namespace DynamicDriving.SystemTests.Services;
 public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram>
 {
     private IServiceProvider serviceProvider = default!;
+    private readonly IFixture fixture = new Fixture();
 
     public DriversWebApplicationFactory()
     {
@@ -23,11 +28,11 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureHostConfiguration(config =>
+        _ = builder.ConfigureHostConfiguration(config =>
             {
-                config.AddUserSecrets(typeof(DriversWebApplicationFactory).Assembly);
-                config.AddJsonFile("appsettings.Drivers.json", false);
-                config.AddEnvironmentVariables("ASPNETCORE");
+                _ = config.AddUserSecrets(typeof(DriversWebApplicationFactory).Assembly)
+                .AddJsonFile("appsettings.Drivers.json", false)
+                .AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Drivers");
 
@@ -36,11 +41,12 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices((context, services) =>
+        _ = builder.ConfigureServices((context, services) =>
         {
             this.serviceProvider = services.BuildServiceProvider();
 
             DropDatabase(context);
+            this.SeedDatabase();
         });
 
         base.ConfigureWebHost(builder);
@@ -51,6 +57,20 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
         var mongoOptions = context.Configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
         var client = new MongoClient(mongoOptions.Client);
         client.DropDatabase(mongoOptions.Database);
+    }
+
+    private void SeedDatabase()
+    {
+        var mongoDatabase = this.serviceProvider.GetRequiredService<IMongoDatabase>();
+
+        var tripCollection = mongoDatabase.GetCollection<Trip>(nameof(Trip));
+
+        var trip = new Trip(Guid.Parse(SystemTestsConstants.TripId), DateTime.Now, this.fixture.Create<Coordinates>(), this.fixture.Create<Coordinates>());
+        tripCollection.InsertOne(trip);
+
+        var driverCollection = mongoDatabase.GetCollection<Driver>(nameof(Driver));
+        var driver = new Driver(Guid.Parse(SystemTestsConstants.DriverId), this.fixture.Create<string>(), this.fixture.Create<Car>(), true);
+        driverCollection.InsertOne(driver);
     }
 
     protected override void Dispose(bool disposing)

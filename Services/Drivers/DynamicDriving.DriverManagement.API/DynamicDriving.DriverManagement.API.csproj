@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Drivers\Edit\**" />
+    <Content Remove="UseCases\Drivers\Edit\**" />
+    <EmbeddedResource Remove="UseCases\Drivers\Edit\**" />
+    <None Remove="UseCases\Drivers\Edit\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
@@ -20,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Drivers\Edit\" />
     <Folder Include="UseCases\Trips\Assign\" />
   </ItemGroup>
 

@@ -36,7 +36,7 @@ public static class AzureServiceBusExtensions
         services.AddSingleton<IMessageReceiver>(sp =>
         {
             var messageReceiverEndPoint = new MessageReceiver(sp);
-            messageReceiverEndPoint.AddProcessorsForAssembly(options.IntegrationEventsAssembly);
+            messageReceiverEndPoint.AddProcessorsForTypes(options.IntegrationEventTypes);
 
             return messageReceiverEndPoint;
         });

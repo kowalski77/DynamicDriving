@@ -22,14 +22,11 @@ public sealed class MessageReceiver : IMessageReceiver, IAsyncDisposable
         }
     }
 
-    public void AddProcessorsForAssembly(Assembly assembly)
+    public void AddProcessorsForTypes(IEnumerable<Type> integrationEventTypes)
     {
-        ArgumentNullException.ThrowIfNull(assembly);
+        ArgumentNullException.ThrowIfNull(integrationEventTypes);
 
-        var integrationEvenTypes = assembly.GetTypes()
-            .Where(x => typeof(IIntegrationEvent).IsAssignableFrom(x));
-
-        foreach (var integrationEvenType in integrationEvenTypes)
+        foreach (var integrationEvenType in integrationEventTypes)
         {
             this.AddProcessor(integrationEvenType);
         }

@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cities\**" />
+    <EmbeddedResource Remove="Cities\**" />
+    <None Remove="Cities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.AzureServiceBus\DynamicDriving.AzureServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.EventBus\DynamicDriving.EventBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
@@ -17,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Cities\" />
     <Folder Include="Drivers\Commands\" />
     <Folder Include="Outbox\" />
     <Folder Include="Trips\Events\" />
