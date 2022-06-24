@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using DynamicDriving.Events;
 
 namespace DynamicDriving.AzureServiceBus;
 
@@ -6,5 +6,10 @@ public class AzureServiceBusOptions
 {
     public string StorageConnectionString { get; set; } = default!;
 
-    public IEnumerable<Type> IntegrationEventTypes { get; set; } = new List<Type>();
+    public ICollection<Type> IntegrationEventTypes { get; } = new List<Type>();
+
+    public void RegisterIntegrationEvent<T>() where T : class, IIntegrationEvent
+    {
+        this.IntegrationEventTypes.Add(typeof(T));
+    }
 }

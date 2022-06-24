@@ -32,7 +32,7 @@ var storageConnectionString = builder.Configuration["StorageConnectionString"];
 builder.Services.AddAzureServiceBusReceiver(configure =>
 {
     configure.StorageConnectionString = storageConnectionString;
-    configure.IntegrationEventTypes = new[] { typeof(TripConfirmed) };
+    configure.RegisterIntegrationEvent<TripConfirmed>();
 });
 
 builder.Services.AddAzureServiceBusPublisher(configure =>

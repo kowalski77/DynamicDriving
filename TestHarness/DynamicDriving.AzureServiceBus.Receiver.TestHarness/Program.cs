@@ -4,14 +4,14 @@ using DynamicDriving.Events;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddUserSecrets<Program>();
 
+builder.Configuration.AddUserSecrets<Program>();
 builder.Services.AddMediatR(typeof(PingNotification).Assembly);
 builder.Services.AddTranslator<Ping, PingTranslator>();
 builder.Services.AddAzureServiceBusReceiver(configure =>
             {
                 configure.StorageConnectionString = builder.Configuration["StorageConnectionString"];
-                configure.IntegrationEventTypes = new[] { typeof(Ping) };
+                configure.RegisterIntegrationEvent<Ping>();
             });
 
 var app = builder.Build();

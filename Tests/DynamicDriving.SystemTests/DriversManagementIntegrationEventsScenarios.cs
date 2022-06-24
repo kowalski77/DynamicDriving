@@ -56,7 +56,7 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         // Assert
         response.EnsureSuccessStatusCode();
 
-        await Retry.Handle<XunitException>(1000, 5)
+        await Retry.Handle<XunitException>(1000, 2)
             .ExecuteAsync(async () =>
             {
                 var trip = await this.webApplicationFixture.Trips.GetTripByIdAsync(tripId);
