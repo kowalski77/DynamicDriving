@@ -39,6 +39,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseMiddleware<ExceptionHandler>();
+}
+
+app.UseCors(cfg =>
+{
+    cfg.WithOrigins(builder.Configuration["AllowedOrigin"])
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

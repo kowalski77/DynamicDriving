@@ -73,7 +73,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.DriverManage
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceTests", "ServiceTests", "{3A8A74D1-4B4E-49EC-8158-9D4CF477CFC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.SystemTests", "Tests\DynamicDriving.SystemTests\DynamicDriving.SystemTests.csproj", "{BFF17CAF-2988-47C7-9810-CBCF73F96A5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.SystemTests", "Tests\DynamicDriving.SystemTests\DynamicDriving.SystemTests.csproj", "{BFF17CAF-2988-47C7-9810-CBCF73F96A5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{7E3EA0CB-F329-4D1C-8E50-A4177E23CCE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.Identity.Service", "Services\Identity\DynamicDriving.Identity.Service\DynamicDriving.Identity.Service.csproj", "{BA7EB193-C944-46C1-AE07-D267C0AB6FEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +173,10 @@ Global
 		{BFF17CAF-2988-47C7-9810-CBCF73F96A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFF17CAF-2988-47C7-9810-CBCF73F96A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFF17CAF-2988-47C7-9810-CBCF73F96A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -206,6 +214,8 @@ Global
 		{D98616D7-0F94-4B3E-86FE-690D70F92A21} = {E8E85D14-48B5-41E1-9CB8-BAC6980A7309}
 		{3A8A74D1-4B4E-49EC-8158-9D4CF477CFC5} = {2A3C3841-0D14-4DB4-90FB-11F27902420A}
 		{BFF17CAF-2988-47C7-9810-CBCF73F96A5A} = {3A8A74D1-4B4E-49EC-8158-9D4CF477CFC5}
+		{7E3EA0CB-F329-4D1C-8E50-A4177E23CCE8} = {374CDF69-A802-4237-992B-89C1F0A314B2}
+		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC} = {7E3EA0CB-F329-4D1C-8E50-A4177E23CCE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}
