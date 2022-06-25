@@ -18,4 +18,8 @@
     <Folder Include="Entities\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,10 +1,9 @@
-﻿using System.Net.Http.Json;
-using AutoFixture;
+﻿using AutoFixture;
 using DynamicDriving.Models;
 using DynamicDriving.SystemTests.Services;
 using DynamicDriving.SystemTests.Support;
 using FluentAssertions;
-using Xunit.Sdk;
+using System.Net.Http.Json;
 
 namespace DynamicDriving.SystemTests;
 
@@ -33,13 +32,13 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         var response = await this.webApplicationFixture.Drivers.HttpClient.PostAsJsonAsync(DriversEndpoint, request);
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        _ = response.EnsureSuccessStatusCode();
 
         await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
                 var driver = await this.webApplicationFixture.Trips.GetDriverByIdAsync(driverId);
-                driver.Name.Should().Be(request.Name);
+                _ = driver.Name.Should().Be(request.Name);
             });
     }
 
@@ -54,13 +53,13 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         var response = await this.webApplicationFixture.Drivers.HttpClient.PostAsJsonAsync(TripsEndpoint, request);
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        _ = response.EnsureSuccessStatusCode();
 
         await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
                 var trip = await this.webApplicationFixture.Trips.GetTripByIdAsync(tripId);
-                trip.Driver.Should().NotBeNull();
+                _ = trip.Driver.Should().NotBeNull();
             });
     }
 }
