@@ -18,7 +18,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<UserDto>> Get()
     {
-        var users = this.userManager.Users.Select(users => users.AsDto()).ToList();
+        var users = this.userManager.Users.ToList().Select(x => x.AsDto());
 
         return this.Ok(users);
     }
