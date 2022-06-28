@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
@@ -7,6 +6,7 @@ using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.DriverManagement.Infrastructure;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.SharedKernel.Identity;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +43,8 @@ builder.Services.AddAzureServiceBusPublisher(configure =>
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddJwtBearerAuthentication();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -64,6 +66,7 @@ app.UseCors(cfg =>
 });
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

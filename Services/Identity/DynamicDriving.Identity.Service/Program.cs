@@ -17,7 +17,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<ApplicationRole>()
     .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>
     (
-        connectionString: "mongodb://localhost:27017",
+        connectionString: "mongodb://localhost:27017", // TODO: refactor
         databaseName: "IdentityDb"
     );
 

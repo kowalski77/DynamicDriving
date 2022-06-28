@@ -4,11 +4,13 @@ using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Assign;
 
 [Route("api/v1/[controller]")]
+[Authorize]
 public class TripsController : ApplicationController
 {
     public TripsController(IMediator mediator) : base(mediator)
