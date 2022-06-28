@@ -1,4 +1,5 @@
 using DynamicDriving.Identity.Service.Entities;
+using DynamicDriving.Identity.Service.Settings;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -20,6 +21,20 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
         databaseName: "IdentityDb"
     );
 
+var identityServerSettings = builder.Configuration.GetSection(nameof(IdentityServerSettings)).Get<IdentityServerSettings>();
+
+builder.Services.AddIdentityServer(options =>
+{ // more logs
+    options.Events.RaiseSuccessEvents = true;
+    options.Events.RaiseFailureEvents = true;
+    options.Events.RaiseErrorEvents = true;
+})
+    .AddAspNetIdentity<ApplicationUser>()
+    .AddInMemoryApiScopes(identityServerSettings.ApiScopes)
+    .AddInMemoryClients(identityServerSettings.Clients)
+    .AddInMemoryIdentityResources(identityServerSettings.IdentityResources)
+    .AddDeveloperSigningCredential(); // not for production
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
 
+app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllers();
