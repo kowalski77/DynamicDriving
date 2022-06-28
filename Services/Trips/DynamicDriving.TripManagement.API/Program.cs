@@ -8,6 +8,7 @@ using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
 using DynamicDriving.TripManagement.Infrastructure;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -32,6 +33,13 @@ builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 //builder.Services.AddHostedService<OutboxHostedService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:7070";
+        options.Audience = "TripManagement";
+    });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -52,6 +60,7 @@ app.UseCors(cfg =>
 });
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
