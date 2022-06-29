@@ -8,6 +8,7 @@ using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
 using FluentAssertions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -51,6 +52,9 @@ public class TripControllerTests
                     .ReturnsAsync(5);
 
                 services.AddScoped(_ => coordinatesAgentMock.Object);
+
+                _ = services.AddAuthentication("Test")
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
             });
         }).CreateClient();
 
@@ -67,7 +71,7 @@ public class TripControllerTests
     public async Task Trip_is_retrieved_by_identifier()
     {
         // Arrange
-        var client = this.factory.CreateDefaultClient();
+        var client = this.factory.Client;
 
         // Act
         var response = await client.GetAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}");
@@ -89,6 +93,9 @@ public class TripControllerTests
             {
                 publisherMock.Setup(x => x.PublishAsync(It.IsAny<TripConfirmed>(), CancellationToken.None)).Returns(Task.CompletedTask);
                 services.AddSingleton(_ => publisherMock.Object);
+
+                _ = services.AddAuthentication("Test")
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
             });
         }).CreateClient();
 

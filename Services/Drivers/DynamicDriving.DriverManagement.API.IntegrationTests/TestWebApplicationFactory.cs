@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.EventBus;
 using DynamicDriving.SharedKernel.Mongo;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -16,6 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using Moq;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace DynamicDriving.DriverManagement.API.IntegrationTests;
 
@@ -30,12 +31,15 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         {
             return this.WithWebHostBuilder(builder =>
             {
-                builder.ConfigureTestServices(services =>
+                _ = builder.ConfigureTestServices(services =>
                 {
                     var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
-                    services.Remove(hostedServiceDescriptor);
+                    _ = services.Remove(hostedServiceDescriptor);
 
-                    services.AddSingleton(_ => this.PublisherMock.Object);
+                    _ = services.AddSingleton(_ => this.PublisherMock.Object);
+
+                    _ = services.AddAuthentication("Test")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
                 });
             }).CreateDefaultClient();
         });
@@ -61,10 +65,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureHostConfiguration(config =>
+        _ = builder.ConfigureHostConfiguration(config =>
             {
-                config.AddJsonFile("appsettings.Testing.json", false);
-                config.AddEnvironmentVariables("ASPNETCORE");
+                _ = config.AddJsonFile("appsettings.Testing.json", false);
+                _ = config.AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Testing");
 
@@ -73,7 +77,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices((context, services) =>
+        _ = builder.ConfigureServices((context, services) =>
         {
             this.serviceProvider = services.BuildServiceProvider();
 

@@ -7,8 +7,10 @@ using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +26,15 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
 
     public TripsWebApplicationFactory()
     {
-        this.HttpClient = this.CreateClient();
+        this.HttpClient = this.WithWebHostBuilder(builder =>
+        {
+            _ = builder.ConfigureTestServices(services =>
+            {
+                _ = services.AddAuthentication("Test")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        "Test", options => { });
+            });
+        }).CreateClient();
     }
 
     public HttpClient HttpClient { get; }

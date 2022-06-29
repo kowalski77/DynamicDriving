@@ -6,8 +6,10 @@ using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,9 +19,28 @@ namespace DynamicDriving.TripManagement.API.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly Lazy<HttpClient> httpClient;
     private IServiceProvider serviceProvider = default!;
 
+    public TestWebApplicationFactory()
+    {
+        this.httpClient = new Lazy<HttpClient>(() =>
+        {
+            return this.WithWebHostBuilder(builder =>
+            {
+                _ = builder.ConfigureTestServices(services =>
+                {
+                    _ = services.AddAuthentication("Test")
+                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                            "Test", options => { });
+                });
+            }).CreateDefaultClient();
+        });
+    }
+
     public IFixture Fixture { get; } = new Fixture();
+
+    public HttpClient Client => this.httpClient.Value;
 
     public IConsumer<T> GetConsumer<T>()
     {
@@ -44,10 +65,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureHostConfiguration(config =>
+        _ = builder.ConfigureHostConfiguration(config =>
             {
-                config.AddJsonFile("appsettings.Testing.json", false);
-                config.AddEnvironmentVariables("ASPNETCORE");
+                _ = config.AddJsonFile("appsettings.Testing.json", false);
+                _ = config.AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Testing");
 
@@ -56,7 +77,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
+        _ = builder.ConfigureServices(services =>
         {
             this.serviceProvider = services.BuildServiceProvider();
             using var scope = this.serviceProvider.CreateScope();
@@ -64,11 +85,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
             var outboxContext = scope.ServiceProvider.GetRequiredService<OutboxContext>();
 
-            context.Database.EnsureDeleted();
+            _ = context.Database.EnsureDeleted();
             context.Database.Migrate();
             outboxContext.Database.Migrate();
 
-            SeedDatabase(context);
+            this.SeedDatabase(context);
         });
 
         base.ConfigureWebHost(builder);
@@ -95,11 +116,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var originLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
         var destinationLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName2, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
 
-        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originLocation, destinationLocation));
+        _ = context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originLocation, destinationLocation));
 
         var driver = new Driver(Guid.Parse(IntegrationTestConstants.DriverId), this.Fixture.Create<string>(), this.Fixture.Create<string>(), this.Fixture.Create<Car>());
-        context.Drivers.Add(driver);
+        _ = context.Drivers.Add(driver);
 
-        context.SaveChanges();
+        _ = context.SaveChanges();
     }
 }

@@ -4,8 +4,10 @@ using AutoFixture;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel.Mongo;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,7 +23,15 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     public DriversWebApplicationFactory()
     {
-        this.HttpClient = this.CreateClient();
+        this.HttpClient = this.WithWebHostBuilder(builder =>
+        {
+            _ = builder.ConfigureTestServices(services =>
+            {
+                _ = services.AddAuthentication("Test")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        "Test", options => { });
+            });
+        }).CreateClient();
     }
 
     public HttpClient HttpClient { get; }
