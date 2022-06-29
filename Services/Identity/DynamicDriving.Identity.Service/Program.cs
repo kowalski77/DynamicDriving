@@ -36,6 +36,8 @@ builder.Services.AddIdentityServer(options =>
     .AddInMemoryIdentityResources(identityServerSettings.IdentityResources)
     .AddDeveloperSigningCredential(); // not for production
 
+builder.Services.AddLocalApiAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
