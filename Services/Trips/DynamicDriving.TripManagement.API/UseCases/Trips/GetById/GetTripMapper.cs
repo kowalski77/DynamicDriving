@@ -6,7 +6,7 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 
 public static class GetTripMapper
 {
-    public static TripByIdResponse AsResponse(this TripByIdDto source)
+    public static TripByIdResponse AsResponse(this TripDto source)
     {
         Guards.ThrowIfNull(source);
 

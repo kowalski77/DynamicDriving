@@ -6,9 +6,9 @@ using MediatR;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Queries;
 
-public record GetTripById(Guid Id) : IRequest<Result<TripByIdDto>>;
+public record GetTripById(Guid Id) : IRequest<Result<TripDto>>;
 
-public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<TripByIdDto>>
+public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<TripDto>>
 {
     private readonly ITripReadRepository repository;
 
@@ -17,7 +17,7 @@ public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<Tri
         this.repository = Guards.ThrowIfNull(repository);
     }
 
-    public async Task<Result<TripByIdDto>> Handle(GetTripById request, CancellationToken cancellationToken)
+    public async Task<Result<TripDto>> Handle(GetTripById request, CancellationToken cancellationToken)
     {
         Guards.ThrowIfNull(request);
 
@@ -30,7 +30,7 @@ public sealed class GetTripByIdHandler : IRequestHandler<GetTripById, Result<Tri
 
     private async Task<Result<Trip>> GetTripById(Guid tripId, CancellationToken cancellationToken)
     {
-        var maybeTrip = await this.repository.GetById(tripId, cancellationToken);
+        var maybeTrip = await this.repository.GetByIdAsync(tripId, cancellationToken);
 
         return maybeTrip.HasValue ?
             maybeTrip.Value : 

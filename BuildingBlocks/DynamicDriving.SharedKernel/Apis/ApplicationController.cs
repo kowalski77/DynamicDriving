@@ -39,6 +39,13 @@ public class ApplicationController : ControllerBase
         return actionResult;
     }
 
+    protected static IActionResult Ok<T>(T model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+
+        return new EnvelopeResult(SuccessEnvelope.Create(model), HttpStatusCode.OK);
+    }
+
     protected IActionResult CreatedResult<T, TR>(Result<T> result, Func<T, TR> converter, string routeName, Func<object> routeValues)
         where T : class
         where TR : class

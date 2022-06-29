@@ -27,8 +27,7 @@ public static class ResultExtensions
     {
         var errorCollection = (from result in results
                                where result.Failure
-                               select result.Error!)
-            .ToList();
+                               select result.Error!).ToList();
 
         return errorCollection.Any() ?
             errorCollection.First()! :  //TODO: rethink this, handle error collections in result & envelope

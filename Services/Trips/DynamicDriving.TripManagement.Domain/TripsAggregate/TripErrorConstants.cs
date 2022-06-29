@@ -10,4 +10,7 @@ public static class TripErrorConstants
 
     public const string ConfirmFailedCode = "confirm.not.possible";
     public const string ConfirmFailedMessage = "Can not confirm due trip status is {0}";
+
+    public const string UserTripNotFoundCode = "usertrip.not.found";
+    public const string TripNotFoundMessage = "Trip for user with id {0} not found";
 }
