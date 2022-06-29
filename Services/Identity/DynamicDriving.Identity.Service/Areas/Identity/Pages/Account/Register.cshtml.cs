@@ -77,6 +77,8 @@ public class RegisterModel : PageModel
             {
                 this.logger.LogInformation("User created a new account with password.");
 
+                await this.userManager.AddToRoleAsync(user, Roles.User);
+
                 var userId = await this.userManager.GetUserIdAsync(user);
                 var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

@@ -29,7 +29,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> Get(Guid id)
     {
-        var user = await this.userManager.FindByIdAsync(id.ToString());
+        var user = await this.userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
 
         return user is null ?
             this.NotFound() :
@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, UpdateUserDto user)
     {
-        var userToUpdate = await this.userManager.FindByIdAsync(id.ToString());
+        var userToUpdate = await this.userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
         if (userToUpdate is null)
         {
             return this.NotFound();
@@ -57,7 +57,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userToDelete = await this.userManager.FindByIdAsync(id.ToString());
+        var userToDelete = await this.userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
         if (userToDelete is null)
         {
             return this.NotFound();
