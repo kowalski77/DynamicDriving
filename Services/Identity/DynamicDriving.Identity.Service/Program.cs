@@ -1,5 +1,6 @@
 using DynamicDriving.Identity.Service.Entities;
 using DynamicDriving.Identity.Service.Settings;
+using DynamicDriving.Identity.Service.Support;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -57,4 +58,9 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapRazorPages();
 
-app.Run();
+if (app.Environment.IsDevelopment())
+{
+    await app.SeedUserRoles().ConfigureAwait(false); // NOTE: is not a good idea in production
+}
+
+await app.RunAsync().ConfigureAwait(false);
