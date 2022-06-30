@@ -5,7 +5,6 @@ using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.TripManagement.API;
 using DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
-using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
 using DynamicDriving.TripManagement.Infrastructure;
@@ -23,7 +22,7 @@ builder.Services.AddControllers()
     {
         options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
     })
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateDraftTripValidator>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

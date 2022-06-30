@@ -36,7 +36,7 @@ public class TripControllerTests
     {
         // Arrange
         var tripId = Guid.NewGuid();
-        var model = new CreateDraftTripRequest(tripId, Guid.Parse(IntegrationTestConstants.UserId), DateTime.Now, 10, 10, 20, 20);
+        var model = new CreateDraftTripRequest(tripId, DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
 
         var client = this.factory.WithWebHostBuilder(builder =>
