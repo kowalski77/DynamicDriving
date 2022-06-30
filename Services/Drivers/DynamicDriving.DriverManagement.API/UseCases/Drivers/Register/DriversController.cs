@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 
 [Route("api/v1/[controller]")]
-[Authorize(Roles = DriverManagementConstants.AdminRole)]
+[Authorize(Policies.Write)]
 public class DriversController : ApplicationController
 {
     public DriversController(IMediator mediator) : base(mediator)

@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.AzureServiceBus;
+using DynamicDriving.DriverManagement.API;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
@@ -43,6 +44,19 @@ builder.Services.AddAzureServiceBusPublisher(configure =>
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.Read, policy =>
+    {
+        policy.RequireRole(DriverManagementConstants.AdminRole);
+        policy.RequireClaim("scope", "drivermanagement.readaccess", "drivermanagement.fullaccess");
+    });
+    options.AddPolicy(Policies.Write, policy =>
+    {
+        policy.RequireRole(DriverManagementConstants.AdminRole);
+        policy.RequireClaim("scope", "drivermanagement.writeaccess", "drivermanagement.fullaccess");
+    });
+});
 builder.Services.AddJwtBearerAuthentication();
 
 var app = builder.Build();

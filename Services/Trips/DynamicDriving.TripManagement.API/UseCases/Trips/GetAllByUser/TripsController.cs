@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetAllByUser;
 
 [Route("api/v1/[controller]")]
-[Authorize]
+[Authorize(Policies.Read)]
 public class TripsController : ApplicationController
 {
     public TripsController(IMediator mediator) : base(mediator)
