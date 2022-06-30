@@ -1,5 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DynamicDriving.TripManagement.API.Tests;
 
@@ -25,7 +30,20 @@ public class CustomDataSourceAttribute : AutoDataAttribute
     {
         public void Customize(IFixture fixture)
         {
-            fixture.Customize<BindingInfo>(c => c.OmitAutoProperties());
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+            var httpContext = new DefaultHttpContext
+            {
+                User = claimsPrincipal
+            };
+            fixture.Customize<ControllerContext>(c =>
+                c.OmitAutoProperties()
+                .Do(h => h.HttpContext = httpContext));
         }
     }
 }

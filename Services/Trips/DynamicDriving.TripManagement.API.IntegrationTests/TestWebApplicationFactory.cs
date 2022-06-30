@@ -116,7 +116,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var originLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
         var destinationLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName2, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
 
-        _ = context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), UserId.CreateInstance(Guid.NewGuid()).Value, DateTime.Now, originLocation, destinationLocation));
+        var userId = UserId.CreateInstance(Guid.Parse(IntegrationTestConstants.UserId));
+        _ = context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userId.Value, DateTime.Now, originLocation, destinationLocation)); 
 
         var driver = new Driver(Guid.Parse(IntegrationTestConstants.DriverId), this.Fixture.Create<string>(), this.Fixture.Create<string>(), this.Fixture.Create<Car>());
         _ = context.Drivers.Add(driver);
