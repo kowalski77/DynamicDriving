@@ -30,8 +30,8 @@ public class RegisterDriverHandler : ICommandHandler<RegisterDriver, Result<Guid
 
         await this.driverRepository.CreateAsync(driver, cancellationToken);
 
-        //var driverCreated = new DriverCreated(Guid.NewGuid(), driver.Id, driver.Name, car.Model, car.CarType.ToString());
-        //await this.outboxService.PublishIntegrationEventAsync(driverCreated, cancellationToken);
+        var driverCreated = new DriverCreated(Guid.NewGuid(), driver.Id, driver.Name, car.Model, car.CarType.ToString());
+        await this.outboxService.PublishIntegrationEventAsync(driverCreated, cancellationToken);
 
         return Result.Ok(driver.Id);
     }
