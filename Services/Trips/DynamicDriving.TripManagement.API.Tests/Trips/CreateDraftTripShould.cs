@@ -1,4 +1,6 @@
-﻿using DynamicDriving.Models;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
@@ -7,8 +9,6 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DynamicDriving.TripManagement.API.Tests.Trips;
 

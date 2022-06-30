@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
@@ -20,7 +21,7 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
         {
             new Claim(ClaimTypes.Name, "Test user"),
             new Claim(ClaimTypes.Role, "Admin"),
-            new Claim("sub", IntegrationTestConstants.UserId),
+            new Claim(JwtRegisteredClaimNames.Sub, IntegrationTestConstants.UserId),
             new Claim("scope", "tripmanagement.fullaccess")
         };
         var identity = new ClaimsIdentity(claims, "Test");
