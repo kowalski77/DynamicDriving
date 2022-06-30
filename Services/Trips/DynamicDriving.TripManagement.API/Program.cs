@@ -2,7 +2,7 @@
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;
-using DynamicDriving.TripManagement.API;
+using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.Application;
@@ -34,17 +34,7 @@ builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 //builder.Services.AddHostedService<OutboxHostedService>();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(Policies.Read, policy =>
-    {
-        policy.RequireClaim("scope", "tripmanagement.readaccess", "tripmanagement.fullaccess");
-    });
-    options.AddPolicy(Policies.Write, policy =>
-    {
-        policy.RequireClaim("scope", "tripmanagement.writeaccess", "tripmanagement.fullaccess");
-    });
-});
+builder.Services.AddCustomAuthorization();
 builder.Services.AddJwtBearerAuthentication();
 
 var app = builder.Build();
