@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Assign;
 
 [Route("api/v1/[controller]")]
-[Authorize(Policies.Write)]
+[Authorize(DriverManagementConstants.WritePolicy)]
 public class TripsController : ApplicationController
 {
     public TripsController(IMediator mediator) : base(mediator)

@@ -46,12 +46,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(Policies.Read, policy =>
+    options.AddPolicy(DriverManagementConstants.ReadPolicy, policy =>
     {
         policy.RequireRole(DriverManagementConstants.AdminRole);
         policy.RequireClaim("scope", "drivermanagement.readaccess", "drivermanagement.fullaccess");
     });
-    options.AddPolicy(Policies.Write, policy =>
+    options.AddPolicy(DriverManagementConstants.WritePolicy, policy =>
     {
         policy.RequireRole(DriverManagementConstants.AdminRole);
         policy.RequireClaim("scope", "drivermanagement.writeaccess", "drivermanagement.fullaccess");
