@@ -11,6 +11,7 @@ namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Assign;
 
 [Route("api/v1/[controller]")]
 [Authorize]
+[Authorize(Roles = DriverManagementConstants.AdminRole)]
 public class TripsController : ApplicationController
 {
     public TripsController(IMediator mediator) : base(mediator)
