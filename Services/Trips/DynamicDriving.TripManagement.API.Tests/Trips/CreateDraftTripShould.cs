@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-using DynamicDriving.Models;
+﻿using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
@@ -13,6 +7,8 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DynamicDriving.TripManagement.API.Tests.Trips;
 
@@ -26,7 +22,7 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
             .ReturnsAsync(Result.Ok(draftTripDto));
 
         // Act
@@ -34,9 +30,9 @@ public class CreateDraftTripShould
 
         // Assert
         var envelopeResult = (CreatedAtRouteResult)actionResult;
-        envelopeResult.StatusCode.Should().Be(StatusCodes.Status201Created);
+        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status201Created);
         var successEnvelope = (SuccessEnvelope<CreateDraftTripResponse>)envelopeResult.Value!;
-        successEnvelope.Data.TripId.Should().Be(draftTripDto.Id);
+        _ = successEnvelope.Data.TripId.Should().Be(draftTripDto.Id);
     }
 
     [Theory, CustomDataSource]
@@ -47,7 +43,7 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
             .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
 
         // Act
@@ -55,9 +51,9 @@ public class CreateDraftTripShould
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
-        envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
-        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        _ = envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
+        _ = envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 
     [Theory, CustomDataSource]
@@ -69,7 +65,7 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
             .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
@@ -77,8 +73,8 @@ public class CreateDraftTripShould
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
-        envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
-        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        _ = envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
+        _ = envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 }
