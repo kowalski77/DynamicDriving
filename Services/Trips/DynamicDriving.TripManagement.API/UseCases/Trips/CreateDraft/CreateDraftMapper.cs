@@ -7,13 +7,13 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 
 public static class CreateDraftMapper
 {
-    public static CreateDraftTrip AsCommand(this CreateDraftTripRequest request)
+    public static CreateDraftTrip AsCommand(this CreateDraftTripRequest request, Guid userId)
     {
         Guards.ThrowIfNull(request);
 
         return new CreateDraftTrip(
             request.TripId,
-            request.UserId, 
+            userId, 
             request.PickUp, 
             request.OriginLatitude, 
             request.OriginLatitude, 

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Support\" />
     <Folder Include="UseCases\Trips\GetById\" />
     <Folder Include="UseCases\Trips\Confirm\" />
   </ItemGroup>

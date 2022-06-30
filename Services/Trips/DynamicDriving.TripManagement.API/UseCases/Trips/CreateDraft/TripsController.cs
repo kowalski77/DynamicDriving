@@ -2,7 +2,6 @@
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.Application.Trips.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +22,9 @@ public class TripsController : ApplicationController
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
     {
-        Guards.ThrowIfNull(request);
+        _ = Guards.ThrowIfNull(request);
 
-        CreateDraftTrip command = request.AsCommand();
+        var command = request.AsCommand(this.GetCurrentUserIdBySub());
         var result = await this.Mediator.Send(command).ConfigureAwait(false);
 
         return this.CreatedResult(
