@@ -22,17 +22,16 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
-            .ReturnsAsync(Result.Ok(draftTripDto));
+        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None)).ReturnsAsync(Result.Ok(draftTripDto));
 
         // Act
         var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
         var envelopeResult = (CreatedAtRouteResult)actionResult;
-        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status201Created);
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status201Created);
         var successEnvelope = (SuccessEnvelope<CreateDraftTripResponse>)envelopeResult.Value!;
-        _ = successEnvelope.Data.TripId.Should().Be(draftTripDto.Id);
+        successEnvelope.Data.TripId.Should().Be(draftTripDto.Id);
     }
 
     [Theory, CustomDataSource]
@@ -43,17 +42,16 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
-            .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
+        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None)).ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(ErrorConstants.RecordNotFound, errorMessage)));
 
         // Act
         var actionResult = await sut.CreateDraftTrip(request);
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
-        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        _ = envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
-        _ = envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
+        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 
     [Theory, CustomDataSource]
@@ -65,7 +63,7 @@ public class CreateDraftTripShould
         TripsController sut)
     {
         // Arrange
-        _ = mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
+        mediatorMock.Setup(x => x.Send(It.IsAny<CreateDraftTrip>(), CancellationToken.None))
             .ReturnsAsync(Result.Fail<DraftTripDto>(new ErrorResult(errorCode, errorMessage)));
 
         // Act
@@ -73,8 +71,8 @@ public class CreateDraftTripShould
 
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
-        _ = envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        _ = envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
-        _ = envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
+        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
     }
 }
