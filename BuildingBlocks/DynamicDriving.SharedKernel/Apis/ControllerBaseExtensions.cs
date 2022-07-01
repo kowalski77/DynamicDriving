@@ -13,11 +13,8 @@ public static class ControllerBaseExtensions
         var userId = controllerBase.User.FindFirstValue(JwtRegisteredClaimNames.Sub) ??
             throw new InvalidOperationException("Could not retrieve user id");
 
-        if (!Guid.TryParse(userId, out Guid parsedUserId))
-        {
-            throw new InvalidOperationException($"Could not parse user id to {typeof(Guid)}");
-        }
-
-        return parsedUserId;
+        return !Guid.TryParse(userId, out var parsedUserId)
+            ? throw new InvalidOperationException($"Could not parse user id to {typeof(Guid)}")
+            : parsedUserId;
     }
 }

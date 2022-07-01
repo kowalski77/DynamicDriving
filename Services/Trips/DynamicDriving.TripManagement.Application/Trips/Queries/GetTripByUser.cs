@@ -4,9 +4,9 @@ using MediatR;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Queries;
 
-public record GetTripByUser(Guid UserId) : IRequest<IReadOnlyList<TripDto>>;
+public record GetTripByUser(Guid UserId) : IRequest<IReadOnlyList<TripSummaryDto>>;
 
-public sealed class GetTripByUserHandler : IRequestHandler<GetTripByUser, IReadOnlyList<TripDto>>
+public sealed class GetTripByUserHandler : IRequestHandler<GetTripByUser, IReadOnlyList<TripSummaryDto>>
 {
     private readonly ITripReadRepository repository;
 
@@ -15,9 +15,9 @@ public sealed class GetTripByUserHandler : IRequestHandler<GetTripByUser, IReadO
         this.repository = repository;
     }
 
-    public async Task<IReadOnlyList<TripDto>> Handle(GetTripByUser request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TripSummaryDto>> Handle(GetTripByUser request, CancellationToken cancellationToken)
     {
-        _ = Guards.ThrowIfNull(request);
+        Guards.ThrowIfNull(request);
 
         return await this.repository.GetTripsByUserIdAsync(request.UserId, cancellationToken);
     }

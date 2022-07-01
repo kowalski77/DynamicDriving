@@ -4,7 +4,7 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate;
 
 namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 
-public static class GetTripMapper
+public static class GetByIdMapper
 {
     public static TripByIdResponse AsResponse(this TripDto source)
     {

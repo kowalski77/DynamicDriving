@@ -26,13 +26,16 @@ public sealed class TripReadRepository : ITripReadRepository
         return trip;
     }
 
-    public async Task<IReadOnlyList<TripDto>> GetTripsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<TripSummaryDto>> GetTripsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var trips = await this.context.Trips
             .AsNoTracking()
-            .Select(x => new TripDto(userId, x.Driver.Name, x.PickUp, // TODO: x.Driver?.name --> error??? WTF!!!
-            new TripByIdLocationDto(x.Origin.Name, x.Origin.City.Name, x.Origin.Coordinates.Latitude, x.Origin.Coordinates.Longitude),
-            new TripByIdLocationDto(x.Destination.Name, x.Destination.City.Name, x.Destination.Coordinates.Latitude, x.Destination.Coordinates.Longitude)))
+            .Select(x => new TripSummaryDto(
+                x.UserId.Value, 
+                x.Driver.Name, // TODO: WTF?
+                x.TripStatus.ToString(), 
+                x.Origin.Name, 
+                x.Destination.Name))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 

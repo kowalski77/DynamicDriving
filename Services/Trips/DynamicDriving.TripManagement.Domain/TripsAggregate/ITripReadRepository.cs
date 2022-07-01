@@ -6,5 +6,5 @@ public interface ITripReadRepository
 {
     Task<Maybe<Trip>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
-    Task<IReadOnlyList<TripDto>> GetTripsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<TripSummaryDto>> GetTripsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 }

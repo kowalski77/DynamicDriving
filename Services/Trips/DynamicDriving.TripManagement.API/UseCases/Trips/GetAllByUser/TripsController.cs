@@ -17,13 +17,13 @@ public class TripsController : ApplicationController
     }
 
     [HttpGet("me", Name = nameof(GetCurrentUserTrips))]
-    [ProducesResponseType(typeof(SuccessEnvelope<TripByIdResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SuccessEnvelope<TripsByUserResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCurrentUserTrips()
     {
         var userId = this.GetCurrentUserIdBySub();
         var trips = await this.Mediator.Send(new GetTripByUser(userId)).ConfigureAwait(false);
 
-        return Ok(trips);
+        return Ok(trips.AsResponse(userId));
     }
 }
