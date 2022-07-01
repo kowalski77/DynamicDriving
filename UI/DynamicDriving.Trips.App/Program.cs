@@ -1,6 +1,6 @@
 using DynamicDriving.Trips.App.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +8,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
+      options =>
+      {
+          options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+          options.Authority = "https://localhost:7070";
+          options.ClientId = "tripsui";
+          options.ResponseType = "code";
+          options.Scope.Add("openid");
+          options.Scope.Add("profile");
+          options.Scope.Add("drivermanagement.fullaccess");
+          //options.CallbackPath = ...
+          options.SaveTokens = true;
+          options.GetClaimsFromUserInfoEndpoint = true;
+          options.TokenValidationParameters.NameClaimType = "given_name";
+      });
 
 var app = builder.Build();
 
