@@ -24,7 +24,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj" />
     <ProjectReference Include="..\DynamicDriving.DriverManagement.Core\DynamicDriving.DriverManagement.Core.csproj" />
-    <ProjectReference Include="..\DynamicDriving.DriverManagement.Infrastructure\DynamicDriving.DriverManagement.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

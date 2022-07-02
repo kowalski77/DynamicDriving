@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MongoDB.Driver;
 
 namespace DynamicDriving.DriverManagement.Core.Drivers.Queries;
 
@@ -15,7 +16,12 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, IReadOnlyList
 
     public async Task<IReadOnlyList<DriverSummaryDto>> Handle(GetAllDrivers request, CancellationToken cancellationToken)
     {
-        var driverSummaries = await this.driverRepository.GetDriversSummaryAsync(cancellationToken).ConfigureAwait(false);
+        var options = new FindOptions<Driver, DriverSummaryDto>
+        {
+            Projection = Builders<Driver>.Projection.Expression(x => new DriverSummaryDto(x.Id, x.Name, x.Car.Model, x.IsAvailable))
+        };
+
+        var driverSummaries = await this.driverRepository.GetAllAsync(_ => true, options, cancellationToken).ConfigureAwait(false);
 
         return driverSummaries;
     }
