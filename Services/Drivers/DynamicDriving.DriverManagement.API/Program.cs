@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.DriverManagement.API;
 using DynamicDriving.DriverManagement.API.Support;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;

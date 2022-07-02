@@ -1,4 +1,6 @@
 using DynamicDriving.Trips.App.Data;
+using DynamicDriving.Trips.App.Services;
+using DynamicDriving.Trips.App.Support;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
@@ -8,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddHttpClient<IDriversService, DriversService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7292/");
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -25,11 +32,13 @@ builder.Services.AddAuthentication(options =>
           options.Scope.Add("openid");
           options.Scope.Add("profile");
           options.Scope.Add("drivermanagement.fullaccess");
-          //options.CallbackPath = ...
+          options.Scope.Add("offline_access");
           options.SaveTokens = true;
           options.GetClaimsFromUserInfoEndpoint = true;
-          options.TokenValidationParameters.NameClaimType = "given_name";
       });
+
+builder.Services.AddScoped<TokenManager>();
+builder.Services.AddScoped<TokenProvider>();
 
 var app = builder.Build();
 
@@ -46,6 +55,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

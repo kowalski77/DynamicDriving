@@ -1,4 +1,5 @@
 ﻿@page "/counter"
+@using DynamicDriving.Trips.App.Services
 
 <PageTitle>Counter</PageTitle>
 
@@ -11,8 +12,11 @@
 @code {
     private int currentCount = 0;
 
-    private void IncrementCount()
+    [Inject] private IDriversService DriversService { get; set; } = default!;
+
+    private async Task IncrementCount()
     {
         currentCount++;
+        var result = await this.DriversService.GetDriversSummaryAsync();
     }
 }
