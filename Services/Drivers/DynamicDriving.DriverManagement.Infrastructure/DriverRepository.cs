@@ -10,4 +10,16 @@ public sealed class DriverRepository : MongoRepository<Driver>, IDriverRepositor
         : base(database)
     {
     }
+
+    public async Task<IReadOnlyList<DriverSummaryDto>> GetDriversSummaryAsync(CancellationToken cancellationToken)
+    {
+        var options = new FindOptions<Driver, DriverSummaryDto>
+        {
+            Projection = Builders<Driver>.Projection.Expression(x => new DriverSummaryDto(x.Id, x.Name, x.Car.Model, x.IsAvailable))
+        };
+
+        var driverdummaries = await this.GetAllAsync(_ => true, options, cancellationToken).ConfigureAwait(false);
+
+        return driverdummaries;
+    }
 }
