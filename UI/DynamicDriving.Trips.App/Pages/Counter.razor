@@ -1,6 +1,7 @@
 ﻿@page "/counter"
 @using DynamicDriving.Trips.App.Services
 @attribute [Authorize]
+@*@attribute [Authorize(Policy = "IsAdmin")]*@
 
 <PageTitle>Counter</PageTitle>
 
