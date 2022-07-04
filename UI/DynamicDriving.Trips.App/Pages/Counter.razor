@@ -1,5 +1,6 @@
 ﻿@page "/counter"
 @using DynamicDriving.Trips.App.Services
+@attribute [Authorize]
 
 <PageTitle>Counter</PageTitle>
 
@@ -13,6 +14,11 @@
     private int currentCount = 0;
 
     [Inject] private IDriversService DriversService { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
 
     private async Task IncrementCount()
     {

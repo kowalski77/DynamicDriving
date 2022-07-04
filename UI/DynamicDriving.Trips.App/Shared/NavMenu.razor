@@ -29,9 +29,12 @@
                     </NavLink>
                 </div>
             </nav>
+            @{
+                var userName = @context.User.FindFirst(x => x.Type == "name")?.Value;
+            }
             <form action="/logoutidentity" method="post">
                 <button class="nav-link btn btn-link" type="submit">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Log out (@context.User.Identity.Name)
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Log out (@userName)
                 </button>
                 <input name="__RequestVerificationToken" type="hidden"
                        value="@TokenProvider.XsrfToken">

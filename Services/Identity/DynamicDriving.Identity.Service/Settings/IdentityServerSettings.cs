@@ -13,6 +13,7 @@ public class IdentityServerSettings
     public IReadOnlyCollection<IdentityResource> IdentityResources { get; } = new IdentityResource[]
     {
         new IdentityResources.OpenId(),
-        new IdentityResources.Profile()
+        new IdentityResources.Profile(),
+        new IdentityResources.Email()
     };
 }

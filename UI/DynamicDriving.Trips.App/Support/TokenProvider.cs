@@ -9,7 +9,6 @@ public class TokenProvider
     public string RefreshToken { get; set; } = default!;
 
     public DateTimeOffset ExpiresAt { get; set; }
-
 }
 
 public class InitialApplicationState

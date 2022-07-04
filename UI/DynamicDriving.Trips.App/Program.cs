@@ -3,6 +3,7 @@ using DynamicDriving.Trips.App.Services;
 using DynamicDriving.Trips.App.Support;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,14 +32,17 @@ builder.Services.AddAuthentication(options =>
           options.ResponseType = "code";
           options.Scope.Add("openid");
           options.Scope.Add("profile");
+          options.Scope.Add("email");
           options.Scope.Add("drivermanagement.fullaccess");
           options.Scope.Add("offline_access");
           options.SaveTokens = true;
           options.GetClaimsFromUserInfoEndpoint = true;
+          options.TokenValidationParameters.NameClaimType = "given_name";
       });
 
 builder.Services.AddScoped<TokenManager>();
 builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 var app = builder.Build();
 
