@@ -24,7 +24,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
             return Task.FromResult(authenticationState);
         }
 
-        authenticationState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(this.tokenProvider.AccessToken), "jwt")));
+        authenticationState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(this.tokenProvider.AccessToken), "jwtAuthType", ClaimTypes.Name, "roles")));
         this.NotifyAuthenticationStateChanged(Task.FromResult(authenticationState));
 
         return Task.FromResult(authenticationState);

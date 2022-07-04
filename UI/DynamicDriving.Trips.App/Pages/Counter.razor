@@ -15,11 +15,6 @@
 
     [Inject] private IDriversService DriversService { get; set; } = default!;
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-    }
-
     private async Task IncrementCount()
     {
         currentCount++;

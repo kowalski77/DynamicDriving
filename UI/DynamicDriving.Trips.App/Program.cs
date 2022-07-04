@@ -43,6 +43,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<TokenManager>();
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsAdmin", policy => policy.RequireClaim("roles", "Admin"));
+});
 
 var app = builder.Build();
 
