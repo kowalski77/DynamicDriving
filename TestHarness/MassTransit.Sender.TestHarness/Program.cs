@@ -14,7 +14,7 @@ ConfigureServices();
 var testMessage = new Ping(Guid.NewGuid(), 10);
 
 var eventPublisher = serviceProvider.GetRequiredService<IEventBusMessagePublisher>();
-await eventPublisher.PublishAsync(testMessage);
+await eventPublisher.PublishAsync(Guid.NewGuid(), $"TestHarness#{typeof(Ping).FullName}", testMessage);
 
 Console.ReadKey();
 DisposeServices();

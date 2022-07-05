@@ -2,9 +2,10 @@
 
 namespace DynamicDriving.MassTransit;
 
-public class RabbitmqSettings
+public class MassTransitSettings
 {
-    public string Host { get; init; } = default!;
+    public string RabbitMqHost { get; init; } = default!;
+    
     public string ServiceName { get; init; } = default!;
 
     public Func<IRabbitMqBusFactoryConfigurator, Action<IServiceProvider>>? ConfigureEndpoints { get; set; }
@@ -13,7 +14,7 @@ public class RabbitmqSettings
 
     public ICollection<Type> ConsumerTypes { get; } = new List<Type>();
 
-    public void RegisterConsumer<T>()
+    public void RegisterConsumerFor<T>()
         where T : class
     {
         this.ConsumerTypes.Add(typeof(Consumer<T>));

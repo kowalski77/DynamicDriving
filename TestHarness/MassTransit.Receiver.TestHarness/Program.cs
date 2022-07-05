@@ -1,18 +1,14 @@
 using DynamicDriving.EventBus;
 using DynamicDriving.Events;
-using DynamicDriving.MassTransit;
+using MassTransit.Receiver.TestHarness;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMediatR(typeof(PingNotification).Assembly);
 
-builder.Services.AddMassTransitWithRabbitMq(cfg =>
-{
-    cfg.RegisterConsumer<Ping>();
-});
-
 builder.Services.AddTranslator<Ping, PingTranslator>();
+builder.Services.AddEventBus();
 
 var app = builder.Build();
 
