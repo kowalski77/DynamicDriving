@@ -1,11 +1,11 @@
 ﻿using AutoFixture;
-using DynamicDriving.AzureServiceBus.Receiver;
 using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Domain.CitiesAggregate;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Infrastructure.Persistence;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -43,6 +43,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     public HttpClient Client => this.httpClient.Value;
 
     public IConsumer<T> GetConsumer<T>()
+        where T : class, IConsumer
     {
         return this.serviceProvider.GetRequiredService<IConsumer<T>>();
     }

@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynamicDriving.AzureServiceBus\DynamicDriving.AzureServiceBus.csproj" />
     <ProjectReference Include="..\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
   </ItemGroup>
 

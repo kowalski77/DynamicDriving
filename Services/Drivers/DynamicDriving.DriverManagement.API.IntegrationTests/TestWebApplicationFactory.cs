@@ -1,9 +1,12 @@
-﻿using AutoFixture;
-using DynamicDriving.AzureServiceBus.Receiver;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AutoFixture;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.EventBus;
 using DynamicDriving.SharedKernel.Mongo;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,10 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using Moq;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace DynamicDriving.DriverManagement.API.IntegrationTests;
 
@@ -31,15 +30,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         {
             return this.WithWebHostBuilder(builder =>
             {
-                _ = builder.ConfigureTestServices(services =>
+                builder.ConfigureTestServices(services =>
                 {
-                    var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
-                    _ = services.Remove(hostedServiceDescriptor);
+                    //var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
+                    //_ = services.Remove(hostedServiceDescriptor);
 
-                    _ = services.AddSingleton(_ => this.PublisherMock.Object);
+                    //_ = services.AddSingleton(_ => this.PublisherMock.Object);
 
-                    _ = services.AddAuthentication("Test")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
+                    services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
                 });
             }).CreateDefaultClient();
         });
@@ -52,6 +50,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     public Mock<IEventBusMessagePublisher> PublisherMock { get; } = new();
 
     public IConsumer<T> GetConsumer<T>()
+        where T : class, IConsumer
     {
         return this.serviceProvider.GetRequiredService<IConsumer<T>>();
     }
@@ -65,10 +64,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        _ = builder.ConfigureHostConfiguration(config =>
+            builder.ConfigureHostConfiguration(config =>
             {
-                _ = config.AddJsonFile("appsettings.Testing.json", false);
-                _ = config.AddEnvironmentVariables("ASPNETCORE");
+                config.AddJsonFile("appsettings.Testing.json", false);
+                config.AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Testing");
 
@@ -77,7 +76,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        _ = builder.ConfigureServices((context, services) =>
+        builder.ConfigureServices((context, services) =>
         {
             this.serviceProvider = services.BuildServiceProvider();
 

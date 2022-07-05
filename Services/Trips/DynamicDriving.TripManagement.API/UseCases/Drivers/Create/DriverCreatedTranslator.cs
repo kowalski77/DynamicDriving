@@ -1,4 +1,4 @@
-﻿using DynamicDriving.AzureServiceBus.Receiver;
+﻿using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Application.Drivers.Commands;

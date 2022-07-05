@@ -1,5 +1,5 @@
-﻿using DynamicDriving.AzureServiceBus.Receiver;
-using DynamicDriving.DriverManagement.Core.Trips.Commands;
+﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
+using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using MediatR;

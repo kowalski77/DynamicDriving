@@ -18,16 +18,18 @@ public class DriversCommandHandlersTests
     [Fact]
     public async Task Driver_is_created_when_driver_created_event_is_received()
     {
-        // Arrange
-        _ = this.factory.CreateDefaultClient();
-        var driverCreated = this.factory.Fixture.Create<DriverCreated>();
-        var consumer = this.factory.GetConsumer<DriverCreated>();
+        //// Arrange
+        //_ = this.factory.CreateDefaultClient();
+        //var driverCreated = this.factory.Fixture.Create<DriverCreated>();
+        //var consumer = this.factory.GetConsumer<DriverCreated>();
 
-        // Act
-        await consumer.ExecuteAsync(driverCreated);
+        //// Act
+        //await consumer.ExecuteAsync(driverCreated);
 
-        // Assert
-        var driver = await this.factory.GetDriverByIdAsync(driverCreated.DriverId);
-        driver.Should().NotBeNull();
+        //// Assert
+        //var driver = await this.factory.GetDriverByIdAsync(driverCreated.DriverId);
+        //driver.Should().NotBeNull();
+
+        Assert.True(false);
     }
 }

@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using DynamicDriving.EventBus;
+using MassTransit;
+using MediatR;
 
-namespace DynamicDriving.AzureServiceBus.Receiver;
+namespace DynamicDriving.MassTransit;
 
 public sealed class Consumer<T> : IConsumer<T>
+    where T : class
 {
     private readonly IMediator mediator;
     private readonly ITranslator<T> translator;
@@ -13,9 +16,11 @@ public sealed class Consumer<T> : IConsumer<T>
         this.translator = translator ?? throw new ArgumentNullException(nameof(translator));
     }
 
-    public async Task ExecuteAsync(T message)
+    public async Task Consume(ConsumeContext<T> context)
     {
-        var notification = this.translator.Translate(message);
+        ArgumentNullException.ThrowIfNull(context);
+        
+        var notification = this.translator.Translate(context.Message);
 
         await this.mediator.Publish(notification).ConfigureAwait(false);
     }

@@ -1,4 +1,4 @@
-﻿using DynamicDriving.AzureServiceBus;
+﻿using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;

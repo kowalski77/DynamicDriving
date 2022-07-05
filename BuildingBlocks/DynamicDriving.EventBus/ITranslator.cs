@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace DynamicDriving.AzureServiceBus.Receiver;
+namespace DynamicDriving.EventBus;
 
 public interface ITranslator<in T>
 {

@@ -1,11 +1,12 @@
-﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.DriverManagement.API.Support;
+﻿using DynamicDriving.DriverManagement.API.Support;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Infrastructure;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
+using DynamicDriving.EventBus;
 using DynamicDriving.Events;
+using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;
 using FluentValidation.AspNetCore;
@@ -26,20 +27,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
+builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>();
 
-var storageConnectionString = builder.Configuration["StorageConnectionString"];
-builder.Services.AddAzureServiceBusReceiver(configure =>
-{
-    configure.StorageConnectionString = storageConnectionString;
-    configure.RegisterIntegrationEvent<TripConfirmed>();
-});
-
-builder.Services.AddAzureServiceBusPublisher(configure =>
-{
-    configure.StorageConnectionString = storageConnectionString;
-});
+builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
 
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);

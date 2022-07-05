@@ -1,6 +1,5 @@
-﻿using DynamicDriving.AzureServiceBus;
-using DynamicDriving.EventBus;
-using DynamicDriving.Events;
+﻿using DynamicDriving.EventBus;
+using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Application.Behaviors;
@@ -22,21 +21,11 @@ public static class ApplicationExtensions
         services.AddMediatR(typeof(CreateDraftTripHandler).Assembly);
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 
+        services.AddMassTransitWithRabbitMq();
+
         services.AddScoped<IOutboxService>(sp => new OutboxService(
             sp.GetRequiredService<IDbContext>(),
             sp.GetRequiredService<IEventBusMessagePublisher>(),
             dc => new OutboxRepository(dc)));
-
-        services.AddAzureServiceBusPublisher(configure =>
-        {
-            configure.StorageConnectionString = configuration["StorageConnectionString"];
-        });
-
-        services.AddAzureServiceBusReceiver(configure =>
-        {
-            configure.StorageConnectionString = configuration["StorageConnectionString"];
-            configure.RegisterIntegrationEvent<DriverCreated>();
-            configure.RegisterIntegrationEvent<DriverAssigned>();
-        });
     }
 }

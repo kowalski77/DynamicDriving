@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.MassTransit\DynamicDriving.MassTransit.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.Application\DynamicDriving.TripManagement.Application.csproj" />
