@@ -71,6 +71,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.Identity.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.MassTransit", "BuildingBlocks\DynamicDriving.MassTransit\DynamicDriving.MassTransit.csproj", "{F185C660-DBDE-431C-8615-B1E377F850C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Sender.TestHarness", "TestHarness\MassTransit.Sender.TestHarness\MassTransit.Sender.TestHarness.csproj", "{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Receiver.TestHarness", "TestHarness\MassTransit.Receiver.TestHarness\MassTransit.Receiver.TestHarness.csproj", "{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +157,14 @@ Global
 		{F185C660-DBDE-431C-8615-B1E377F850C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F185C660-DBDE-431C-8615-B1E377F850C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F185C660-DBDE-431C-8615-B1E377F850C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +200,8 @@ Global
 		{7E3EA0CB-F329-4D1C-8E50-A4177E23CCE8} = {374CDF69-A802-4237-992B-89C1F0A314B2}
 		{BA7EB193-C944-46C1-AE07-D267C0AB6FEC} = {7E3EA0CB-F329-4D1C-8E50-A4177E23CCE8}
 		{F185C660-DBDE-431C-8615-B1E377F850C0} = {F53D37A0-B1B1-4F03-8523-CF6807136AEF}
+		{1ACEA4FB-64D1-4ABE-B41A-78AAF6AD32E4} = {C101C2D5-D120-4C83-A294-2C5DA890E962}
+		{0F422E78-3344-48A4-AB7C-ED2D3C26FC8A} = {C101C2D5-D120-4C83-A294-2C5DA890E962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C833D25C-4F10-473D-A316-718F3B380887}

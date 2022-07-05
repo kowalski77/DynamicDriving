@@ -7,7 +7,7 @@ namespace DynamicDriving.MassTransit;
 public class MassTransitEventPublisher : IEventBusMessagePublisher
 {
     private readonly IPublishEndpoint publishEndpoint;
-
+    
     public MassTransitEventPublisher(IPublishEndpoint publishEndpoint)
     {
         this.publishEndpoint = publishEndpoint;

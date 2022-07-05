@@ -1,4 +1,6 @@
-﻿using MassTransit;
+﻿using DynamicDriving.EventBus;
+using DynamicDriving.Events;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,9 +14,12 @@ public static class MassTransitExtensions
     {
         services.AddMassTransit(configure =>
         {
-            configure.AddConsumers(typeof(Consumer<>).Assembly);
+            //configure.AddConsumers(typeof(Consumer<>).Assembly);
+            configure.AddConsumer<Consumer<Ping>>();
             configure.UseRabbitMq(configureRetries);
         });
+
+        services.AddScoped<IEventBusMessagePublisher, MassTransitEventPublisher>();
 
         return services;
     }
