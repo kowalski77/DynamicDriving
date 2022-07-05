@@ -1,5 +1,4 @@
 ﻿using DynamicDriving.EventBus;
-using DynamicDriving.Events;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +9,18 @@ public static class MassTransitExtensions
 {
     public static IServiceCollection AddMassTransitWithRabbitMq(
         this IServiceCollection services,
-        Action<IRetryConfigurator>? configureRetries = null)
+        Action<RabbitmqSettings>? configure = null)
     {
+        var settings = new RabbitmqSettings();
+        configure?.Invoke(settings);
+
         services.AddMassTransit(configure =>
         {
-            //configure.AddConsumers(typeof(Consumer<>).Assembly);
-            configure.AddConsumer<Consumer<Ping>>();
-            configure.UseRabbitMq(configureRetries);
+            foreach (var type in settings.ConsumerTypes)
+            {
+                configure.AddConsumer(type);
+            }
+            configure.UseRabbitMq(settings.ConfigureRetries);
         });
 
         services.AddScoped<IEventBusMessagePublisher, MassTransitEventPublisher>();

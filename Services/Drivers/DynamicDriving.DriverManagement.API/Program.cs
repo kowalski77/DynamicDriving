@@ -27,7 +27,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMassTransitWithRabbitMq();
+//builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>();
 
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);

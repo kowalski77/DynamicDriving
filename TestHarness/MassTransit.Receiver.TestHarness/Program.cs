@@ -6,7 +6,12 @@ using MediatR;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMediatR(typeof(PingNotification).Assembly);
-builder.Services.AddMassTransitWithRabbitMq();
+
+builder.Services.AddMassTransitWithRabbitMq(cfg =>
+{
+    cfg.RegisterConsumer<Ping>();
+});
+
 builder.Services.AddTranslator<Ping, PingTranslator>();
 
 var app = builder.Build();
