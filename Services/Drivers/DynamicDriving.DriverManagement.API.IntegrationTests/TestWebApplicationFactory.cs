@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using AutoFixture;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
@@ -21,7 +20,7 @@ namespace DynamicDriving.DriverManagement.API.IntegrationTests;
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly Lazy<HttpClient> httpClient;
-    private IServiceProvider serviceProvider = default!;
+    private IServiceProvider? serviceProvider;
 
     public TestWebApplicationFactory()
     {
@@ -31,11 +30,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    //var hostedServiceDescriptor = services.Single(x => x.ImplementationType == typeof(ServiceBusReceiverHostedService));
-                    //_ = services.Remove(hostedServiceDescriptor);
-
-                    //_ = services.AddSingleton(_ => this.PublisherMock.Object);
-
+                    services.AddSingleton(_ => this.PublisherMock.Object);
                     services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
                 });
             }).CreateDefaultClient();
@@ -48,27 +43,24 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPublishEndpoint> PublisherMock { get; } = new();
 
-    public IConsumer<T> GetConsumer<T>()
-        where T : class, IConsumer
+    public T GetService<T>() where T : class
     {
-        return this.serviceProvider.GetRequiredService<IConsumer<T>>();
-    }
+        if (this.serviceProvider is null)
+        {
+            throw new InvalidOperationException("Service provider is not initialized. Call Client first.");
+        }
 
-    public async Task<Trip?> GetTripByIdAsync(Guid id)
-    {
-        var repository = this.serviceProvider.GetRequiredService<ITripRepository>();
-
-        return await repository.GetAsync(id);
+        return this.serviceProvider.GetRequiredService<T>();
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-            builder.ConfigureHostConfiguration(config =>
-            {
-                config.AddJsonFile("appsettings.Testing.json", false);
-                config.AddEnvironmentVariables("ASPNETCORE");
-            })
-            .UseEnvironment("Testing");
+        builder.ConfigureHostConfiguration(config =>
+        {
+            config.AddJsonFile("appsettings.Testing.json", false);
+            config.AddEnvironmentVariables("ASPNETCORE");
+        })
+        .UseEnvironment("Testing");
 
         return base.CreateHost(builder);
     }
@@ -88,7 +80,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     private void SeedDatabase()
     {
-        var mongoDatabase = this.serviceProvider.GetRequiredService<IMongoDatabase>();
+        var mongoDatabase = this.serviceProvider!.GetRequiredService<IMongoDatabase>();
 
         var tripCollection = mongoDatabase.GetCollection<Trip>(nameof(Trip));
 

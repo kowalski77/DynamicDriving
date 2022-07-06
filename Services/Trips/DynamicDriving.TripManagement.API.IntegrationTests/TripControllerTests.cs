@@ -86,26 +86,13 @@ public class TripControllerTests
     public async Task Trip_is_confirmed()
     {
         // Arrange
-        var publisherMock = new Mock<IPublishEndpoint>();
-        var client = this.factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureTestServices(services =>
-            {
-                //publisherMock.Setup(x => x.PublishAsync(It.IsAny<TripConfirmed>(), CancellationToken.None)).Returns(Task.CompletedTask);
-                services.AddSingleton(_ => publisherMock.Object);
-
-                _ = services.AddAuthentication("Test")
-                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
-            });
-        }).CreateClient();
+        var client = this.factory.Client;
 
         // Act
         var response = await client.PutAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}/confirmation", null);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        //publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(y => y.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
-
-        Assert.True(false);
+        this.factory.PublisherMock.Verify(x => x.Publish(It.Is<TripConfirmed>(y => y.TripId == Guid.Parse(IntegrationTestConstants.TripId)), typeof(TripConfirmed), CancellationToken.None));
     }
 }

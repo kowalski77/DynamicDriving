@@ -1,13 +1,12 @@
 ﻿using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Application.Drivers.Commands;
-using MediatR;
 
 namespace DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
 
-public class DriverCreatedTranslator
+public static class DriverCreatedMapper
 {
-    public INotification Translate(DriverCreated message)
+    public static CreateDriver AsCommand(this DriverCreated message)
     {
         Guards.ThrowIfNull(message);
 

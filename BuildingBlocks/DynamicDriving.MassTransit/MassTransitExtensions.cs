@@ -9,6 +9,7 @@ public static class MassTransitExtensions
 {
     public static IServiceCollection AddMassTransitWithRabbitMq(
         this IServiceCollection services,
+        Assembly? consumersAssembly = null,
         Action<MassTransitSettings>? configure = null)
     {
         var settings = new MassTransitSettings();
@@ -16,7 +17,10 @@ public static class MassTransitExtensions
 
         services.AddMassTransit(configure =>
         {
-            configure.AddConsumers(Assembly.GetEntryAssembly());
+            if(consumersAssembly is not null)
+            {
+                configure.AddConsumers(consumersAssembly);
+            }
             configure.UseRabbitMq(settings.ConfigureRetries, settings.ConfigureEndpoints);
         });
 

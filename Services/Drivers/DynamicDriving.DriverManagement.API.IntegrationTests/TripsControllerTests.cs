@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.Events;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
@@ -35,21 +36,19 @@ public class TripsControllerTests
         var request = this.factory.Fixture.Build<AssignDriverRequest>()
             .With(x => x.TripId, tripId)
             .Create();
-        //this.factory.PublisherMock.Setup(x => x.PublishAsync(It.IsAny<DriverAssigned>(), CancellationToken.None))
-        //    .Returns(Task.CompletedTask);
 
         // Act
         var responseMessage = await this.factory.Client.PostAsJsonAsync(TripsEndpoint, request);
 
         // Assert
         responseMessage.EnsureSuccessStatusCode();
+        
         var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<AssignDriverResponse>>(JsonSerializerOptions);
         response!.Data.TripId.Should().Be(IntegrationTestConstants.TripId);
 
-        var trip = await this.factory.GetTripByIdAsync(tripId);
+        var repository = this.factory.GetService<ITripRepository>();
+        var trip = await repository.GetAsync(tripId);
         trip!.Driver?.Id.Should().Be(response.Data.DriverId);
-        //this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverAssigned>(y => y.TripId == tripId), CancellationToken.None), Times.Once);
-
-        Assert.True(false);
+        this.factory.PublisherMock.Verify(x => x.Publish(It.Is<DriverAssigned>(y => y.TripId == tripId), typeof(DriverAssigned), CancellationToken.None), Times.Once);
     }
 }

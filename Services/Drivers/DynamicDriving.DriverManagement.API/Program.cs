@@ -1,5 +1,6 @@
 ﻿using DynamicDriving.DriverManagement.API.Support;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
+using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Infrastructure;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
@@ -24,7 +25,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddMassTransitWithRabbitMq(typeof(TripConfirmedConsumer).Assembly);
 
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
 

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
 
-public sealed record CreateTrip(Guid Id, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) : INotification;
+public sealed record CreateTrip(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) : INotification;
 
 public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
 {
@@ -14,14 +14,14 @@ public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
         this.tripRepository = Guards.ThrowIfNull(tripRepository);
     }
 
-    public async Task Handle(CreateTrip request, CancellationToken cancellationToken)
+    public async Task Handle(CreateTrip notification, CancellationToken cancellationToken)
     {
-        Guards.ThrowIfNull(request);
+        Guards.ThrowIfNull(notification);
 
-        var originCoordinates = Coordinates.CreateInstance(request.OriginLatitude, request.OriginLongitude);
-        var destinationCoordinates = Coordinates.CreateInstance(request.DestinationLatitude, request.DestinationLongitude);
-        var trip = new Trip(request.Id, request.PickUp, originCoordinates, destinationCoordinates);
+        var originCoordinates = Coordinates.CreateInstance(notification.OriginLatitude, notification.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(notification.DestinationLatitude, notification.DestinationLongitude);
+        var trip = new Trip(notification.TripId, notification.PickUp, originCoordinates, destinationCoordinates);
 
-        await this.tripRepository.CreateAsync(trip, cancellationToken);
+        await this.tripRepository.CreateAsync(trip, cancellationToken).ConfigureAwait(false);
     }
 }

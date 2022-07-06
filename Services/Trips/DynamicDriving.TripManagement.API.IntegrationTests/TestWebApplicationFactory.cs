@@ -14,13 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Moq;
 
 namespace DynamicDriving.TripManagement.API.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly Lazy<HttpClient> httpClient;
-    private IServiceProvider serviceProvider = default!;
+    private IServiceProvider? serviceProvider;
 
     public TestWebApplicationFactory()
     {
@@ -28,9 +29,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         {
             return this.WithWebHostBuilder(builder =>
             {
-                _ = builder.ConfigureTestServices(services =>
+                builder.ConfigureTestServices(services =>
                 {
-                    _ = services.AddAuthentication("Test")
+                    services.AddSingleton(_ => this.PublisherMock.Object);
+                    services.AddAuthentication("Test")
                         .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                             "Test", options => { });
                 });
@@ -42,34 +44,24 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public HttpClient Client => this.httpClient.Value;
 
-    public IConsumer<T> GetConsumer<T>()
-        where T : class, IConsumer
+    public Mock<IPublishEndpoint> PublisherMock { get; } = new();
+
+    public T GetService<T>() where T : class
     {
-        return this.serviceProvider.GetRequiredService<IConsumer<T>>();
-    }
-
-    public async Task<Driver> GetDriverByIdAsync(Guid id)
-    {
-        var repository = this.serviceProvider.GetRequiredService<IDriverRepository>();
-        var driver = await repository.GetAsync(id);
-
-        return driver.Value;
-    }
-
-    public async Task<Trip> GetTripByIdAsync(Guid id)
-    {
-        var repository = this.serviceProvider.GetRequiredService<ITripRepository>();
-        var trip = await repository.GetAsync(id);
-
-        return trip.Value;
+        if(this.serviceProvider is null)
+        {
+            throw new InvalidOperationException("Service provider is not initialized. Call Client first.");
+        }
+        
+        return this.serviceProvider.GetRequiredService<T>();
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        _ = builder.ConfigureHostConfiguration(config =>
+        builder.ConfigureHostConfiguration(config =>
             {
-                _ = config.AddJsonFile("appsettings.Testing.json", false);
-                _ = config.AddEnvironmentVariables("ASPNETCORE");
+                config.AddJsonFile("appsettings.Testing.json", false);
+                config.AddEnvironmentVariables("ASPNETCORE");
             })
             .UseEnvironment("Testing");
 
@@ -78,7 +70,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        _ = builder.ConfigureServices(services =>
+        builder.ConfigureServices(services =>
         {
             this.serviceProvider = services.BuildServiceProvider();
             using var scope = this.serviceProvider.CreateScope();
@@ -86,7 +78,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
             var outboxContext = scope.ServiceProvider.GetRequiredService<OutboxContext>();
 
-            _ = context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.Migrate();
             outboxContext.Database.Migrate();
 
@@ -118,11 +110,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var destinationLocation = new Location(Guid.NewGuid(), IntegrationTestConstants.LocationName2, cityEntry.Entity, Coordinates.CreateInstance(IntegrationTestConstants.Latitude, IntegrationTestConstants.Longitude).Value);
 
         var userId = UserId.CreateInstance(Guid.Parse(IntegrationTestConstants.UserId));
-        _ = context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userId.Value, DateTime.Now, originLocation, destinationLocation)); 
+        context.Trips.Add(new Trip(Guid.Parse(IntegrationTestConstants.TripId), userId.Value, DateTime.Now, originLocation, destinationLocation));
 
         var driver = new Driver(Guid.Parse(IntegrationTestConstants.DriverId), this.Fixture.Create<string>(), this.Fixture.Create<string>(), this.Fixture.Create<Car>());
-        _ = context.Drivers.Add(driver);
+        context.Drivers.Add(driver);
 
-        _ = context.SaveChanges();
+        context.SaveChanges();
     }
 }

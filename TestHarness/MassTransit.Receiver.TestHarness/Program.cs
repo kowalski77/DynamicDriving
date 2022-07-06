@@ -4,7 +4,7 @@ using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddMassTransitWithRabbitMq(typeof(PingConsumer).Assembly);
 
 var app = builder.Build();
 
