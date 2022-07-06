@@ -13,8 +13,11 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 [Authorize]
 public class TripsController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    private readonly IMediator mediator;
+
+    public TripsController(IMediator mediator)
     {
+        this.mediator = mediator;
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetTripById))]
@@ -24,7 +27,7 @@ public class TripsController : ApplicationController
     {
         Guards.ThrowIfEmpty(id);
 
-        var result = await this.Mediator.Send(new GetTripById(id)).ConfigureAwait(false);
+        var result = await this.mediator.Send(new GetTripById(id)).ConfigureAwait(false);
 
         return FromResult(result, dto => dto.AsResponse());
     }

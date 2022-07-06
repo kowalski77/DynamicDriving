@@ -12,8 +12,11 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetAllByUser;
 [Authorize(TripManagementConstants.ReadPolicy)]
 public class TripsController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    private readonly IMediator mediator;
+
+    public TripsController(IMediator mediator)
     {
+        this.mediator = mediator;
     }
 
     [HttpGet("me", Name = nameof(GetCurrentUserTrips))]
@@ -22,7 +25,7 @@ public class TripsController : ApplicationController
     public async Task<IActionResult> GetCurrentUserTrips()
     {
         var userId = this.GetCurrentUserIdBySub();
-        var trips = await this.Mediator.Send(new GetTripByUser(userId)).ConfigureAwait(false);
+        var trips = await this.mediator.Send(new GetTripByUser(userId)).ConfigureAwait(false);
 
         return Ok(trips.AsResponse(userId));
     }

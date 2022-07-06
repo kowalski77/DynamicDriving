@@ -1,27 +1,30 @@
 ﻿using DynamicDriving.SharedKernel;
-using MediatR;
+using DynamicDriving.SharedKernel.Application;
+using DynamicDriving.SharedKernel.Results;
 
 namespace DynamicDriving.DriverManagement.Core.Trips.Commands;
 
-public sealed record CreateTrip(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) : INotification;
+public sealed record CreateTrip(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) : ICommand<Result>;
 
-public sealed class CreateTripHandler : INotificationHandler<CreateTrip>
+public sealed class CreateTripServiceCommand : IServiceCommand<CreateTrip, Result>
 {
     private readonly ITripRepository tripRepository;
 
-    public CreateTripHandler(ITripRepository tripRepository)
+    public CreateTripServiceCommand(ITripRepository tripRepository)
     {
         this.tripRepository = Guards.ThrowIfNull(tripRepository);
     }
 
-    public async Task Handle(CreateTrip notification, CancellationToken cancellationToken)
+    public async Task<Result> ExecuteAsync(CreateTrip command, CancellationToken cancellationToken = default)
     {
-        Guards.ThrowIfNull(notification);
+        Guards.ThrowIfNull(command);
 
-        var originCoordinates = Coordinates.CreateInstance(notification.OriginLatitude, notification.OriginLongitude);
-        var destinationCoordinates = Coordinates.CreateInstance(notification.DestinationLatitude, notification.DestinationLongitude);
-        var trip = new Trip(notification.TripId, notification.PickUp, originCoordinates, destinationCoordinates);
+        var originCoordinates = Coordinates.CreateInstance(command.OriginLatitude, command.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(command.DestinationLatitude, command.DestinationLongitude);
+        var trip = new Trip(command.TripId, command.PickUp, originCoordinates, destinationCoordinates);
 
         await this.tripRepository.CreateAsync(trip, cancellationToken).ConfigureAwait(false);
+
+        return Result.Ok();
     }
 }

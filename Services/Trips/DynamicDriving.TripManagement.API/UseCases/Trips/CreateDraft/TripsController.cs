@@ -12,8 +12,11 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;
 [Authorize(TripManagementConstants.WritePolicy)]
 public class TripsController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    private readonly IMediator mediator;
+    
+    public TripsController(IMediator mediator)
     {
+        this.mediator = mediator;
     }
 
     [HttpPost]
@@ -25,7 +28,7 @@ public class TripsController : ApplicationController
         _ = Guards.ThrowIfNull(request);
 
         var command = request.AsCommand(this.GetCurrentUserIdBySub());
-        var result = await this.Mediator.Send(command).ConfigureAwait(false);
+        var result = await this.mediator.Send(command).ConfigureAwait(false);
 
         return this.CreatedResult(
             result,

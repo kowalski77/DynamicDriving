@@ -1,32 +1,32 @@
 ﻿using DynamicDriving.DriverManagement.Core.Outbox;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
-using DynamicDriving.SharedKernel.Mediator;
+using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Results;
 
 namespace DynamicDriving.DriverManagement.Core.Drivers.Commands;
 
-public record RegisterDriver(Guid Id, string Name, CarModel Car, bool IsAvailable) : ICommand<Result<Guid>>;
+public sealed record RegisterDriver(Guid Id, string Name, CarModel Car, bool IsAvailable) : ICommand<Result<Guid>>;
 
 public record CarModel(string Model, CarType CarType);
 
-public class RegisterDriverHandler : ICommandHandler<RegisterDriver, Result<Guid>>
+public sealed class RegisterDriverServiceCommand : IServiceCommand<RegisterDriver, Result<Guid>>
 {
     private readonly IDriverRepository driverRepository;
     private readonly IOutboxService outboxService;
 
-    public RegisterDriverHandler(IDriverRepository driverRepository, IOutboxService outboxService)
+    public RegisterDriverServiceCommand(IDriverRepository driverRepository, IOutboxService outboxService)
     {
-        this.driverRepository = Guards.ThrowIfNull(driverRepository);
-        this.outboxService = Guards.ThrowIfNull(outboxService);
+        this.driverRepository = driverRepository;
+        this.outboxService = outboxService;
     }
-
-    public async Task<Result<Guid>> Handle(RegisterDriver request, CancellationToken cancellationToken)
+    
+    public async Task<Result<Guid>> ExecuteAsync(RegisterDriver command, CancellationToken cancellationToken = default)
     {
-        Guards.ThrowIfNull(request);
+        Guards.ThrowIfNull(command);
 
-        var car = new Car(Guid.NewGuid(), request.Car.Model, request.Car.CarType);
-        var driver = new Driver(request.Id, request.Name, car, request.IsAvailable);
+        var car = new Car(Guid.NewGuid(), command.Car.Model, command.Car.CarType);
+        var driver = new Driver(command.Id, command.Name, car, command.IsAvailable);
 
         await this.driverRepository.CreateAsync(driver, cancellationToken).ConfigureAwait(false);
 

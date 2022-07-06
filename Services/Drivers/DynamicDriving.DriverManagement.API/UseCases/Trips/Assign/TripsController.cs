@@ -1,9 +1,11 @@
-﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
+﻿using DynamicDriving.DriverManagement.Core.Trips;
+using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
+using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Envelopes;
-using MediatR;
+using DynamicDriving.SharedKernel.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +15,11 @@ namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Assign;
 [Authorize(DriverManagementConstants.WritePolicy)]
 public class TripsController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    private readonly IServiceCommand<AssignDriver, Result<AssignDriverDto>> serviceCommand;
+
+    public TripsController(IServiceCommand<AssignDriver, Result<AssignDriverDto>> serviceCommand)
     {
+        this.serviceCommand = serviceCommand;
     }
 
     [HttpPost]
@@ -25,7 +30,7 @@ public class TripsController : ApplicationController
         Guards.ThrowIfNull(request);
 
         AssignDriver command = request.AsCommand();
-        var result = await this.Mediator.Send(command).ConfigureAwait(false);
+        var result = await this.serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
 
         return FromResult(result, value => new AssignDriverResponse(value.TripId, value.DriverId));
     }

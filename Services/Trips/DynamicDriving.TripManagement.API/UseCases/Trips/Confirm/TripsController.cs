@@ -12,8 +12,11 @@ namespace DynamicDriving.TripManagement.API.UseCases.Trips.Confirm;
 [Authorize(TripManagementConstants.WritePolicy)]
 public class TripsController : ApplicationController
 {
-    public TripsController(IMediator mediator) : base(mediator)
+    private readonly IMediator mediator;
+
+    public TripsController(IMediator mediator)
     {
+        this.mediator = mediator;
     }
 
     [HttpPut("{id:guid}/confirmation")]
@@ -25,7 +28,7 @@ public class TripsController : ApplicationController
         Guards.ThrowIfEmpty(id);
 
         ConfirmTrip command = new(id);
-        var result = await this.Mediator.Send(command).ConfigureAwait(false);
+        var result = await this.mediator.Send(command).ConfigureAwait(false);
 
         return FromResult(result);
     }

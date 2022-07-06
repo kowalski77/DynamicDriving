@@ -1,20 +1,20 @@
-﻿using MediatR;
+﻿using DynamicDriving.SharedKernel.Application;
 using MongoDB.Driver;
 
 namespace DynamicDriving.DriverManagement.Core.Drivers.Queries;
 
-public record GetAllDrivers() : IRequest<IReadOnlyList<DriverSummaryDto>>;
+public record GetAllDrivers() : ICommand<IReadOnlyList<DriverSummaryDto>>;
 
-public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, IReadOnlyList<DriverSummaryDto>>
+public class GetAllDriversServiceCommand : IServiceCommand<GetAllDrivers, IReadOnlyList<DriverSummaryDto>>
 {
     private readonly IDriverRepository driverRepository;
 
-    public GetAllDriversHandler(IDriverRepository driverRepository)
+    public GetAllDriversServiceCommand(IDriverRepository driverRepository)
     {
         this.driverRepository = driverRepository;
     }
 
-    public async Task<IReadOnlyList<DriverSummaryDto>> Handle(GetAllDrivers request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<DriverSummaryDto>> ExecuteAsync(GetAllDrivers command, CancellationToken cancellationToken = default)
     {
         var options = new FindOptions<Driver, DriverSummaryDto>
         {

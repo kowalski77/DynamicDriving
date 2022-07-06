@@ -2,8 +2,9 @@
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
+using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Envelopes;
-using MediatR;
+using DynamicDriving.SharedKernel.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +14,11 @@ namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 [Authorize(DriverManagementConstants.WritePolicy)]
 public class DriversController : ApplicationController
 {
-    public DriversController(IMediator mediator) : base(mediator)
+    private readonly IServiceCommand<RegisterDriver, Result<Guid>> serviceCommand;
+
+    public DriversController(IServiceCommand<RegisterDriver, Result<Guid>> serviceCommand)
     {
+        this.serviceCommand = serviceCommand;
     }
 
     [HttpPost]
@@ -25,7 +29,7 @@ public class DriversController : ApplicationController
         Guards.ThrowIfNull(request);
 
         RegisterDriver command = request.AsCommand();
-        var result = await this.Mediator.Send(command).ConfigureAwait(false);
+        var result = await this.serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
 
         return FromResult(result, value => new RegisterDriverResponse(value));
     }

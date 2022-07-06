@@ -3,12 +3,10 @@ using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Infrastructure;
-using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;
 using FluentValidation.AspNetCore;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -26,9 +24,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransitWithRabbitMq(typeof(TripConfirmedConsumer).Assembly);
-
-builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
-
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 

@@ -1,26 +1,27 @@
 ﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Application;
+using DynamicDriving.SharedKernel.Results;
 using MassTransit;
-using MediatR;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
 public class TripConfirmedConsumer : IConsumer<TripConfirmed>
 {
-    private readonly IMediator mediator;
+    private readonly IServiceCommand<CreateTrip, Result> serviceCommand;
 
-    public TripConfirmedConsumer(IMediator mediator)
+    public TripConfirmedConsumer(IServiceCommand<CreateTrip, Result> serviceCommand)
     {
-        this.mediator = mediator;
+        this.serviceCommand = serviceCommand;
     }
 
     public async Task Consume(ConsumeContext<TripConfirmed> context)
     {
         Guards.ThrowIfNull(context);
 
-        CreateTrip command = context.Message.AsCommand();
+        var command = context.Message.AsCommand();
 
-        await this.mediator.Publish(command).ConfigureAwait(false);
+        await this.serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
     }
 }

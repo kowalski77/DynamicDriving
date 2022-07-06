@@ -2,7 +2,6 @@
 using System.Net.Mime;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicDriving.SharedKernel.Apis;
@@ -12,13 +11,6 @@ namespace DynamicDriving.SharedKernel.Apis;
 [Consumes(MediaTypeNames.Application.Json)]
 public class ApplicationController : ControllerBase
 {
-    public ApplicationController(IMediator mediator)
-    {
-        this.Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    }
-
-    protected IMediator Mediator { get; }
-
     protected static IActionResult Error(ErrorResult? error, string invalidField)
     {
         return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.BadRequest);
