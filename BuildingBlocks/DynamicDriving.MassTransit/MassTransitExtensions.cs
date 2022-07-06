@@ -1,4 +1,4 @@
-﻿using DynamicDriving.EventBus;
+﻿using System.Reflection;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,14 +16,9 @@ public static class MassTransitExtensions
 
         services.AddMassTransit(configure =>
         {
-            foreach (var type in settings.ConsumerTypes)
-            {
-                configure.AddConsumer(type);
-            }
+            configure.AddConsumers(Assembly.GetEntryAssembly());
             configure.UseRabbitMq(settings.ConfigureRetries, settings.ConfigureEndpoints);
         });
-
-        services.AddScoped<IEventBusMessagePublisher, MassTransitEventPublisher>();
 
         return services;
     }
@@ -39,19 +34,13 @@ public static class MassTransitExtensions
             var settings = configuration.GetSection(nameof(MassTransitSettings)).Get<MassTransitSettings>();
 
             configurator.Host(settings.RabbitMqHost);
-            //configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(settings.ServiceName, false));
+            configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(settings.ServiceName, false));
 
             if (configureRetries is null)
             {
                 configureRetries = (retryConfigurator) => retryConfigurator.Interval(3, TimeSpan.FromSeconds(5));
             }
-            
-            if(configureEndpoints is not null)
-            {
-                configureEndpoints(configurator)(context);
-            }
 
-            configurator.UseServiceScope(context);
             configurator.UseMessageRetry(configureRetries);
             configurator.UseInstrumentation(serviceName: settings.ServiceName);
         });

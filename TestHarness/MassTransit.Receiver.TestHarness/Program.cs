@@ -1,35 +1,31 @@
-using DynamicDriving.EventBus;
 using DynamicDriving.Events;
-using MassTransit.Receiver.TestHarness;
-using MediatR;
+using DynamicDriving.MassTransit;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMediatR(typeof(PingNotification).Assembly);
-
-builder.Services.AddTranslator<Ping, PingTranslator>();
-builder.Services.AddEventBus();
+builder.Services.AddMassTransitWithRabbitMq();
 
 var app = builder.Build();
 
 app.Run();
 
-public sealed record PingNotification(Guid Id, int Value) : INotification;
-
-public sealed record TestMessageNotificationHandler : INotificationHandler<PingNotification>
+public sealed class PingConsumer : IConsumer<Ping>
 {
-    public Task Handle(PingNotification notification, CancellationToken cancellationToken)
+    public Task Consume(ConsumeContext<Ping> context)
     {
-        Console.WriteLine($"Received ping notification: {notification} with id: {notification.Id} and value: {notification.Value}");
+        Console.WriteLine($"Received ping notification: {context.GetType()} with id: {context.Message.Id} and value: {context.Message.Value}");
 
         return Task.CompletedTask;
     }
 }
 
-public sealed class PingTranslator : ITranslator<Ping>
+public sealed class PingConsumer2 : IConsumer<Ping>
 {
-    public INotification Translate(Ping message)
+    public Task Consume(ConsumeContext<Ping> context)
     {
-        return new PingNotification(message.Id, message.Value);
+        Console.WriteLine($"Received ping notification: {context.GetType()} with id: {context.Message.Id} and value: {context.Message.Value}");
+
+        return Task.CompletedTask;
     }
 }

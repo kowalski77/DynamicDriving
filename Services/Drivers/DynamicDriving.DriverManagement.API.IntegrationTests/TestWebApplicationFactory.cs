@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Trips;
-using DynamicDriving.EventBus;
 using DynamicDriving.SharedKernel.Mongo;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
@@ -47,7 +46,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public HttpClient Client => this.httpClient.Value;
 
-    public Mock<IEventBusMessagePublisher> PublisherMock { get; } = new();
+    public Mock<IPublishEndpoint> PublisherMock { get; } = new();
 
     public IConsumer<T> GetConsumer<T>()
         where T : class, IConsumer

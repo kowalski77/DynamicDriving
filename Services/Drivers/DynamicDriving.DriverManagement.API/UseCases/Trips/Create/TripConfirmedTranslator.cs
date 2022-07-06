@@ -1,21 +1,20 @@
 ﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
-using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using MediatR;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
-public sealed class TripConfirmedTranslator : ITranslator<TripConfirmed>
+public sealed class TripConfirmedTranslator
 {
-    public INotification Translate(TripConfirmed message)
-    {
-        Guards.ThrowIfNull(message);
+    //public INotification Translate(TripConfirmed message)
+    //{
+    //    Guards.ThrowIfNull(message);
 
-        return new CreateTrip(
-            message.Id, 
-            message.PickUp,
-            message.OriginLatitude, message.OriginLongitude, 
-            message.DestinationLatitude, message.DestinationLongitude);
-    }
+    //    return new CreateTrip(
+    //        message.Id, 
+    //        message.PickUp,
+    //        message.OriginLatitude, message.OriginLongitude, 
+    //        message.DestinationLatitude, message.DestinationLongitude);
+    //}
 }

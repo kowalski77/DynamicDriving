@@ -1,12 +1,11 @@
-﻿using DynamicDriving.EventBus;
-using DynamicDriving.Events;
+﻿using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Application.Drivers.Commands;
 using MediatR;
 
 namespace DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
 
-public class DriverCreatedTranslator : ITranslator<DriverCreated>
+public class DriverCreatedTranslator
 {
     public INotification Translate(DriverCreated message)
     {

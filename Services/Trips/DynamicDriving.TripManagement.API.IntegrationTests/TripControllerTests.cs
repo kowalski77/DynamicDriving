@@ -2,12 +2,12 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
 using FluentAssertions;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,12 +86,12 @@ public class TripControllerTests
     public async Task Trip_is_confirmed()
     {
         // Arrange
-        var publisherMock = new Mock<IEventBusMessagePublisher>();
+        var publisherMock = new Mock<IPublishEndpoint>();
         var client = this.factory.WithWebHostBuilder(builder =>
         {
             builder.ConfigureTestServices(services =>
             {
-                publisherMock.Setup(x => x.PublishAsync(It.IsAny<TripConfirmed>(), CancellationToken.None)).Returns(Task.CompletedTask);
+                //publisherMock.Setup(x => x.PublishAsync(It.IsAny<TripConfirmed>(), CancellationToken.None)).Returns(Task.CompletedTask);
                 services.AddSingleton(_ => publisherMock.Object);
 
                 _ = services.AddAuthentication("Test")
@@ -104,6 +104,8 @@ public class TripControllerTests
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(y => y.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
+        //publisherMock.Verify(x => x.PublishAsync(It.Is<TripConfirmed>(y => y.TripId == Guid.Parse(IntegrationTestConstants.TripId)), CancellationToken.None));
+
+        Assert.True(false);
     }
 }

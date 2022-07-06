@@ -1,10 +1,10 @@
 ﻿using System.Data.Common;
-using DynamicDriving.EventBus;
 using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.SharedKernel.Outbox.Sql;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDriving.TripManagement.Application.Outbox;
@@ -12,17 +12,17 @@ namespace DynamicDriving.TripManagement.Application.Outbox;
 public sealed class OutboxService : IOutboxService
 {
     private readonly IDbContext context;
-    private readonly IEventBusMessagePublisher eventBusMessagePublisher;
+    private readonly IPublishEndpoint publishEndpoint;
     private readonly IOutboxRepository outboxRepository;
 
-    public OutboxService(IDbContext context, IEventBusMessagePublisher eventBusMessagePublisher, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
+    public OutboxService(IDbContext context, IPublishEndpoint publishEndpoint, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
     {
         Guards.ThrowIfNull(context);
-        Guards.ThrowIfNull(eventBusMessagePublisher);
+        Guards.ThrowIfNull(publishEndpoint);
         Guards.ThrowIfNull(outboxRepositoryFactory);
 
         this.context = context;
-        this.eventBusMessagePublisher = eventBusMessagePublisher;
+        this.publishEndpoint = publishEndpoint;
         this.outboxRepository = outboxRepositoryFactory(context.DatabaseFacade.GetDbConnection());
     }
 
@@ -64,7 +64,7 @@ public sealed class OutboxService : IOutboxService
         {
             var message = await OutboxSerializer.DeserializeAsync<IIntegrationEvent>(outboxMessage);
 
-            await this.eventBusMessagePublisher.PublishAsync(message, cancellationToken).ConfigureAwait(false);
+            await this.publishEndpoint.Publish(message, message.GetType(), cancellationToken).ConfigureAwait(false);
 
             await this.outboxRepository.MarkMessageAsPublishedAsync(outboxMessage.Id, cancellationToken).ConfigureAwait(false);
         }

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\DynamicDriving.MassTransit\DynamicDriving.MassTransit.csproj" />
+    <ProjectReference Include="..\..\Contracts\DynamicDriving.Events\DynamicDriving.Events.csproj" />
   </ItemGroup>
 
 </Project>

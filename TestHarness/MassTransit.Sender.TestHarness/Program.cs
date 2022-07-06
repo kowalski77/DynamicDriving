@@ -1,6 +1,6 @@
-﻿using DynamicDriving.EventBus;
-using DynamicDriving.Events;
+﻿using DynamicDriving.Events;
 using DynamicDriving.MassTransit;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,10 +11,9 @@ IServiceProvider serviceProvider;
 
 ConfigureServices();
 
-var testMessage = new Ping(Guid.NewGuid(), 10);
-
-var eventPublisher = serviceProvider.GetRequiredService<IEventBusMessagePublisher>();
-await eventPublisher.PublishAsync(Guid.NewGuid(), $"TestHarness#{typeof(Ping).FullName}", testMessage);
+var pingMessage = new Ping(Guid.NewGuid(), 10);
+var endpoint = serviceProvider.GetRequiredService<IPublishEndpoint>();
+await endpoint.Publish(pingMessage);
 
 Console.ReadKey();
 DisposeServices();

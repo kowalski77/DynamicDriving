@@ -1,10 +1,6 @@
-﻿using DynamicDriving.EventBus;
-using DynamicDriving.Events;
-using DynamicDriving.SharedKernel.Envelopes;
+﻿using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.TripManagement.API.Support;
-using DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
-using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
 using DynamicDriving.TripManagement.Infrastructure;
@@ -26,9 +22,6 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddTranslator<DriverCreated, DriverCreatedTranslator>();
-builder.Services.AddTranslator<DriverAssigned, DriverAssignedTranslator>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -63,4 +56,6 @@ app.MapControllers();
 
 app.Run();
 
+#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
+#pragma warning restore CA1050 // Declare types in namespaces

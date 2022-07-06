@@ -41,6 +41,8 @@ public class DriversControllerTests
         responseMessage.EnsureSuccessStatusCode();
         var envelope = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<RegisterDriverResponse>>(JsonSerializerOptions);
         envelope!.Data.DriverId.Should().Be(driverId);
-        this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverCreated>(y => y.DriverId == driverId), CancellationToken.None), Times.Once);
+        //this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverCreated>(y => y.DriverId == driverId), CancellationToken.None), Times.Once);
+
+        Assert.True(false);
     }
 }

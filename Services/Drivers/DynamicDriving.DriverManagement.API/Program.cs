@@ -1,11 +1,8 @@
 ﻿using DynamicDriving.DriverManagement.API.Support;
 using DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;
-using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core;
 using DynamicDriving.DriverManagement.Core.Infrastructure;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
-using DynamicDriving.EventBus;
-using DynamicDriving.Events;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Identity;
@@ -27,8 +24,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddMassTransitWithRabbitMq();
-builder.Services.AddTranslator<TripConfirmed, TripConfirmedTranslator>();
+builder.Services.AddMassTransitWithRabbitMq();
 
 builder.Services.AddMediatR(typeof(CreateTrip).Assembly);
 
@@ -65,4 +61,6 @@ app.MapControllers();
 
 app.Run();
 
+#pragma warning disable CA1050 // Declare types in namespaces
 public partial class Program { }
+#pragma warning restore CA1050 // Declare types in namespaces

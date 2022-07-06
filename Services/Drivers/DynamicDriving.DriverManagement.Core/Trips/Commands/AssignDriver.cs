@@ -27,7 +27,7 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<A
     {
         Guards.ThrowIfNull(request);
 
-        var trip = await this.tripRepository.GetAsync(request.TripId, cancellationToken);
+        var trip = await this.tripRepository.GetAsync(request.TripId, cancellationToken).ConfigureAwait(false);
         if (trip is null)
         {
             return GeneralErrors.NotFound(request.TripId, nameof(Trip));
@@ -39,17 +39,17 @@ public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Result<A
             return canAssignResult.Error!;
         }
 
-        var driver = await this.driverService.GetFirstAvailableDriverAsync(cancellationToken);
+        var driver = await this.driverService.GetFirstAvailableDriverAsync(cancellationToken).ConfigureAwait(false);
         if (driver is null)
         {
             return TripErrors.NoDriverAvailable();
         }
 
         var updatedTrip = trip.With(driver);
-        await this.tripRepository.UpdateAsync(updatedTrip, cancellationToken);
+        await this.tripRepository.UpdateAsync(updatedTrip, cancellationToken).ConfigureAwait(false);
 
         var driverAssigned = new DriverAssigned(Guid.NewGuid(), request.TripId, driver.Id);
-        await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken);
+        await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(new AssignDriverDto(trip.Id, driver.Id));
     }

@@ -1,10 +1,10 @@
-﻿using DynamicDriving.EventBus;
-using DynamicDriving.MassTransit;
+﻿using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox.Sql;
 using DynamicDriving.TripManagement.Application.Behaviors;
 using DynamicDriving.TripManagement.Application.Outbox;
 using DynamicDriving.TripManagement.Application.Trips.Commands;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +25,7 @@ public static class ApplicationExtensions
 
         services.AddScoped<IOutboxService>(sp => new OutboxService(
             sp.GetRequiredService<IDbContext>(),
-            sp.GetRequiredService<IEventBusMessagePublisher>(),
+            sp.GetRequiredService<IPublishEndpoint>(),
             dc => new OutboxRepository(dc)));
     }
 }

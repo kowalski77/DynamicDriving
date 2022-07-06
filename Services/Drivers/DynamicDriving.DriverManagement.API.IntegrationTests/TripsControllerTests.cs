@@ -35,8 +35,8 @@ public class TripsControllerTests
         var request = this.factory.Fixture.Build<AssignDriverRequest>()
             .With(x => x.TripId, tripId)
             .Create();
-        this.factory.PublisherMock.Setup(x => x.PublishAsync(It.IsAny<DriverAssigned>(), CancellationToken.None))
-            .Returns(Task.CompletedTask);
+        //this.factory.PublisherMock.Setup(x => x.PublishAsync(It.IsAny<DriverAssigned>(), CancellationToken.None))
+        //    .Returns(Task.CompletedTask);
 
         // Act
         var responseMessage = await this.factory.Client.PostAsJsonAsync(TripsEndpoint, request);
@@ -48,6 +48,8 @@ public class TripsControllerTests
 
         var trip = await this.factory.GetTripByIdAsync(tripId);
         trip!.Driver?.Id.Should().Be(response.Data.DriverId);
-        this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverAssigned>(y => y.TripId == tripId), CancellationToken.None), Times.Once);
+        //this.factory.PublisherMock.Verify(x => x.PublishAsync(It.Is<DriverAssigned>(y => y.TripId == tripId), CancellationToken.None), Times.Once);
+
+        Assert.True(false);
     }
 }
