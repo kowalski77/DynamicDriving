@@ -2,6 +2,7 @@
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.TripManagement.Application.Trips.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ public class TripsController : ApplicationController
     {
         _ = Guards.ThrowIfNull(request);
 
-        var command = request.AsCommand(this.GetCurrentUserIdBySub());
+        CreateDraftTrip command = request.AsCommand(this.GetCurrentUserIdBySub());
         var result = await this.mediator.Send(command).ConfigureAwait(false);
 
         return this.CreatedResult(

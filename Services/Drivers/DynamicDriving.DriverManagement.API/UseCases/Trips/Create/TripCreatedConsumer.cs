@@ -7,16 +7,16 @@ using MassTransit;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
-public class TripConfirmedConsumer : IConsumer<TripConfirmed>
+public class TripCreatedConsumer : IConsumer<TripCreated>
 {
     private readonly IServiceCommand<CreateTrip, Result> serviceCommand;
 
-    public TripConfirmedConsumer(IServiceCommand<CreateTrip, Result> serviceCommand)
+    public TripCreatedConsumer(IServiceCommand<CreateTrip, Result> serviceCommand)
     {
         this.serviceCommand = serviceCommand;
     }
 
-    public async Task Consume(ConsumeContext<TripConfirmed> context)
+    public async Task Consume(ConsumeContext<TripCreated> context)
     {
         Guards.ThrowIfNull(context);
 

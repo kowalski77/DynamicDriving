@@ -23,7 +23,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMassTransitWithRabbitMq(typeof(TripConfirmedConsumer).Assembly);
+builder.Services.AddMassTransitWithRabbitMq(typeof(TripCreatedConsumer).Assembly);
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 

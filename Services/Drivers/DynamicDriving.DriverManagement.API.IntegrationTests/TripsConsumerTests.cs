@@ -24,12 +24,12 @@ public class TripsConsumerTests
     public async Task Trip_is_stored_when_trip_confirmed_event_is_received()
     {
         //Arrange
-        var tripConfirmed = this.factory.Fixture.Create<TripConfirmed>();
-        var consumeContextMock = new Mock<ConsumeContext<TripConfirmed>>();
+        var tripConfirmed = this.factory.Fixture.Create<TripCreated>();
+        var consumeContextMock = new Mock<ConsumeContext<TripCreated>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(tripConfirmed);
 
         _ = this.factory.Client;
-        var consumer = this.factory.GetService<TripConfirmedConsumer>();
+        var consumer = this.factory.GetService<TripCreatedConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);

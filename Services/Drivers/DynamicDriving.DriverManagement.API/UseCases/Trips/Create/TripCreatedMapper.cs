@@ -4,9 +4,9 @@ using DynamicDriving.SharedKernel;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 
-public static class TripConfirmedMapper
+public static class TripCreatedMapper
 {
-    public static CreateTrip AsCommand(this TripConfirmed message)
+    public static CreateTrip AsCommand(this TripCreated message)
     {
         Guards.ThrowIfNull(message);
 

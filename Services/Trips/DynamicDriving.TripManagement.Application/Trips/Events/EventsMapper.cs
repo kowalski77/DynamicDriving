@@ -6,11 +6,11 @@ namespace DynamicDriving.TripManagement.Application.Trips.Events;
 
 public static class EventsMapper
 {
-    public static TripConfirmed AsIntegrationEvent(this TripConfirmedDomainEvent source)
+    public static TripCreated AsIntegrationEvent(this TripConfirmedDomainEvent source)
     {
         Guards.ThrowIfNull(source);
 
-        return new TripConfirmed(
+        return new TripCreated(
             Guid.NewGuid(), 
             source.TripId, 
             source.PickUp, 
