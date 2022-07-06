@@ -68,7 +68,7 @@ app.MapRazorPages();
 
 if (app.Environment.IsDevelopment())
 {
-    await app.SeedUserRoles().ConfigureAwait(false); // NOTE: is not a good idea in production
+    await app.SeedUsersAndRoles().ConfigureAwait(false); // NOTE: is not a good idea in production
 }
 
 await app.RunAsync().ConfigureAwait(false);

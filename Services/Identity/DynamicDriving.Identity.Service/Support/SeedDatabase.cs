@@ -7,9 +7,9 @@ namespace DynamicDriving.Identity.Service.Support;
 
 public static class SeedDatabase
 {
-    public static async Task SeedUserRoles(this WebApplication host)
+    public static async Task SeedUsersAndRoles(this WebApplication host)
     {
-        _ = Guards.ThrowIfNull(host);
+        Guards.ThrowIfNull(host);
 
         using var scope = host.Services.CreateScope();
 
@@ -23,6 +23,7 @@ public static class SeedDatabase
         await CreateRoleAsync(roleManager, Roles.User).ConfigureAwait(false);
 
         await CreateAdminUserAsync(userManager, identitySettings).ConfigureAwait(false);
+        await CreateTestUserAsync(userManager).ConfigureAwait(false);
     }
 
     private static async Task CreateRoleAsync(RoleManager<ApplicationRole> roleManager, string role)
@@ -33,7 +34,7 @@ public static class SeedDatabase
             return;
         }
 
-        _ = await roleManager.CreateAsync(new ApplicationRole
+        await roleManager.CreateAsync(new ApplicationRole
         {
             Name = role,
             NormalizedName = role.ToUpperInvariant(),
@@ -50,11 +51,33 @@ public static class SeedDatabase
 
         adminUser = new ApplicationUser
         {
-            UserName = settings.AdminUserEmail,
-            Email = settings.AdminUserEmail
+            UserName = "Admin",
+            Email = settings.AdminUserEmail,
+            Credits = int.MaxValue
         };
 
-        _ = await userManager.CreateAsync(adminUser, settings.AdminUserPassword).ConfigureAwait(false);
-        _ = await userManager.AddToRoleAsync(adminUser, Roles.Admin).ConfigureAwait(false);
+        await userManager.CreateAsync(adminUser, settings.AdminUserPassword).ConfigureAwait(false);
+        await userManager.AddToRoleAsync(adminUser, Roles.Admin).ConfigureAwait(false);
+    }
+
+    private static async Task CreateTestUserAsync(UserManager<ApplicationUser> userManager)
+    {
+        const string testUserEmail = "test@dynamic-driving.com";
+        
+        var testUser = await userManager.FindByEmailAsync(testUserEmail).ConfigureAwait(false);
+        if(testUser is not null)
+        {
+            return;
+        }
+
+        testUser = new ApplicationUser
+        {
+            UserName = "tester01",
+            Email = testUserEmail,
+            Credits = 100
+        };
+
+        await userManager.CreateAsync(testUser, "Password1!").ConfigureAwait(false);
+        await userManager.AddToRoleAsync(testUser, Roles.User).ConfigureAwait(false);
     }
 }

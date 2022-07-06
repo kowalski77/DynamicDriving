@@ -6,4 +6,5 @@ namespace DynamicDriving.Identity.Service.Entities;
 [CollectionName("Users")]
 public class ApplicationUser : MongoIdentityUser<Guid>
 {
+    public int Credits { get; set; }
 }

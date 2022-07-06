@@ -26,7 +26,7 @@ public class TripsController : ApplicationController
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateDraftTrip([FromBody] CreateDraftTripRequest request)
     {
-        _ = Guards.ThrowIfNull(request);
+        Guards.ThrowIfNull(request);
 
         CreateDraftTrip command = request.AsCommand(this.GetCurrentUserIdBySub());
         var result = await this.mediator.Send(command).ConfigureAwait(false);
