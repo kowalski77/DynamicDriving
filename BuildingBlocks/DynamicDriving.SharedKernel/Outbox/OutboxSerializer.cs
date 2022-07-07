@@ -4,12 +4,15 @@ namespace DynamicDriving.SharedKernel.Outbox;
 
 public static class OutboxSerializer
 {
-    public static async Task<T> DeserializeAsync<T>(OutboxMessage outboxMessage)
+    public static async Task<object> DeserializeAsync(OutboxMessage outboxMessage)
     {
         Guards.ThrowIfNull(outboxMessage);
 
-        var type = typeof(T).Assembly.GetType(outboxMessage.Type) ?? 
-                   throw new InvalidOperationException($"Could not find type {outboxMessage.Type}");
+        var type = Type.GetType(outboxMessage.Type);
+        if(type is null)
+        {
+            throw new InvalidOperationException($"Could not find type {outboxMessage.Type}");
+        }
 
         using var stream = new MemoryStream();
         await using var writer = new Utf8JsonWriter(stream);
@@ -18,7 +21,7 @@ public static class OutboxSerializer
         await writer.FlushAsync().ConfigureAwait(false);
         stream.Position = 0;
 
-        var result = (T)(await JsonSerializer.DeserializeAsync(stream, type).ConfigureAwait(false))!;
+        var result = (await JsonSerializer.DeserializeAsync(stream, type).ConfigureAwait(false))!;
 
         return result;
     }

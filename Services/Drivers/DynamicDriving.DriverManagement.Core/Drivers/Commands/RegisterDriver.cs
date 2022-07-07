@@ -30,7 +30,7 @@ public sealed class RegisterDriverServiceCommand : IServiceCommand<RegisterDrive
 
         await this.driverRepository.CreateAsync(driver, cancellationToken).ConfigureAwait(false);
 
-        var driverCreated = new DriverCreated(Guid.NewGuid(), driver.Id, driver.Name, car.Model, car.CarType.ToString());
+        var driverCreated = new DriverCreated(driver.Id, driver.Name, car.Model, car.CarType.ToString());
         await this.outboxService.PublishIntegrationEventAsync(driverCreated, cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(driver.Id);

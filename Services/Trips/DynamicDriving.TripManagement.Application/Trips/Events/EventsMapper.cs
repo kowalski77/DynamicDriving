@@ -11,7 +11,6 @@ public static class EventsMapper
         Guards.ThrowIfNull(source);
 
         return new TripCreated(
-            Guid.NewGuid(), 
             source.TripId, 
             source.PickUp, 
             source.Origin.Latitude, 

@@ -74,7 +74,7 @@ public sealed class OutboxRepository : IOutboxRepository, IDisposable
     private static OutboxMessage GetOutboxMessage<TIntegrationEvent>(TIntegrationEvent integrationEvent, Guid transactionId)
         where TIntegrationEvent : class
     {
-        var type = integrationEvent.GetType().FullName ??
+        var type = integrationEvent.GetType().AssemblyQualifiedName ??
                    throw new InvalidOperationException("The type of the message cannot be null.");
 
         var data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType());

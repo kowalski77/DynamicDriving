@@ -22,7 +22,7 @@ public class TripsConsumerTests
     public async Task Driver_is_assigned_to_trip_when_assigned_driver_event_is_received()
     {
         // Arrange
-        var driverAssigned = new DriverAssigned(Guid.NewGuid(), Guid.Parse(IntegrationTestConstants.TripId), Guid.Parse(IntegrationTestConstants.DriverId));
+        var driverAssigned = new DriverAssigned(Guid.Parse(IntegrationTestConstants.TripId), Guid.Parse(IntegrationTestConstants.DriverId));
         var consumeContextMock = new Mock<ConsumeContext<DriverAssigned>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(driverAssigned);
 

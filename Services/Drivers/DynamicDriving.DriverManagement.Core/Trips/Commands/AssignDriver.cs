@@ -48,7 +48,7 @@ public sealed class AssignDriverServiceCommand : IServiceCommand<AssignDriver, R
         var updatedTrip = trip.With(driver);
         await this.tripRepository.UpdateAsync(updatedTrip, cancellationToken).ConfigureAwait(false);
 
-        var driverAssigned = new DriverAssigned(Guid.NewGuid(), command.TripId, driver.Id);
+        var driverAssigned = new DriverAssigned(command.TripId, driver.Id);
         await this.outboxService.PublishIntegrationEventAsync(driverAssigned, cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(new AssignDriverDto(trip.Id, driver.Id));

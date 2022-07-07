@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
@@ -27,7 +26,7 @@ public sealed class OutboxService : IOutboxService
     }
 
     public async Task AddIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
-        where TIntegrationEvent : class, IIntegrationEvent
+        where TIntegrationEvent : class
     {
         Guards.ThrowIfNull(integrationEvent);
 
@@ -62,7 +61,7 @@ public sealed class OutboxService : IOutboxService
     {
         try
         {
-            var message = await OutboxSerializer.DeserializeAsync<IIntegrationEvent>(outboxMessage);
+            var message = await OutboxSerializer.DeserializeAsync(outboxMessage);
 
             await this.publishEndpoint.Publish(message, message.GetType(), cancellationToken).ConfigureAwait(false);
 

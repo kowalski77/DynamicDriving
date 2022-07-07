@@ -1,5 +1,4 @@
-﻿using DynamicDriving.Events;
-using DynamicDriving.SharedKernel;
+﻿using DynamicDriving.SharedKernel;
 using MassTransit;
 
 namespace DynamicDriving.DriverManagement.Core.Outbox;
@@ -16,7 +15,7 @@ public class OutboxService : IOutboxService
     }
 
     public Task PublishIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
-        where TIntegrationEvent : class, IIntegrationEvent
+        where TIntegrationEvent : class
     {
         Guards.ThrowIfNull(integrationEvent);
 
@@ -24,7 +23,7 @@ public class OutboxService : IOutboxService
     }
 
     private async Task TryPublishIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
-        where TIntegrationEvent : class, IIntegrationEvent
+        where TIntegrationEvent : class
     {
         try
         {
