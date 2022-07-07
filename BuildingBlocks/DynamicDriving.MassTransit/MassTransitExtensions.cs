@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,8 +28,8 @@ public static class MassTransitExtensions
         return services;
     }
 
-    private static void UseRabbitMq(
-        this IBusRegistrationConfigurator configure,
+    public static void UseRabbitMq(
+        this IServiceCollectionBusConfigurator configure,
         Action<IRetryConfigurator>? configureRetries)
     {
         configure.UsingRabbitMq((context, configurator) =>
