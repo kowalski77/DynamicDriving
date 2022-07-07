@@ -1,5 +1,5 @@
-﻿using DynamicDriving.DriverManagement.Core.Outbox;
-using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
+using DynamicDriving.DriverManagement.Core.Outbox;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Results;
@@ -20,7 +20,7 @@ public sealed class RegisterDriverServiceCommand : IServiceCommand<RegisterDrive
         this.driverRepository = driverRepository;
         this.outboxService = outboxService;
     }
-    
+
     public async Task<Result<Guid>> ExecuteAsync(RegisterDriver command, CancellationToken cancellationToken = default)
     {
         Guards.ThrowIfNull(command);

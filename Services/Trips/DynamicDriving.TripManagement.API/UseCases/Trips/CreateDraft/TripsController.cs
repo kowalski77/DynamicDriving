@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Models;
+﻿using DynamicDriving.Contracts.Models;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Envelopes;

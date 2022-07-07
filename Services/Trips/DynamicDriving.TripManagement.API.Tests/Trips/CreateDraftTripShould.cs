@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DynamicDriving.Models;
+using DynamicDriving.Contracts.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.API.UseCases.Trips.CreateDraft;

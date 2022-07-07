@@ -1,6 +1,5 @@
-﻿using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.SharedKernel;
-using DynamicDriving.TripManagement.Application.Drivers.Commands;
 using MassTransit;
 using MediatR;
 
@@ -19,7 +18,7 @@ public class DriverCreatedConsumer : IConsumer<DriverCreated>
     {
         Guards.ThrowIfNull(context);
 
-        CreateDriver command = context.Message.AsCommand();
+        var command = context.Message.AsCommand();
 
         await this.mediator.Publish(command).ConfigureAwait(false);
     }

@@ -1,6 +1,6 @@
-﻿using DynamicDriving.DriverManagement.Core.Trips;
+﻿using DynamicDriving.Contracts.Models;
+using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.DriverManagement.Core.Trips.Commands;
-using DynamicDriving.Models;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Application;

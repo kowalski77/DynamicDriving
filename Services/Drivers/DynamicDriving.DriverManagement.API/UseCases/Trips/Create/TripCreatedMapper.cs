@@ -1,5 +1,5 @@
-﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
-using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
+using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.SharedKernel;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;

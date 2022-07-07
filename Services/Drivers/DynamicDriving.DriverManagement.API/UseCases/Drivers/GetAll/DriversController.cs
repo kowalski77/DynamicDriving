@@ -1,6 +1,6 @@
-﻿using DynamicDriving.DriverManagement.Core.Drivers;
+﻿using DynamicDriving.Contracts.Models;
+using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Drivers.Queries;
-using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Apis;
 using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Envelopes;

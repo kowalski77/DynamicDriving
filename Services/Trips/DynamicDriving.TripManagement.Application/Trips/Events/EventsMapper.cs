@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.SharedKernel;
 using TripConfirmedDomainEvent = DynamicDriving.TripManagement.Domain.TripsAggregate.Events.TripConfirmed;
 
@@ -11,9 +11,9 @@ public static class EventsMapper
         Guards.ThrowIfNull(source);
 
         return new TripCreated(
-            source.TripId, 
-            source.PickUp, 
-            source.Origin.Latitude, 
+            source.TripId,
+            source.PickUp,
+            source.Origin.Latitude,
             source.Origin.Longitude,
             source.Destination.Latitude,
             source.Destination.Longitude);

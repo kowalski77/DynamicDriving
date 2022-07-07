@@ -1,5 +1,5 @@
-﻿using DynamicDriving.DriverManagement.Core.Trips.Commands;
-using DynamicDriving.Models;
+﻿using DynamicDriving.Contracts.Models;
+using DynamicDriving.DriverManagement.Core.Trips.Commands;
 using DynamicDriving.SharedKernel;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Assign;

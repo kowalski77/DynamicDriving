@@ -1,5 +1,5 @@
-﻿using DynamicDriving.DriverManagement.Core.Drivers;
-using DynamicDriving.Models;
+﻿using DynamicDriving.Contracts.Models;
+using DynamicDriving.DriverManagement.Core.Drivers;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.GetAll;
 

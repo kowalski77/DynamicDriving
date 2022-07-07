@@ -4,8 +4,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
-using DynamicDriving.Events;
-using DynamicDriving.Models;
+using DynamicDriving.Contracts.Events;
+using DynamicDriving.Contracts.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using FluentAssertions;
 using Moq;
@@ -39,10 +39,10 @@ public class DriversControllerTests
 
         // Assert
         responseMessage.EnsureSuccessStatusCode();
-        
+
         var envelope = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<RegisterDriverResponse>>(JsonSerializerOptions);
         envelope!.Data.DriverId.Should().Be(driverId);
-        
+
         this.factory.PublisherMock.Verify(x => x.Publish(It.Is<DriverCreated>(y => y.DriverId == driverId), typeof(DriverCreated), CancellationToken.None), Times.Once);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Application.Drivers.Commands;
 

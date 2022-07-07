@@ -13,4 +13,8 @@
     <None Remove="Protos\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>

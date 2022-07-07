@@ -4,9 +4,9 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using DynamicDriving.Contracts.Events;
+using DynamicDriving.Contracts.Models;
 using DynamicDriving.DriverManagement.Core.Trips;
-using DynamicDriving.Events;
-using DynamicDriving.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using FluentAssertions;
 using Moq;
@@ -42,7 +42,7 @@ public class TripsControllerTests
 
         // Assert
         responseMessage.EnsureSuccessStatusCode();
-        
+
         var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<AssignDriverResponse>>(JsonSerializerOptions);
         response!.Data.TripId.Should().Be(IntegrationTestConstants.TripId);
 

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AutoFixture;
+using DynamicDriving.Contracts.Events;
 using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core.Trips;
-using DynamicDriving.Events;
 using FluentAssertions;
 using MassTransit;
 using Moq;

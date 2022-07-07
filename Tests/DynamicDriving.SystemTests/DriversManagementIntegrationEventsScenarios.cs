@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DynamicDriving.Models;
+using DynamicDriving.Contracts.Models;
 using DynamicDriving.SystemTests.Services;
 using DynamicDriving.SystemTests.Support;
 using FluentAssertions;

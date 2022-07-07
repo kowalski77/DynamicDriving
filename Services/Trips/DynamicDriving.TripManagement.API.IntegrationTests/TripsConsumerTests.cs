@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using FluentAssertions;

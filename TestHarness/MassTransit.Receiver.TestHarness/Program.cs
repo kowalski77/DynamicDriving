@@ -1,4 +1,4 @@
-using DynamicDriving.Events;
+using DynamicDriving.Contracts.Events;
 using DynamicDriving.MassTransit;
 using MassTransit;
 

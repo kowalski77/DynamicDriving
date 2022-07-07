@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Models\DynamicDriving.Models.csproj" />
     <ProjectReference Include="..\DynamicDriving.TripManagement.API\DynamicDriving.TripManagement.API.csproj" />
   </ItemGroup>
 

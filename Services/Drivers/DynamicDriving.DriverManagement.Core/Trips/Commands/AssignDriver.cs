@@ -1,6 +1,6 @@
-﻿using DynamicDriving.DriverManagement.Core.Drivers;
+﻿using DynamicDriving.Contracts.Events;
+using DynamicDriving.DriverManagement.Core.Drivers;
 using DynamicDriving.DriverManagement.Core.Outbox;
-using DynamicDriving.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Envelopes;

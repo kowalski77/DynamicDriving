@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.Events;
+﻿namespace DynamicDriving.Contracts.Events;
 
 public sealed record DriverCreated(Guid DriverId, string Name, string CarName, string CarDescription);
 

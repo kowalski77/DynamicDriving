@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Events;
+﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.MassTransit;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -23,10 +23,10 @@ void ConfigureServices()
     IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
-    
+
     var services = new ServiceCollection();
     services.AddSingleton(config);
-   
+
     services.AddMassTransitWithRabbitMq();
 
     serviceProvider = services.BuildServiceProvider();
