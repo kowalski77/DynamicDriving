@@ -21,7 +21,7 @@ public static class MassTransitExtensions
             {
                 configure.AddConsumers(consumersAssembly);
             }
-            configure.UseRabbitMq(settings.ConfigureRetries, settings.ConfigureEndpoints);
+            configure.UseRabbitMq(settings.ConfigureRetries);
         });
 
         return services;
@@ -29,8 +29,7 @@ public static class MassTransitExtensions
 
     private static void UseRabbitMq(
         this IBusRegistrationConfigurator configure,
-        Action<IRetryConfigurator>? configureRetries,
-        Func<IRabbitMqBusFactoryConfigurator, Action<IServiceProvider>>? configureEndpoints)
+        Action<IRetryConfigurator>? configureRetries)
     {
         configure.UsingRabbitMq((context, configurator) =>
         {
