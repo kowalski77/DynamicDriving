@@ -35,7 +35,7 @@ public class DriversControllerTests
         var request = this.factory.Fixture.Build<RegisterDriverRequest>().With(x => x.Id, driverId).Create();
 
         // Act
-        var responseMessage = await this.factory.Client.PostAsJsonAsync(DriversEndpoint, request);
+        var responseMessage = await this.factory.TestServer.CreateClient().PostAsJsonAsync(DriversEndpoint, request);
 
         // Assert
         responseMessage.EnsureSuccessStatusCode();

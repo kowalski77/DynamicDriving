@@ -29,15 +29,13 @@ public class TripsConsumerTests
         var consumeContextMock = new Mock<ConsumeContext<TripCreated>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(tripConfirmed);
 
-        _ = this.factory.Client;
-        
-        var consumer = this.factory.Services.GetRequiredService<TripCreatedConsumer>();
+        var consumer = this.factory.TestServer.Services.GetRequiredService<TripCreatedConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);
 
         // Assert
-        var repository = this.factory.Services.GetRequiredService<ITripRepository>();
+        var repository = this.factory.TestServer.Services.GetRequiredService<ITripRepository>();
         var trip = await repository.GetAsync(tripConfirmed.TripId);
         trip.Should().NotBeNull();
     }

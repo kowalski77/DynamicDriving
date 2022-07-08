@@ -28,8 +28,7 @@ public class DriversConsumerTests
         var consumeContextMock = new Mock<ConsumeContext<DriverCreated>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(driverCreated);
 
-        _ = this.factory.Client;
-        var consumer = this.factory.Services.GetRequiredService<DriverCreatedConsumer>();
+        var consumer = this.factory.TestServer.Services.GetRequiredService<DriverCreatedConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);

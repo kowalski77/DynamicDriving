@@ -39,7 +39,7 @@ public class TripsControllerTests
             .Create();
 
         // Act
-        var responseMessage = await this.factory.Client.PostAsJsonAsync(TripsEndpoint, request);
+        var responseMessage = await this.factory.TestServer.CreateClient().PostAsJsonAsync(TripsEndpoint, request);
 
         // Assert
         responseMessage.EnsureSuccessStatusCode();
@@ -47,7 +47,7 @@ public class TripsControllerTests
         var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<AssignDriverResponse>>(JsonSerializerOptions);
         response!.Data.TripId.Should().Be(IntegrationTestConstants.TripId);
 
-        var repository = this.factory.Services.GetRequiredService<ITripRepository>();
+        var repository = this.factory.TestServer.Services.GetRequiredService<ITripRepository>();
         var trip = await repository.GetAsync(tripId);
         trip!.Driver?.Id.Should().Be(response.Data.DriverId);
         this.factory.PublisherMock.Verify(x => x.Publish(It.Is<DriverAssigned>(y => y.TripId == tripId), typeof(DriverAssigned), CancellationToken.None), Times.Once);

@@ -69,7 +69,7 @@ public class TripControllerTests
     public async Task Trip_is_retrieved_by_identifier()
     {
         // Arrange
-        var client = this.factory.Client;
+        var client = this.factory.TestServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}");

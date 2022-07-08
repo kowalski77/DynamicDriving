@@ -28,15 +28,14 @@ public class TripsConsumerTests
         var driverAssigned = new DriverAssigned(Guid.Parse(IntegrationTestConstants.TripId), Guid.Parse(IntegrationTestConstants.DriverId));
         var consumeContextMock = new Mock<ConsumeContext<DriverAssigned>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(driverAssigned);
-
-        _ = this.factory.Client;
-        var consumer = this.factory.Services.GetRequiredService<DriverAssignedConsumer>();
+        
+        var consumer = this.factory.TestServer.Services.GetRequiredService<DriverAssignedConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);
 
         // Assert
-        var repository = this.factory.Services.GetRequiredService< ITripRepository >();
+        var repository = this.factory.TestServer.Services.GetRequiredService< ITripRepository >();
         var trip = await repository.GetAsync(driverAssigned.TripId);
         trip.Value.Driver!.Id.Should().Be(driverAssigned.DriverId);
     }
@@ -49,14 +48,13 @@ public class TripsConsumerTests
         var consumeContextMock = new Mock<ConsumeContext<ConfirmTrip>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(confirmTrip);
 
-        _ = this.factory.Client;
-        var consumer = this.factory.Services.GetRequiredService<ConfirmTripConsumer>();
+        var consumer = this.factory.TestServer.Services.GetRequiredService<ConfirmTripConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);
 
         // Assert
-        var repository = this.factory.Services.GetRequiredService<ITripRepository>();
+        var repository = this.factory.TestServer.Services.GetRequiredService<ITripRepository>();
         var trip = await repository.GetAsync(confirmTrip.TripId);
         trip.Value.TripStatus.Should().Be(TripStatus.Confirmed);
     }

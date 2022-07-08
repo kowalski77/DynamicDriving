@@ -20,28 +20,21 @@ namespace DynamicDriving.TripManagement.API.IntegrationTests;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly Lazy<HttpClient> httpClient;
-
     public TestWebApplicationFactory()
     {
-        this.httpClient = new Lazy<HttpClient>(() =>
+        this.TestServer = this.WithWebHostBuilder(builder =>
         {
-            return this.WithWebHostBuilder(builder =>
+            builder.ConfigureTestServices(services =>
             {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton(_ => this.PublisherMock.Object);
-                    services.AddAuthentication("Test")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                            "Test", options => { });
-                });
-            }).CreateDefaultClient();
-        });
+                services.AddSingleton(_ => this.PublisherMock.Object);
+                services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
+            });
+        }).Server;
     }
 
     public IFixture Fixture { get; } = new Fixture();
 
-    public HttpClient Client => this.httpClient.Value;
+    public TestServer TestServer { get; }
 
     public Mock<IPublishEndpoint> PublisherMock { get; } = new();
 
