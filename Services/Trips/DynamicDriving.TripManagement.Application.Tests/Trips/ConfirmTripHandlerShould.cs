@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.TripManagement.Application.Trips.Commands;
+using DynamicDriving.TripManagement.Application.Trips.Exceptions;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Exceptions;
@@ -27,15 +28,16 @@ public class ConfirmTripHandlerShould
     }
 
     [Theory, HandlerDataSource]
-    public async Task Return_error_message_when_trip_not_found(
+    public async Task Fail_when_trip_not_found(
         [Frozen] Mock<ITripRepository> tripRepositoryMock,
         ConfirmTrip command,
         ConfirmTripHandler sut)
     {
         // Act
-        await sut.Handle(command, CancellationToken.None);
+        Func<Task> func = () =>  sut.Handle(command, CancellationToken.None);
 
         // Assert
+        await func.Should().ThrowAsync<TripNotFoundException>();
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }

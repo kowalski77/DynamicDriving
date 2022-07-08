@@ -17,8 +17,8 @@ public static class TripErrors
         return new ErrorResult(
             TripErrorConstants.MinimumDistanceBetweenLocationsCode,
             string.Format(
-                CultureInfo.InvariantCulture, 
-                TripErrorConstants.MinimumDistanceBetweenLocationsMessage, 
+                CultureInfo.InvariantCulture,
+                TripErrorConstants.MinimumDistanceBetweenLocationsMessage,
                 distance.ToString(CultureInfo.InvariantCulture)));
     }
 
@@ -27,5 +27,12 @@ public static class TripErrors
         return new ErrorResult(
             TripErrorConstants.ConfirmFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.ConfirmFailedMessage, status.ToString()));
+    }
+
+    public static ErrorResult InvalidateFailed(TripStatus status)
+    {
+        return new ErrorResult(
+            TripErrorConstants.InvalidateFailedCode,
+            string.Format(CultureInfo.InvariantCulture, TripErrorConstants.InvalidateFailedMessage, status.ToString()));
     }
 }

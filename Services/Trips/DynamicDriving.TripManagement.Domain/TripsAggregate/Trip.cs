@@ -60,6 +60,24 @@ public sealed class Trip : Entity, IAggregateRoot
         this.TripStatus = TripStatus.Confirmed;
     }
 
+    public Result CanInvalidate()
+    {
+        return this.TripStatus is TripStatus.Confirmed ?
+            Result.Ok() :
+            TripErrors.InvalidateFailed(this.TripStatus);
+    }
+
+    public void Invalidate()
+    {
+        var result = this.CanInvalidate();
+        if (result.Failure)
+        {
+            throw new TripInvalidationException(result.Error!.Message);
+        }
+
+        this.TripStatus = TripStatus.Draft;
+    }
+
     public Result CanAssignDriver()
     {
         return this.TripStatus is TripStatus.Draft or TripStatus.Confirmed ?
