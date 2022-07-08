@@ -1,9 +1,9 @@
 ﻿using System.Data.Common;
-using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Outbox;
 using DynamicDriving.SharedKernel.Outbox.Sql;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicDriving.TripManagement.Application.Outbox;
@@ -11,10 +11,10 @@ namespace DynamicDriving.TripManagement.Application.Outbox;
 public sealed class OutboxService : IOutboxService
 {
     private readonly IDbContext context;
-    private readonly IMessagePublisher publishEndpoint;
+    private readonly IPublishEndpoint publishEndpoint;
     private readonly IOutboxRepository outboxRepository;
 
-    public OutboxService(IDbContext context, IMessagePublisher publishEndpoint, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
+    public OutboxService(IDbContext context, IPublishEndpoint publishEndpoint, Func<DbConnection, IOutboxRepository> outboxRepositoryFactory)
     {
         Guards.ThrowIfNull(context);
         Guards.ThrowIfNull(publishEndpoint);
@@ -63,7 +63,7 @@ public sealed class OutboxService : IOutboxService
         {
             var message = await OutboxSerializer.DeserializeAsync(outboxMessage);
 
-            await this.publishEndpoint.PublishAsync(message, message.GetType(), cancellationToken).ConfigureAwait(false);
+            await this.publishEndpoint.Publish(message, message.GetType(), cancellationToken).ConfigureAwait(false);
 
             await this.outboxRepository.MarkMessageAsPublishedAsync(outboxMessage.Id, cancellationToken).ConfigureAwait(false);
         }

@@ -38,7 +38,7 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
             .ExecuteAsync(async () =>
             {
                 var driver = await this.webApplicationFixture.Trips.GetDriverByIdAsync(driverId);
-                _ = driver.Name.Should().Be(request.Name);
+                driver.Name.Should().Be(request.Name);
             });
     }
 

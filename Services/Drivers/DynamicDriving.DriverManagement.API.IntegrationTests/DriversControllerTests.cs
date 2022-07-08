@@ -28,7 +28,7 @@ public class DriversControllerTests
     }
 
     [Fact]
-    public async Task Driver_is_created()
+    public async Task Driver_is_registered()
     {
         // Arrange
         var driverId = Guid.NewGuid();

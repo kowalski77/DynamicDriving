@@ -55,7 +55,6 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
             
-
             DropDatabase(context);
             this.SeedDatabase(scope);
         });

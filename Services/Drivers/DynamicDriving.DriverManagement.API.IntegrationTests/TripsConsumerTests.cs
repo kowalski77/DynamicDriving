@@ -30,6 +30,7 @@ public class TripsConsumerTests
         consumeContextMock.SetupGet(x => x.Message).Returns(tripConfirmed);
 
         _ = this.factory.Client;
+        
         var consumer = this.factory.Services.GetRequiredService<TripCreatedConsumer>();
 
         // Act

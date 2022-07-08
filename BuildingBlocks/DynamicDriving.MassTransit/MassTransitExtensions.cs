@@ -24,8 +24,6 @@ public static class MassTransitExtensions
             configure.UseRabbitMq(settings.ConfigureRetries);
         });
 
-        services.AddScoped<IMessagePublisher, MessagePublisher>();
-
         return services;
     }
 

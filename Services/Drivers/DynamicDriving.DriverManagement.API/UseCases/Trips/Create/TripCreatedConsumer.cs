@@ -20,7 +20,7 @@ public class TripCreatedConsumer : IConsumer<TripCreated>
     {
         Guards.ThrowIfNull(context);
 
-        var command = context.Message.AsCommand();
+        CreateTrip command = context.Message.AsCommand();
 
         await this.serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
     }
