@@ -1,5 +1,4 @@
-﻿using DynamicDriving.SharedKernel.Envelopes;
-using DynamicDriving.TripManagement.Application.Trips.Commands;
+﻿using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 
@@ -19,13 +18,11 @@ public class ConfirmTripHandlerShould
             .ReturnsAsync(trip);
 
         // Act
-        var result = await sut.Handle(command, CancellationToken.None);
+        await sut.Handle(command, CancellationToken.None);
 
         // Assert
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Once);
-        result.Error.Should().BeNull();
-        result.Success.Should().BeTrue();
     }
 
     [Theory, HandlerDataSource]
@@ -35,13 +32,11 @@ public class ConfirmTripHandlerShould
         ConfirmTripHandler sut)
     {
         // Act
-        var result = await sut.Handle(command, CancellationToken.None);
+        await sut.Handle(command, CancellationToken.None);
 
         // Assert
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
-        result.Error!.Code.Should().Be(ErrorConstants.RecordNotFound);
-        result.Failure.Should().BeTrue();
     }
 
     [Theory, HandlerDataSource]
@@ -57,13 +52,11 @@ public class ConfirmTripHandlerShould
             .ReturnsAsync(trip);
 
         // Act
-        var result = await sut.Handle(command, CancellationToken.None);
+        await sut.Handle(command, CancellationToken.None);
 
         // Assert
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
-        result.Error!.Code.Should().Be(TripErrorConstants.ConfirmFailedCode);
-        result.Failure.Should().BeTrue();
     }
 
     private class HandlerDataSourceAttribute : CustomDataSourceAttribute

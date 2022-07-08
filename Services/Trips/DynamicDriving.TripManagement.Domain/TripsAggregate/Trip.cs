@@ -4,7 +4,7 @@ using DynamicDriving.SharedKernel.DomainDriven;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
-using DynamicDriving.TripManagement.Domain.TripsAggregate.Events;
+using DynamicDriving.TripManagement.Domain.TripsAggregate.Exceptions;
 
 namespace DynamicDriving.TripManagement.Domain.TripsAggregate;
 
@@ -54,17 +54,15 @@ public sealed class Trip : Entity, IAggregateRoot
         var result = this.CanConfirm();
         if (result.Failure)
         {
-            throw new InvalidOperationException(result.Error!.Message);
+            throw new TripConfirmationException(result.Error!.Message);
         }
 
-        this.TripStatus = TripStatus.Ordered;
-
-        this.AddDomainEvent(new TripConfirmed(this.Id, this.PickUp, this.Origin.Coordinates, this.Destination.Coordinates));
+        this.TripStatus = TripStatus.Confirmed;
     }
 
     public Result CanAssignDriver()
     {
-        return this.TripStatus is TripStatus.Draft or TripStatus.Ordered ?
+        return this.TripStatus is TripStatus.Draft or TripStatus.Confirmed ?
             Result.Ok() :
             TripErrors.DriverAssignedFailed(this.TripStatus);
     }
@@ -74,7 +72,7 @@ public sealed class Trip : Entity, IAggregateRoot
         var result = this.CanAssignDriver();
         if (result.Failure)
         {
-            throw new InvalidOperationException(result.Error!.Message);
+            throw new AssignDriverFailedException(result.Error!.Message);
         }
 
         this.Driver = driver;

@@ -25,7 +25,6 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Drivers\Commands\" />
     <Folder Include="Outbox\" />
-    <Folder Include="Trips\Events\" />
   </ItemGroup>
 
 </Project>

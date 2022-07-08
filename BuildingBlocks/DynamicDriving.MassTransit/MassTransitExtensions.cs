@@ -24,6 +24,8 @@ public static class MassTransitExtensions
             configure.UseRabbitMq(settings.ConfigureRetries);
         });
 
+        services.AddSingleton<IMessagePublisher, MessagePublisher>();
+
         return services;
     }
 

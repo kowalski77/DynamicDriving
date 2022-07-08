@@ -28,8 +28,4 @@
     <InternalsVisibleTo Include="DynamicDriving.TripManagement.API.IntegrationTests" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Trips\Confirm\" />
-  </ItemGroup>
-
 </Project>

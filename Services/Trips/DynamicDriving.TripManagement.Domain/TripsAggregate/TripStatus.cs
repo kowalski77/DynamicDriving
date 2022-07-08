@@ -3,7 +3,7 @@
 public enum TripStatus
 {
     Draft,
-    Ordered,
+    Confirmed,
     ToOrigin,
     ToDestination,
     Canceled,
