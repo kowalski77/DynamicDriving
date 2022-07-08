@@ -2,7 +2,10 @@
 using DynamicDriving.Contracts.Models;
 using DynamicDriving.SystemTests.Services;
 using DynamicDriving.SystemTests.Support;
+using DynamicDriving.TripManagement.Domain.DriversAggregate;
+using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 
 namespace DynamicDriving.SystemTests;
@@ -27,17 +30,19 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         // Arrange
         var driverId = Guid.NewGuid();
         var request = this.fixture.Build<RegisterDriverRequest>().With(x => x.Id, driverId).Create();
+        var client = this.webApplicationFixture.Drivers.TestServer.CreateClient();
 
         // Act
-        var response = await this.webApplicationFixture.Drivers.HttpClient.PostAsJsonAsync(DriversEndpoint, request);
+        var response = await client.PostAsJsonAsync(DriversEndpoint, request);
 
         // Assert
         _ = response.EnsureSuccessStatusCode();
 
+        var driverRepository = this.webApplicationFixture.Trips.TestServer.Services.GetRequiredService<IDriverRepository>();
         await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
-                var driver = await this.webApplicationFixture.Trips.GetDriverByIdAsync(driverId);
+                var driver = (await driverRepository.GetAsync(driverId)).Value;
                 driver.Name.Should().Be(request.Name);
             });
     }
@@ -48,17 +53,19 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         // Arrange
         var tripId = Guid.Parse(SystemTestsConstants.TripId);
         var request = this.fixture.Build<AssignDriverRequest>().With(x => x.TripId, tripId).Create();
+        var client = this.webApplicationFixture.Drivers.TestServer.CreateClient();
 
         // Act
-        var response = await this.webApplicationFixture.Drivers.HttpClient.PostAsJsonAsync(TripsEndpoint, request);
+        var response = await client.PostAsJsonAsync(TripsEndpoint, request);
 
         // Assert
         _ = response.EnsureSuccessStatusCode();
 
+        var tripRepository = this.webApplicationFixture.Trips.TestServer.Services.GetRequiredService<ITripRepository>();
         await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
-                var trip = await this.webApplicationFixture.Trips.GetTripByIdAsync(tripId);
+                var trip = (await tripRepository.GetAsync(tripId)).Value;
                 _ = trip.Driver.Should().NotBeNull();
             });
     }

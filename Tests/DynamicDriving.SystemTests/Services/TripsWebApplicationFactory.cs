@@ -25,7 +25,7 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
 
     public TripsWebApplicationFactory()
     {
-        this.HttpClient = this.WithWebHostBuilder(builder =>
+        this.TestServer = this.WithWebHostBuilder(builder =>
         {
             _ = builder.ConfigureTestServices(services =>
             {
@@ -33,24 +33,10 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                         "Test", options => { });
             });
-        }).CreateClient();
+        }).Server;
     }
 
-    public HttpClient HttpClient { get; }
-
-    public async Task<Driver> GetDriverByIdAsync(Guid id)
-    {
-        var repository = this.Services.GetRequiredService<IDriverRepository>();
-
-        return (await repository.GetAsync(id)).Value;
-    }
-
-    public async Task<Trip> GetTripByIdAsync(Guid id)
-    {
-        var repository = this.Services.GetRequiredService<ITripRepository>();
-
-        return (await repository.GetAsync(id)).Value;
-    }
+    public TestServer TestServer { get; }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

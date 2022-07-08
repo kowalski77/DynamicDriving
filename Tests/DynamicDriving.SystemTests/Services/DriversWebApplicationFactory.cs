@@ -22,7 +22,7 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     public DriversWebApplicationFactory()
     {
-        this.HttpClient = this.WithWebHostBuilder(builder =>
+        this.TestServer = this.WithWebHostBuilder(builder =>
         {
             _ = builder.ConfigureTestServices(services =>
             {
@@ -30,10 +30,10 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                         "Test", options => { });
             });
-        }).CreateClient();
+        }).Server;
     }
 
-    public HttpClient HttpClient { get; }
+    public TestServer TestServer { get; }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
