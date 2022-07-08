@@ -21,7 +21,6 @@ namespace DynamicDriving.SystemTests.Services;
 
 public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
 {
-    private IServiceProvider serviceProvider = default!;
     private readonly IFixture fixture = new Fixture();
 
     public TripsWebApplicationFactory()
@@ -41,14 +40,14 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
 
     public async Task<Driver> GetDriverByIdAsync(Guid id)
     {
-        var repository = this.serviceProvider.GetRequiredService<IDriverRepository>();
+        var repository = this.Services.GetRequiredService<IDriverRepository>();
 
         return (await repository.GetAsync(id)).Value;
     }
 
     public async Task<Trip> GetTripByIdAsync(Guid id)
     {
-        var repository = this.serviceProvider.GetRequiredService<ITripRepository>();
+        var repository = this.Services.GetRequiredService<ITripRepository>();
 
         return (await repository.GetAsync(id)).Value;
     }
@@ -57,8 +56,8 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
     {
         builder.ConfigureServices(services =>
         {
-            this.serviceProvider = services.BuildServiceProvider();
-            using var scope = this.serviceProvider.CreateScope();
+            using var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
             var outboxContext = scope.ServiceProvider.GetRequiredService<OutboxContext>();
@@ -97,20 +96,5 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
             .UseEnvironment("Trips");
 
         return base.CreateHost(builder);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            switch (this.serviceProvider)
-            {
-                case IDisposable disposable:
-                    disposable.Dispose();
-                    break;
-            }
-        }
-
-        base.Dispose(disposing);
     }
 }

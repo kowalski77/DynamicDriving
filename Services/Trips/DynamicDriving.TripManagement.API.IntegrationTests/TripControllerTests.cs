@@ -2,12 +2,10 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using DynamicDriving.Contracts.Events;
 using DynamicDriving.Contracts.Models;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
 using FluentAssertions;
-using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;

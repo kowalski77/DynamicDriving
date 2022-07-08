@@ -9,6 +9,7 @@ using DynamicDriving.Contracts.Models;
 using DynamicDriving.DriverManagement.Core.Trips;
 using DynamicDriving.SharedKernel.Envelopes;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -46,7 +47,7 @@ public class TripsControllerTests
         var response = await responseMessage.Content.ReadFromJsonAsync<SuccessEnvelope<AssignDriverResponse>>(JsonSerializerOptions);
         response!.Data.TripId.Should().Be(IntegrationTestConstants.TripId);
 
-        var repository = this.factory.GetService<ITripRepository>();
+        var repository = this.factory.Services.GetRequiredService<ITripRepository>();
         var trip = await repository.GetAsync(tripId);
         trip!.Driver?.Id.Should().Be(response.Data.DriverId);
         this.factory.PublisherMock.Verify(x => x.Publish(It.Is<DriverAssigned>(y => y.TripId == tripId), typeof(DriverAssigned), CancellationToken.None), Times.Once);

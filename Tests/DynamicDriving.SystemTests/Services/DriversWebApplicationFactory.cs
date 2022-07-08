@@ -18,7 +18,6 @@ namespace DynamicDriving.SystemTests.Services;
 
 public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram>
 {
-    private IServiceProvider serviceProvider = default!;
     private readonly IFixture fixture = new Fixture();
 
     public DriversWebApplicationFactory()
@@ -53,10 +52,12 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
     {
         _ = builder.ConfigureServices((context, services) =>
         {
-            this.serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
+            
 
             DropDatabase(context);
-            this.SeedDatabase();
+            this.SeedDatabase(scope);
         });
 
         base.ConfigureWebHost(builder);
@@ -69,9 +70,9 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
         client.DropDatabase(mongoOptions.Database);
     }
 
-    private void SeedDatabase()
+    private void SeedDatabase(IServiceScope scope)
     {
-        var mongoDatabase = this.serviceProvider.GetRequiredService<IMongoDatabase>();
+        var mongoDatabase = scope.ServiceProvider.GetRequiredService<IMongoDatabase>();
 
         var tripCollection = mongoDatabase.GetCollection<Trip>(nameof(Trip));
 
@@ -81,20 +82,5 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
         var driverCollection = mongoDatabase.GetCollection<Driver>(nameof(Driver));
         var driver = new Driver(Guid.Parse(SystemTestsConstants.DriverId), this.fixture.Create<string>(), this.fixture.Create<Car>(), true);
         driverCollection.InsertOne(driver);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            switch (this.serviceProvider)
-            {
-                case IDisposable disposable:
-                    disposable.Dispose();
-                    break;
-            }
-        }
-
-        base.Dispose(disposing);
     }
 }

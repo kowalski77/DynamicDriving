@@ -5,6 +5,7 @@ using DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 using DynamicDriving.DriverManagement.Core.Trips;
 using FluentAssertions;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -29,13 +30,13 @@ public class TripsConsumerTests
         consumeContextMock.SetupGet(x => x.Message).Returns(tripConfirmed);
 
         _ = this.factory.Client;
-        var consumer = this.factory.GetService<TripCreatedConsumer>();
+        var consumer = this.factory.Services.GetRequiredService<TripCreatedConsumer>();
 
         // Act
         await consumer.Consume(consumeContextMock.Object);
 
         // Assert
-        var repository = this.factory.GetService<ITripRepository>();
+        var repository = this.factory.Services.GetRequiredService<ITripRepository>();
         var trip = await repository.GetAsync(tripConfirmed.TripId);
         trip.Should().NotBeNull();
     }

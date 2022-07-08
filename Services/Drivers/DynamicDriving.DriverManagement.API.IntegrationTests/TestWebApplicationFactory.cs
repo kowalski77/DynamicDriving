@@ -20,7 +20,6 @@ namespace DynamicDriving.DriverManagement.API.IntegrationTests;
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly Lazy<HttpClient> httpClient;
-    private IServiceProvider? serviceProvider;
 
     public TestWebApplicationFactory()
     {
@@ -43,16 +42,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPublishEndpoint> PublisherMock { get; } = new();
 
-    public T GetService<T>() where T : class
-    {
-        if (this.serviceProvider is null)
-        {
-            throw new InvalidOperationException("Service provider is not initialized. Call Client first.");
-        }
-
-        return this.serviceProvider.GetRequiredService<T>();
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.ConfigureHostConfiguration(config =>
@@ -69,18 +58,19 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices((context, services) =>
         {
-            this.serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
 
             DropDatabase(context);
-            this.SeedDatabase();
+            this.SeedDatabase(scope);
         });
 
         base.ConfigureWebHost(builder);
     }
 
-    private void SeedDatabase()
+    private void SeedDatabase(IServiceScope serviceScope)
     {
-        var mongoDatabase = this.serviceProvider!.GetRequiredService<IMongoDatabase>();
+        var mongoDatabase = serviceScope.ServiceProvider.GetRequiredService<IMongoDatabase>();
 
         var tripCollection = mongoDatabase.GetCollection<Trip>(nameof(Trip));
 
@@ -97,20 +87,5 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var mongoOptions = context.Configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
         var client = new MongoClient(mongoOptions.Client);
         client.DropDatabase(mongoOptions.Database);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            switch (this.serviceProvider)
-            {
-                case IDisposable disposable:
-                    disposable.Dispose();
-                    break;
-            }
-        }
-
-        base.Dispose(disposing);
     }
 }

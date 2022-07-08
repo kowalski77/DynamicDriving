@@ -21,7 +21,6 @@ namespace DynamicDriving.TripManagement.API.IntegrationTests;
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly Lazy<HttpClient> httpClient;
-    private IServiceProvider? serviceProvider;
 
     public TestWebApplicationFactory()
     {
@@ -62,8 +61,8 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            this.serviceProvider = services.BuildServiceProvider();
-            using var scope = this.serviceProvider.CreateScope();
+            using var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
             var outboxContext = scope.ServiceProvider.GetRequiredService<OutboxContext>();
@@ -76,21 +75,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         });
 
         base.ConfigureWebHost(builder);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            switch (this.serviceProvider)
-            {
-                case IDisposable disposable:
-                    disposable.Dispose();
-                    break;
-            }
-        }
-
-        base.Dispose(disposing);
     }
 
     private void SeedDatabase(TripManagementContext context)
