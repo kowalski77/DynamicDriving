@@ -21,6 +21,6 @@ public class DriverAssignedConsumer : IConsumer<DriverAssigned>
 
         var command = new AssignDriver(context.Message.TripId, context.Message.DriverId);
 
-        await this.mediator.Publish(command).ConfigureAwait(false);
+        await this.mediator.Send(command).ConfigureAwait(false);
     }
 }

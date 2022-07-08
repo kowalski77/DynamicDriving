@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.Contracts.Events;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Envelopes;
+using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.Results;
 using DynamicDriving.TripManagement.Application.Outbox;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
@@ -8,9 +9,9 @@ using MediatR;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public sealed record ConfirmTrip(Guid TripId, Guid CorrelationId) : INotification;
+public sealed record ConfirmTrip(Guid TripId, Guid CorrelationId) : ICommand<Unit>;
 
-public sealed class ConfirmTripHandler : INotificationHandler<ConfirmTrip>
+public sealed class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Unit>
 {
     private readonly ITripRepository tripRepository;
     private readonly IOutboxService outboxService;
@@ -21,13 +22,15 @@ public sealed class ConfirmTripHandler : INotificationHandler<ConfirmTrip>
         this.outboxService = outboxService;
     }
 
-    public async Task Handle(ConfirmTrip notification, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ConfirmTrip request, CancellationToken cancellationToken)
     {
-        Guards.ThrowIfNull(notification);
+        Guards.ThrowIfNull(request);
 
         var resultModel = await Result.Init
-            .Do(async () => await this.GetTripByIdAsync(notification.TripId, cancellationToken))
-            .OnSuccess(async trip => await this.ConfirmTripAsync(trip, notification.CorrelationId, cancellationToken));
+            .Do(async () => await this.GetTripByIdAsync(request.TripId, cancellationToken))
+            .OnSuccess(async trip => await this.ConfirmTripAsync(trip, request.CorrelationId, cancellationToken));
+
+        return Unit.Value;
     }
 
     private async Task<Result<Trip>> GetTripByIdAsync(Guid tripId, CancellationToken cancellationToken)

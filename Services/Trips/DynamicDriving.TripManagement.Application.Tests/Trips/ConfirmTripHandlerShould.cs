@@ -1,6 +1,7 @@
 ﻿using DynamicDriving.TripManagement.Application.Trips.Commands;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
+using DynamicDriving.TripManagement.Domain.TripsAggregate.Exceptions;
 
 namespace DynamicDriving.TripManagement.Application.Tests.Trips;
 
@@ -52,9 +53,10 @@ public class ConfirmTripHandlerShould
             .ReturnsAsync(trip);
 
         // Act
-        await sut.Handle(command, CancellationToken.None);
+        Func<Task> func = () => sut.Handle(command, CancellationToken.None);
 
         // Assert
+        await func.Should().ThrowAsync<TripConfirmationException>();
         tripRepositoryMock.Verify(x => x.GetAsync(command.TripId, CancellationToken.None), Times.Once);
         tripRepositoryMock.Verify(x => x.UnitOfWork.SaveEntitiesAsync(CancellationToken.None), Times.Never);
     }

@@ -46,16 +46,6 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     public Mock<IPublishEndpoint> PublisherMock { get; } = new();
 
-    public T GetService<T>() where T : class
-    {
-        if(this.serviceProvider is null)
-        {
-            throw new InvalidOperationException("Service provider is not initialized. Call Client first.");
-        }
-        
-        return this.serviceProvider.GetRequiredService<T>();
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.ConfigureHostConfiguration(config =>

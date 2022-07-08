@@ -21,6 +21,6 @@ public class ConfirmTripConsumer : IConsumer<ConfirmTrip>
 
         var command = new ConfirmTripCommand(context.Message.TripId, context.Message.CorrelationId);
 
-        await this.mediator.Publish(command).ConfigureAwait(false);
+        await this.mediator.Send(command).ConfigureAwait(false);
     }
 }

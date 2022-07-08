@@ -1,13 +1,14 @@
 ﻿using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using MediatR;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public sealed record AssignDriver(Guid TripId, Guid DriverId) : INotification;
+public sealed record AssignDriver(Guid TripId, Guid DriverId) : ICommand<Unit>;
 
-public sealed class AssignDriverHandler : INotificationHandler<AssignDriver>
+public sealed class AssignDriverHandler : ICommandHandler<AssignDriver, Unit>
 {
     private readonly ITripRepository tripRepository;
     private readonly IDriverRepository driverRepository;
@@ -18,16 +19,18 @@ public sealed class AssignDriverHandler : INotificationHandler<AssignDriver>
         this.driverRepository = Guards.ThrowIfNull(driverRepository);
     }
 
-    public async Task Handle(AssignDriver notification, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AssignDriver request, CancellationToken cancellationToken)
     {
-        Guards.ThrowIfNull(notification);
+        Guards.ThrowIfNull(request);
 
-        var trip = await this.GetTripByIdAsync(notification.TripId, cancellationToken);
-        var driver = await this.GetDriverByIdAsync(notification.DriverId, cancellationToken);
+        var trip = await this.GetTripByIdAsync(request.TripId, cancellationToken);
+        var driver = await this.GetDriverByIdAsync(request.DriverId, cancellationToken);
 
         trip.Assign(driver);
 
         await this.tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 
     private async Task<Trip> GetTripByIdAsync(Guid tripId, CancellationToken cancellationToken)
@@ -35,7 +38,7 @@ public sealed class AssignDriverHandler : INotificationHandler<AssignDriver>
         var trip = await this.tripRepository.GetAsync(tripId, cancellationToken);
         if (trip.HasNoValue)
         {
-            throw new InvalidOperationException($"No trip was found with id: {trip}");
+            throw new InvalidOperationException($"No trip was found with id: {tripId}");
         }
 
         return trip.Value;
