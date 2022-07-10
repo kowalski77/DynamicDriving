@@ -21,15 +21,15 @@ public static class MassTransitExtensions
             {
                 configure.AddConsumers(consumersAssembly);
             }
-            configure.UseRabbitMq(settings.ConfigureRetries);
+            configure.UsingDynamicDrivingRabbitMq(settings.ConfigureRetries);
         });
 
         return services;
     }
 
-    public static void UseRabbitMq(
+    public static void UsingDynamicDrivingRabbitMq(
         this IBusRegistrationConfigurator configure,
-        Action<IRetryConfigurator>? configureRetries)
+        Action<IRetryConfigurator>? configureRetries = null)
     {
         configure.UsingRabbitMq((context, configurator) =>
         {
