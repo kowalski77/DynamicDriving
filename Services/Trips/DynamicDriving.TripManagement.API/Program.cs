@@ -5,8 +5,10 @@ using DynamicDriving.TripManagement.API.Support;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.Application;
 using DynamicDriving.TripManagement.Domain;
+using DynamicDriving.TripManagement.Domain.TripsAggregate.Exceptions;
 using DynamicDriving.TripManagement.Infrastructure;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -24,7 +26,16 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMassTransitWithRabbitMq(typeof(DriverAssignedConsumer).Assembly);
+
+builder.Services.AddMassTransitWithRabbitMq(typeof(DriverAssignedConsumer).Assembly, retryConfigurator =>
+{
+    retryConfigurator.ConfigureRetries = cfg =>
+    {
+        cfg.Interval(3, TimeSpan.FromSeconds(5));
+        cfg.Ignore(typeof(TripConfirmationException), typeof(TripInvalidationException));
+    };
+});
+
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);

@@ -39,6 +39,11 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, UpdateUserDto user)
     {
+        if (user is null)
+        {
+            return this.BadRequest();
+        }
+
         var userToUpdate = await this.userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
         if (userToUpdate is null)
         {
@@ -47,7 +52,7 @@ public class UsersController : ControllerBase
 
         userToUpdate.Email = user.Email;
         userToUpdate.UserName = user.Email;
-        var result = await this.userManager.UpdateAsync(userToUpdate);
+        var result = await this.userManager.UpdateAsync(userToUpdate).ConfigureAwait(false);
 
         return result.Succeeded ?
             this.NoContent() :
@@ -63,7 +68,7 @@ public class UsersController : ControllerBase
             return this.NotFound();
         }
 
-        var result = await this.userManager.DeleteAsync(userToDelete);
+        var result = await this.userManager.DeleteAsync(userToDelete).ConfigureAwait(false);
 
         return result.Succeeded ?
             this.NoContent() :

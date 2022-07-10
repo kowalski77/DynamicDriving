@@ -1,6 +1,10 @@
+using DynamicDriving.Identity.Service.Consumers;
 using DynamicDriving.Identity.Service.Entities;
+using DynamicDriving.Identity.Service.Exceptions;
 using DynamicDriving.Identity.Service.Settings;
 using DynamicDriving.Identity.Service.Support;
+using DynamicDriving.MassTransit;
+using MassTransit;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -39,6 +43,14 @@ builder.Services.AddIdentityServer(options =>
     .AddDeveloperSigningCredential(); // not for production
 
 builder.Services.AddLocalApiAuthentication();
+builder.Services.AddMassTransitWithRabbitMq(typeof(DeductCreditsConsumer).Assembly, configure =>
+{
+    configure.ConfigureRetries = cfg => 
+    { 
+        cfg.Interval(3, TimeSpan.FromSeconds(5));
+        cfg.Ignore(typeof(DeductCreditsException), typeof(AddCreditsException));
+    };
+});
 
 var app = builder.Build();
 
