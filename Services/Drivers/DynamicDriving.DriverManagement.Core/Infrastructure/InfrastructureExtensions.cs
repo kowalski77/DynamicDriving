@@ -5,9 +5,6 @@ using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mongo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
 
 namespace DynamicDriving.DriverManagement.Core.Infrastructure;
 
@@ -17,10 +14,7 @@ public static class InfrastructureExtensions
     {
         Guards.ThrowIfNull(configuration);
 
-        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-        
-        var mongoOptions = configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
-        services.AddMongo(mongoOptions);
+        services.AddMongo();
         services.AddScoped<ITripRepository, TripRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
         services.AddScoped<IOutboxRepository, OutboxRepository>();
