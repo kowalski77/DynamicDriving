@@ -12,7 +12,6 @@ using MongoDB.Bson.Serialization.Serializers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -48,7 +47,9 @@ builder.Services.AddMassTransitWithRabbitMq(typeof(DeductCreditsConsumer).Assemb
     configure.ConfigureRetries = cfg => 
     { 
         cfg.Interval(3, TimeSpan.FromSeconds(5));
-        cfg.Ignore(typeof(DeductCreditsException), typeof(AddCreditsException), typeof(UnknownUserException));
+        cfg.Ignore(
+            typeof(UnknownUserException),
+            typeof(NotEnoughCreditsException));
     };
 });
 

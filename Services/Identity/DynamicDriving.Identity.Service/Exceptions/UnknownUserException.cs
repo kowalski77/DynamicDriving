@@ -1,5 +1,8 @@
-﻿namespace DynamicDriving.Identity.Service.Exceptions;
+﻿using System.Runtime.Serialization;
 
+namespace DynamicDriving.Identity.Service.Exceptions;
+
+[Serializable]
 public class UnknownUserException : Exception
 {
     public UnknownUserException(string message) : base(message)
@@ -14,9 +17,14 @@ public class UnknownUserException : Exception
     {
     }
 
-    public UnknownUserException(Guid userId) : this($"User with id {userId} does not exist")
+    public UnknownUserException(Guid userId) : base($"User with id {userId} does not exist")
     {
         this.UserId = userId;
+    }
+
+    protected UnknownUserException(SerializationInfo serializationInfo, StreamingContext streamingContext)
+    {
+        throw new NotImplementedException();
     }
 
     public Guid UserId { get; }

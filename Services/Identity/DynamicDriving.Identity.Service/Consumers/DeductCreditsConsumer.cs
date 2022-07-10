@@ -28,12 +28,12 @@ public class DeductCreditsConsumer : IConsumer<DeductCredits>
         }
 
         user.Credits -= context.Message.Credits;
-        
-        var result = await this.userManager.UpdateAsync(user).ConfigureAwait(false);
-        if (!result.Succeeded)
+        if (user.Credits < 0)
         {
-            throw new DeductCreditsException(string.Join(",", result.Errors));
+            throw new NotEnoughCreditsException(context.Message.UserId, user.Credits);
         }
+
+        _ = await this.userManager.UpdateAsync(user).ConfigureAwait(false);
 
         await context.Publish(new CreditsDeducted(context.Message.CorrelationId)).ConfigureAwait(false);
     }
