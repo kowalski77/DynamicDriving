@@ -24,7 +24,7 @@ public class AddCreditsConsumer : IConsumer<AddCredits>
         var user = await this.userManager.FindByIdAsync(context.Message.UserId.ToString()).ConfigureAwait(false);
         if (user is null)
         {
-            throw new AddCreditsException($"User with Id: {context.Message.UserId} does not exists");
+            throw new UnknownUserException(context.Message.UserId);
         }
 
         user.Credits += context.Message.Credits;

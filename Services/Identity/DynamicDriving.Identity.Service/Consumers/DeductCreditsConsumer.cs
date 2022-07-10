@@ -24,7 +24,7 @@ public class DeductCreditsConsumer : IConsumer<DeductCredits>
         var user = await this.userManager.FindByIdAsync(context.Message.UserId.ToString()).ConfigureAwait(false);
         if(user is null)
         {
-            throw new DeductCreditsException($"User with Id: {context.Message.UserId} does not exists");
+            throw new UnknownUserException(context.Message.UserId);
         }
 
         user.Credits -= context.Message.Credits;

@@ -48,7 +48,7 @@ builder.Services.AddMassTransitWithRabbitMq(typeof(DeductCreditsConsumer).Assemb
     configure.ConfigureRetries = cfg => 
     { 
         cfg.Interval(3, TimeSpan.FromSeconds(5));
-        cfg.Ignore(typeof(DeductCreditsException), typeof(AddCreditsException));
+        cfg.Ignore(typeof(DeductCreditsException), typeof(AddCreditsException), typeof(UnknownUserException));
     };
 });
 
