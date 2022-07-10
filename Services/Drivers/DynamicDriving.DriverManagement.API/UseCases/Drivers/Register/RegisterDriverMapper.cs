@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Models;
+﻿using DynamicDriving.Contracts.Drivers;
 using DynamicDriving.DriverManagement.Core.Drivers.Commands;
 using DynamicDriving.SharedKernel;
 using CarType = DynamicDriving.DriverManagement.Core.Drivers.CarType;

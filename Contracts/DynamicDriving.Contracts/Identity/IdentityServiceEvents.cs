@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.Contracts.Events;
+﻿namespace DynamicDriving.Contracts.Identity;
 
 public record CreditsDeducted(Guid CorrelationId);
 

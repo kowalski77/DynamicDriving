@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Models;
+﻿using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 

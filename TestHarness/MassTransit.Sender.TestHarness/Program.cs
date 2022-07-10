@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts;
 using DynamicDriving.MassTransit;
 using MassTransit;
 using Microsoft.Extensions.Configuration;

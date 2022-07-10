@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using DynamicDriving.Contracts.Models;
+using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
 using FluentAssertions;

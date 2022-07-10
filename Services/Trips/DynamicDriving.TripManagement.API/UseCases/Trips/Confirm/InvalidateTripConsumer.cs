@@ -1,7 +1,7 @@
 ﻿using DynamicDriving.SharedKernel;
 using MassTransit;
 using MediatR;
-using InvalidateTrip = DynamicDriving.Contracts.Commands.InvalidateTrip;
+using InvalidateTrip = DynamicDriving.Contracts.Trips.InvalidateTrip;
 using InvalidateTripCommand = DynamicDriving.TripManagement.Application.Trips.Commands.InvalidateTrip;
 
 namespace DynamicDriving.TripManagement.API.UseCases.Trips.Confirm;

@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.TripManagement.Application.Outbox;

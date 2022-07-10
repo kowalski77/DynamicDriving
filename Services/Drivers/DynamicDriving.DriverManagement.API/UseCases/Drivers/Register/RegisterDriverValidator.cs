@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Models;
+﻿using DynamicDriving.Contracts.Drivers;
 using FluentValidation;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.Register;

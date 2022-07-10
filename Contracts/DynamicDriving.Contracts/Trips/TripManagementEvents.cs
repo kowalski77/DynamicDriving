@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.Contracts.Events;
+﻿namespace DynamicDriving.Contracts.Trips;
 
 public sealed record TripCreated(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude);
 

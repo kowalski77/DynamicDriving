@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.Contracts.Models;
+﻿namespace DynamicDriving.Contracts.Drivers;
 
 public record RegisterDriverRequest(Guid Id, string Name, Car Car, bool IsAvailable);
 

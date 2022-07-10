@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.TripManagement.Application.Outbox;
@@ -25,7 +25,7 @@ public sealed class InvalidateTripHandler : ICommandHandler<InvalidateTrip, Unit
     {
         Guards.ThrowIfNull(request);
 
-        var trip = await tripRepository.GetAsync(request.TripId, cancellationToken);
+        var trip = await this.tripRepository.GetAsync(request.TripId, cancellationToken);
         if (trip.HasNoValue)
         {
             throw new TripNotFoundException(request.TripId);

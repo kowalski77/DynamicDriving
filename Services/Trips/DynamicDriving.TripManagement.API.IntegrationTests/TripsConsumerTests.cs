@@ -1,5 +1,5 @@
-﻿using DynamicDriving.Contracts.Commands;
-using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts.Drivers;
+using DynamicDriving.Contracts.Trips;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Confirm;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;

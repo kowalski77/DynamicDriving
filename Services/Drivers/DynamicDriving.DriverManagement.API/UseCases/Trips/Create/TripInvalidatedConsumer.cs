@@ -1,9 +1,9 @@
-﻿using DynamicDriving.Contracts.Events;
-using DynamicDriving.DriverManagement.Core.Trips.Commands;
+﻿using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Application;
 using DynamicDriving.SharedKernel.Results;
 using MassTransit;
+using InvalidateTrip = DynamicDriving.DriverManagement.Core.Trips.Commands.InvalidateTrip;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Trips.Create;
 

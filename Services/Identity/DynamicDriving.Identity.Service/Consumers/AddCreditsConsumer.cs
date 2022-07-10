@@ -1,5 +1,4 @@
-﻿using DynamicDriving.Contracts.Commands;
-using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts.Identity;
 using DynamicDriving.Identity.Service.Entities;
 using DynamicDriving.Identity.Service.Exceptions;
 using DynamicDriving.SharedKernel;

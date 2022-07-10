@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Models;
+﻿using DynamicDriving.Contracts.Drivers;
 using DynamicDriving.DriverManagement.Core.Drivers;
 
 namespace DynamicDriving.DriverManagement.API.UseCases.Drivers.GetAll;

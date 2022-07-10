@@ -1,5 +1,4 @@
-﻿using DynamicDriving.Contracts.Commands;
-using DynamicDriving.Contracts.Events;
+﻿using DynamicDriving.Contracts.Identity;
 using DynamicDriving.Identity.Service.Entities;
 using DynamicDriving.Identity.Service.Exceptions;
 using DynamicDriving.SharedKernel;
@@ -22,7 +21,7 @@ public class DeductCreditsConsumer : IConsumer<DeductCredits>
         Guards.ThrowIfNull(context);
 
         var user = await this.userManager.FindByIdAsync(context.Message.UserId.ToString()).ConfigureAwait(false);
-        if(user is null)
+        if (user is null)
         {
             throw new UnknownUserException(context.Message.UserId);
         }

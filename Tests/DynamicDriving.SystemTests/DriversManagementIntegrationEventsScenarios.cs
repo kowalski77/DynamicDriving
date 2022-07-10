@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DynamicDriving.Contracts.Models;
+using DynamicDriving.Contracts.Drivers;
 using DynamicDriving.SystemTests.Services;
 using DynamicDriving.SystemTests.Support;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;

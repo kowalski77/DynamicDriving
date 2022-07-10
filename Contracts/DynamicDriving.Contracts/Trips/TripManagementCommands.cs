@@ -1,4 +1,4 @@
-﻿namespace DynamicDriving.Contracts.Commands;
+﻿namespace DynamicDriving.Contracts.Trips;
 
 public record ConfirmTrip(Guid TripId, Guid CorrelationId);
 

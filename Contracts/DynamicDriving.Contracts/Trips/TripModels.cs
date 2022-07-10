@@ -1,6 +1,6 @@
 ﻿[assembly: CLSCompliant(false)]
 
-namespace DynamicDriving.Contracts.Models;
+namespace DynamicDriving.Contracts.Trips;
 
 public sealed record CreateDraftTripRequest(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude);
 

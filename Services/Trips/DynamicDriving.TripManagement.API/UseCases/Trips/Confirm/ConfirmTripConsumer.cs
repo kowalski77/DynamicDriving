@@ -1,4 +1,4 @@
-﻿using DynamicDriving.Contracts.Commands;
+﻿using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel;
 using MassTransit;
 using MediatR;

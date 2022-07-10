@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DynamicDriving.Contracts.Events;
+using DynamicDriving.Contracts.Drivers;
 using DynamicDriving.TripManagement.API.UseCases.Drivers.Create;
 using DynamicDriving.TripManagement.Domain.DriversAggregate;
 using FluentAssertions;
