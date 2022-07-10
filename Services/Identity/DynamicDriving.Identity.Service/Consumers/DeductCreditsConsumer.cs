@@ -30,7 +30,7 @@ public class DeductCreditsConsumer : IConsumer<DeductCredits>
         user.Credits -= context.Message.Credits;
         
         var result = await this.userManager.UpdateAsync(user).ConfigureAwait(false);
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
             throw new DeductCreditsException(string.Join(",", result.Errors));
         }
