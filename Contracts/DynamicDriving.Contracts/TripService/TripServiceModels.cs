@@ -1,3 +1,5 @@
-﻿namespace DynamicDriving.Contracts.TripService;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record ConfirmTripRequested(Guid UserId, Guid TripId, int Credits, Guid CorrelationId);
+namespace DynamicDriving.Contracts.TripService;
+
+public record SubmitBookingRequest([Required] Guid? TripId, [Range(1, 100)] int Credits);

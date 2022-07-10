@@ -3,11 +3,11 @@ using MassTransit;
 
 namespace DynamicDriving.TripService.API.StateMachines;
 
-public class ConfirmTripStateMachine : MassTransitStateMachine<ConfirmTripState>
+public class BookingStateMachine : MassTransitStateMachine<BookingState>
 {
-    private readonly ILogger<ConfirmTripStateMachine> logger;
+    private readonly ILogger<BookingStateMachine> logger;
 
-    public ConfirmTripStateMachine(ILogger<ConfirmTripStateMachine> logger)
+    public BookingStateMachine(ILogger<BookingStateMachine> logger)
     {
         this.logger = logger;
 
@@ -24,17 +24,17 @@ public class ConfirmTripStateMachine : MassTransitStateMachine<ConfirmTripState>
 
     public State? Faulted { get; }
 
-    public Event<ConfirmTripRequested>? ConfirmTripRequested { get; }
+    public Event<BookingRequested>? BookingRequested { get; }
 
     private void ConfigureEvents()
     {
-        this.Event(() => this.ConfirmTripRequested);
+        this.Event(() => this.BookingRequested);
     }
 
     private void ConfigureInitialState()
     {
         this.Initially(
-            When(this.ConfirmTripRequested)
+            When(this.BookingRequested)
             .Then(context =>
             {
                 context.Saga.UserId = context.Message.UserId;

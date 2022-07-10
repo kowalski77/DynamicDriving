@@ -12,11 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.MassTransit\DynamicDriving.MassTransit.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\DynamicDriving.SharedKernel\DynamicDriving.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\Contracts\DynamicDriving.Contracts\DynamicDriving.Contracts.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@
 
 namespace DynamicDriving.TripService.API.StateMachines;
 
-public class ConfirmTripState : SagaStateMachineInstance, ISagaVersion
+public class BookingState : SagaStateMachineInstance, ISagaVersion
 {
     public Guid CorrelationId { get; set; }
 
