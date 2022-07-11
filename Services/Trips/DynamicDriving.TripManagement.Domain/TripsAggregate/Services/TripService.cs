@@ -16,7 +16,6 @@ public sealed class TripService : ITripService
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
-        Guid id,
         UserId userId, DateTime pickUp,
         Coordinates origin, Coordinates destination,
         CancellationToken cancellationToken = default)
@@ -28,7 +27,7 @@ public sealed class TripService : ITripService
         var result = await Result.Init
             .OnSuccess(async () => await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken))
             .OnSuccess(async () => await this.CreateLocationsAsync(origin, destination, cancellationToken))
-            .OnSuccess(locations => new Trip(id, userId, pickUp, locations.Item1, locations.Item2));
+            .OnSuccess(locations => new Trip(userId, pickUp, locations.Item1, locations.Item2));
 
         return result;
     }

@@ -2,7 +2,7 @@
 
 namespace DynamicDriving.Contracts.Trips;
 
-public sealed record CreateDraftTripRequest(Guid TripId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude);
+public sealed record CreateDraftTripRequest(DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude);
 
 public sealed record CreateDraftTripResponse(Guid TripId);
 

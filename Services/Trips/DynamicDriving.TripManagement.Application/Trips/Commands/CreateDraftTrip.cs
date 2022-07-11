@@ -7,7 +7,7 @@ using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
 
 namespace DynamicDriving.TripManagement.Application.Trips.Commands;
 
-public sealed record CreateDraftTrip(Guid TripId, Guid UserId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) 
+public sealed record CreateDraftTrip(Guid UserId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude) 
     : ICommand<Result<DraftTripDto>>;
 
 public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, Result<DraftTripDto>>
@@ -31,15 +31,15 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, Re
 
         var resultModel = await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
-            .OnSuccess(async () => await this.CreateTripAsync(request.TripId, userId.Value, request.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
+            .OnSuccess(async () => await this.CreateTripAsync(userId.Value, request.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
             .OnSuccess(trip => new DraftTripDto(trip.Id));
 
         return resultModel;
     }
 
-    private async Task<Result<Trip>> CreateTripAsync(Guid tripId, UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
     {
-        var result = await this.tripService.CreateDraftTripAsync(tripId, userId, pickUp, origin, destination, cancellationToken);
+        var result = await this.tripService.CreateDraftTripAsync(userId, pickUp, origin, destination, cancellationToken);
         if (result.Failure)
         {
             return result.Error!;

@@ -36,7 +36,7 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         var response = await client.PostAsJsonAsync(DriversEndpoint, request);
 
         // Assert
-        _ = response.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
 
         var driverRepository = this.webApplicationFixture.Trips.TestServer.Services.GetRequiredService<IDriverRepository>();
         await Retry.Handle<Exception>(1000, 3)
@@ -59,14 +59,14 @@ public class DriversManagementIntegrationEventsScenarios : IClassFixture<WebAppl
         var response = await client.PostAsJsonAsync(TripsEndpoint, request);
 
         // Assert
-        _ = response.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
 
         var tripRepository = this.webApplicationFixture.Trips.TestServer.Services.GetRequiredService<ITripRepository>();
         await Retry.Handle<Exception>(1000, 3)
             .ExecuteAsync(async () =>
             {
                 var trip = (await tripRepository.GetAsync(tripId)).Value;
-                _ = trip.Driver.Should().NotBeNull();
+                trip.Driver.Should().NotBeNull();
             });
     }
 }

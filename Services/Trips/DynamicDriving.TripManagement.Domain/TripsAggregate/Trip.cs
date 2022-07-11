@@ -12,9 +12,9 @@ public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    public Trip(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination)
+    public Trip(UserId userId, DateTime pickUp, Location origin, Location destination)
     {
-        this.Id = Guards.ThrowIfEmpty(id);
+        this.Id = Guid.NewGuid();
         this.UserId = Guards.ThrowIfNull(userId);
         this.PickUp = pickUp;
         this.Origin = Guards.ThrowIfNull(origin);
@@ -24,7 +24,19 @@ public sealed class Trip : Entity, IAggregateRoot
         this.Kilometers = 0;
     }
 
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
+    {
+        this.Id = Guards.ThrowIfEmpty(Id);
+        this.UserId = Guards.ThrowIfNull(userId);
+        this.PickUp = pickUp;
+        this.Origin = Guards.ThrowIfNull(origin);
+        this.Destination = Guards.ThrowIfNull(destination);
+        this.CurrentCoordinates = origin.Coordinates;
+        this.TripStatus = TripStatus.Draft;
+        this.Kilometers = 0;
+    }
+
+    public Guid Id { get; private set; }
 
     public UserId UserId { get; private set; }
 

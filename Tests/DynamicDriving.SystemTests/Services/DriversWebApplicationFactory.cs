@@ -24,9 +24,9 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
     {
         this.TestServer = this.WithWebHostBuilder(builder =>
         {
-            _ = builder.ConfigureTestServices(services =>
+             builder.ConfigureTestServices(services =>
             {
-                _ = services.AddAuthentication("Test")
+                services.AddAuthentication("Test")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                         "Test", options => { });
             });
@@ -37,9 +37,9 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        _ = builder.ConfigureHostConfiguration(config =>
+        builder.ConfigureHostConfiguration(config =>
             {
-                _ = config.AddUserSecrets(typeof(DriversWebApplicationFactory).Assembly)
+                config.AddUserSecrets(typeof(DriversWebApplicationFactory).Assembly)
                 .AddJsonFile("appsettings.Drivers.json", false)
                 .AddEnvironmentVariables("ASPNETCORE");
             })
@@ -50,7 +50,7 @@ public class DriversWebApplicationFactory : WebApplicationFactory<DriversProgram
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        _ = builder.ConfigureServices((context, services) =>
+        builder.ConfigureServices((context, services) =>
         {
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();

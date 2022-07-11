@@ -12,7 +12,6 @@ public static class CreateDraftMapper
         Guards.ThrowIfNull(request);
 
         return new CreateDraftTrip(
-            request.TripId,
             userId, 
             request.PickUp, 
             request.OriginLatitude, 

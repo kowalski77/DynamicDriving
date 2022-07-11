@@ -27,9 +27,9 @@ public class TripsWebApplicationFactory : WebApplicationFactory<TripsProgram>
     {
         this.TestServer = this.WithWebHostBuilder(builder =>
         {
-            _ = builder.ConfigureTestServices(services =>
+            builder.ConfigureTestServices(services =>
             {
-                _ = services.AddAuthentication("Test")
+                services.AddAuthentication("Test")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                         "Test", options => { });
             });

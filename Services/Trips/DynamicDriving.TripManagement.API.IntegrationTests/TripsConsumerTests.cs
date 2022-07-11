@@ -3,6 +3,7 @@ using DynamicDriving.Contracts.Trips;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Assign;
 using DynamicDriving.TripManagement.API.UseCases.Trips.Confirm;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
+using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using FluentAssertions;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,10 @@ public class TripsConsumerTests
     public async Task Driver_is_assigned_to_trip_when_assigned_driver_event_is_received()
     {
         // Arrange
-        var driverAssigned = new DriverAssigned(Guid.Parse(IntegrationTestConstants.TripId), Guid.Parse(IntegrationTestConstants.DriverId));
+        var dbContext = this.factory.TestServer.Services.GetRequiredService<TripManagementContext>();
+        var trip = dbContext.Trips.First();
+
+        var driverAssigned = new DriverAssigned(trip.Id, Guid.Parse(IntegrationTestConstants.DriverId));
         var consumeContextMock = new Mock<ConsumeContext<DriverAssigned>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(driverAssigned);
         
@@ -35,16 +39,18 @@ public class TripsConsumerTests
         await consumer.Consume(consumeContextMock.Object);
 
         // Assert
-        var repository = this.factory.TestServer.Services.GetRequiredService< ITripRepository >();
-        var trip = await repository.GetAsync(driverAssigned.TripId);
-        trip.Value.Driver!.Id.Should().Be(driverAssigned.DriverId);
+        var repository = this.factory.TestServer.Services.GetRequiredService<ITripRepository>();
+        var maybeTrip = await repository.GetAsync(driverAssigned.TripId);
+        maybeTrip.Value.Driver!.Id.Should().Be(driverAssigned.DriverId);
     }
 
     [Fact]
     public async Task Trip_is_confirmed_when_confirm_trip_event_is_received()
     {
         // Arrange
-        var confirmTrip = new ConfirmTrip(Guid.Parse(IntegrationTestConstants.TripId), Guid.NewGuid());
+        var dbContext = this.factory.TestServer.Services.GetRequiredService<TripManagementContext>();
+        var trip = dbContext.Trips.First();
+        var confirmTrip = new ConfirmTrip(trip.Id, Guid.NewGuid());
         var consumeContextMock = new Mock<ConsumeContext<ConfirmTrip>>();
         consumeContextMock.SetupGet(x => x.Message).Returns(confirmTrip);
 
@@ -55,7 +61,7 @@ public class TripsConsumerTests
 
         // Assert
         var repository = this.factory.TestServer.Services.GetRequiredService<ITripRepository>();
-        var trip = await repository.GetAsync(confirmTrip.TripId);
-        trip.Value.TripStatus.Should().Be(TripStatus.Confirmed);
+        var maybeTrip = await repository.GetAsync(confirmTrip.TripId);
+        maybeTrip.Value.TripStatus.Should().Be(TripStatus.Confirmed);
     }
 }

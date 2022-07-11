@@ -5,6 +5,7 @@ using System.Text.Json;
 using DynamicDriving.Contracts.Trips;
 using DynamicDriving.SharedKernel.Envelopes;
 using DynamicDriving.TripManagement.Domain.Common;
+using DynamicDriving.TripManagement.Infrastructure.Persistence;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.TestHost;
@@ -33,8 +34,7 @@ public class TripControllerTests
     public async Task Draft_trip_is_created()
     {
         // Arrange
-        var tripId = Guid.NewGuid();
-        var model = new CreateDraftTripRequest(tripId, DateTime.Now, 10, 10, 20, 20);
+        var model = new CreateDraftTripRequest(DateTime.Now, 10, 10, 20, 20);
         var jsonModel = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, JsonMediaType);
 
         var client = this.factory.WithWebHostBuilder(builder =>
@@ -62,17 +62,20 @@ public class TripControllerTests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var result = (SuccessEnvelope<CreateDraftTripResponse>)(await response.Content.ReadFromJsonAsync(typeof(SuccessEnvelope<CreateDraftTripResponse>), JsonSerializerOptions))!;
-        result.Data.TripId.Should().Be(tripId);
+        result.Data.TripId.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Trip_is_retrieved_by_identifier()
     {
         // Arrange
+        var dbContext = this.factory.TestServer.Services.GetRequiredService<TripManagementContext>();
+        var trip = dbContext.Trips.First();
+        
         var client = this.factory.TestServer.CreateClient();
-
+        
         // Act
-        var response = await client.GetAsync($"{TripsEndpoint}/{IntegrationTestConstants.TripId}");
+        var response = await client.GetAsync($"{TripsEndpoint}/{trip.Id}");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
