@@ -53,7 +53,8 @@ public static class SeedDatabase
         {
             UserName = "Admin",
             Email = settings.AdminUserEmail,
-            Credits = int.MaxValue
+            Credits = 999_999,
+            EmailConfirmed = true
         };
 
         await userManager.CreateAsync(adminUser, settings.AdminUserPassword).ConfigureAwait(false);
@@ -74,10 +75,11 @@ public static class SeedDatabase
         {
             UserName = "tester01",
             Email = testUserEmail,
-            Credits = 100
+            Credits = 100,
+            EmailConfirmed = true
         };
 
-        await userManager.CreateAsync(testUser, "Password1!").ConfigureAwait(false);
+        await userManager.CreateAsync(testUser, "Martin,22").ConfigureAwait(false);
         await userManager.AddToRoleAsync(testUser, Roles.User).ConfigureAwait(false);
     }
 }
