@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using DynamicDriving.Contracts.TripService;
 using DynamicDriving.SharedKernel;
+using DynamicDriving.SharedKernel.Mongo;
+using DynamicDriving.TripService.API.Entities;
 using DynamicDriving.TripService.API.StateMachines;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
@@ -13,11 +15,13 @@ namespace DynamicDriving.TripService.API.Controllers;
 [Authorize]
 public class BookingsController : ControllerBase
 {
+    private readonly IMongoRepository<Trip> tripRepository;
     private readonly IPublishEndpoint publishEndpoint;
     private readonly IRequestClient<GetBookingState> bookingClient; // Request/Response in MassTransit
 
-    public BookingsController(IPublishEndpoint publishEndpoint, IRequestClient<GetBookingState> bookingClient)
+    public BookingsController(IMongoRepository<Trip> tripRepository, IPublishEndpoint publishEndpoint, IRequestClient<GetBookingState> bookingClient)
     {
+        this.tripRepository = tripRepository;
         this.publishEndpoint = publishEndpoint;
         this.bookingClient = bookingClient;
     }
@@ -26,10 +30,15 @@ public class BookingsController : ControllerBase
     public async Task<IActionResult> PostAsync([FromBody] SubmitBookingRequest booking)
     {
         Guards.ThrowIfNull(booking);
-
         if (!this.ModelState.IsValid)
         {
             return this.BadRequest(this.ModelState);
+        }
+
+        var trip = await this.tripRepository.GetAsync((Guid)booking.TripId!).ConfigureAwait(false);
+        if(trip is null)
+        {
+            return this.NotFound($"Trip with id {booking.TripId} not found");
         }
 
         var userId = this.User.FindFirstValue("sub");

@@ -1,7 +1,10 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.SharedKernel.Mongo;
+using DynamicDriving.TripService.API.Consumers;
+using DynamicDriving.TripService.API.Entities;
 using DynamicDriving.TripService.API.StateMachines;
 using MassTransit;
 
@@ -16,7 +19,7 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMongo();
+builder.Services.AddMongo().AddMongoRepository<Trip>();
 builder.Services.AddJwtBearerAuthentication();
 AddMassTransit(builder.Services, builder.Configuration);
 
@@ -43,6 +46,7 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
     services.AddMassTransit(configure =>
     {
         configure.UsingDynamicDrivingRabbitMq();
+        configure.AddConsumers(typeof(TripDraftedConsumer).Assembly);
         configure.AddSagaStateMachine<BookingStateMachine, BookingState>()
         .MongoDbRepository(r =>
         {

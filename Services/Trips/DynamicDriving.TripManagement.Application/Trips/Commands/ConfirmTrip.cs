@@ -50,7 +50,6 @@ public sealed class ConfirmTripHandler : ICommandHandler<ConfirmTrip, Unit>
             trip.Origin.Coordinates.Latitude,
             trip.Origin.Coordinates.Longitude,
             trip.Destination.Coordinates.Latitude,
-            trip.Destination.Coordinates.Longitude,
-            trip.CreditsCost ?? 0);
+            trip.Destination.Coordinates.Longitude);
     }
 }

@@ -1,6 +1,8 @@
-﻿using DynamicDriving.SharedKernel;
+﻿using DynamicDriving.Contracts.Trips;
+using DynamicDriving.SharedKernel;
 using DynamicDriving.SharedKernel.Mediator;
 using DynamicDriving.SharedKernel.Results;
+using DynamicDriving.TripManagement.Application.Outbox;
 using DynamicDriving.TripManagement.Domain.Common;
 using DynamicDriving.TripManagement.Domain.TripsAggregate;
 using DynamicDriving.TripManagement.Domain.TripsAggregate.Services;
@@ -14,11 +16,13 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, Re
 {
     private readonly ITripService tripService;
     private readonly ITripRepository tripRepository;
+    private readonly IOutboxService outboxService;
 
-    public CreateDraftTripHandler(ITripService tripService, ITripRepository tripRepository)
+    public CreateDraftTripHandler(ITripService tripService, ITripRepository tripRepository, IOutboxService outboxService)
     {
         this.tripService = Guards.ThrowIfNull(tripService);
         this.tripRepository = Guards.ThrowIfNull(tripRepository);
+        this.outboxService = outboxService;
     }
 
     public async Task<Result<DraftTripDto>> Handle(CreateDraftTrip request, CancellationToken cancellationToken)
@@ -46,6 +50,8 @@ public sealed class CreateDraftTripHandler : ICommandHandler<CreateDraftTrip, Re
         }
 
         var trip = this.tripRepository.Add(result.Value);
+        await this.outboxService.AddIntegrationEventAsync(new TripDrafted(trip.Id, trip.CreditsCost ?? 0), cancellationToken);
+        
         await this.tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return trip;

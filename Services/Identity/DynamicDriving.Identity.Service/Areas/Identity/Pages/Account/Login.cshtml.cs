@@ -105,16 +105,24 @@ public class LoginModel : PageModel
         {
             // This doesn't count login failures towards account lockout
             var user = await this.signInManager.UserManager.FindByEmailAsync(this.Input.Email);
+            if(user is null)
+            {
+                this.ModelState.AddModelError(string.Empty, "User not found.");
+                return this.Page();
+            }
+            
             var result = await this.signInManager.PasswordSignInAsync(user.UserName, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 this.logger.LogInformation("User logged in.");
                 return this.LocalRedirect(returnUrl);
             }
+            
             if (result.RequiresTwoFactor)
             {
                 return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, this.Input.RememberMe });
             }
+            
             if (result.IsLockedOut)
             {
                 this.logger.LogWarning("User account locked out.");
