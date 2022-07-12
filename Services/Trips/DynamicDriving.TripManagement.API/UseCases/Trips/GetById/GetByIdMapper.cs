@@ -15,6 +15,7 @@ public static class GetByIdMapper
             source.DriverName,
             source.PickUpTime,
             new TripByIdLocationResponse(source.Origin.Name, source.Origin.City, source.Origin.Latitude, source.Origin.Longitude),
-            new TripByIdLocationResponse(source.Destination.Name, source.Destination.City, source.Destination.Latitude, source.Destination.Longitude));
+            new TripByIdLocationResponse(source.Destination.Name, source.Destination.City, source.Destination.Latitude, source.Destination.Longitude),
+            source.Credits);
     }
 }

@@ -11,6 +11,7 @@ public static class TripMappers
 
         return new TripDto(trip.UserId.Value, trip.Driver?.Name, trip.PickUp,
             new TripByIdLocationDto(trip.Origin.Name, trip.Origin.City.Name, trip.Origin.Coordinates.Latitude, trip.Origin.Coordinates.Longitude),
-            new TripByIdLocationDto(trip.Destination.Name, trip.Destination.City.Name, trip.Destination.Coordinates.Latitude, trip.Destination.Coordinates.Longitude));
+            new TripByIdLocationDto(trip.Destination.Name, trip.Destination.City.Name, trip.Destination.Coordinates.Latitude, trip.Destination.Coordinates.Longitude),
+            trip.CreditsCost ?? 0);
     }
 }

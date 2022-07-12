@@ -13,5 +13,6 @@ public static class DomainExtensions
         services.AddScoped<ITripService, TripService>();
         services.AddScoped<ILocationFactory, LocationFactory>();
         services.AddScoped<ITripValidator, TripValidator>();
+        services.AddScoped<ITripCostCalculator, TripCostCalculator>();
     }
 }

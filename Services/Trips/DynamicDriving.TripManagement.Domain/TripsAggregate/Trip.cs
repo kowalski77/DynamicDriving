@@ -12,16 +12,9 @@ public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    public Trip(UserId userId, DateTime pickUp, Location origin, Location destination)
+    public Trip(UserId userId, DateTime pickUp, Location origin, Location destination) 
+        : this(Guid.NewGuid(), userId, pickUp, origin, destination)
     {
-        this.Id = Guid.NewGuid();
-        this.UserId = Guards.ThrowIfNull(userId);
-        this.PickUp = pickUp;
-        this.Origin = Guards.ThrowIfNull(origin);
-        this.Destination = Guards.ThrowIfNull(destination);
-        this.CurrentCoordinates = origin.Coordinates;
-        this.TripStatus = TripStatus.Draft;
-        this.Kilometers = 0;
     }
 
     public Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
@@ -53,6 +46,8 @@ public sealed class Trip : Entity, IAggregateRoot
     public TripStatus TripStatus { get; private set; }
 
     public decimal Kilometers { get; private set; }
+
+    public int? CreditsCost { get; private set; }
 
     public Result CanConfirm()
     {
@@ -107,4 +102,9 @@ public sealed class Trip : Entity, IAggregateRoot
 
         this.Driver = driver;
     }
+
+    public void SetCost(int credits)
+    {
+        this.CreditsCost = credits;
+    }   
 }

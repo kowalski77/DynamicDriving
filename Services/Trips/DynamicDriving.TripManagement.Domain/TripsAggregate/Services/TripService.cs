@@ -8,11 +8,13 @@ public sealed class TripService : ITripService
 {
     private readonly ILocationFactory locationFactory;
     private readonly ITripValidator tripValidator;
+    private readonly ITripCostCalculator tripCostCalculator;
 
-    public TripService(ILocationFactory locationFactory, ITripValidator tripValidator)
+    public TripService(ILocationFactory locationFactory, ITripValidator tripValidator, ITripCostCalculator tripCostCalculator)
     {
         this.locationFactory = Guards.ThrowIfNull(locationFactory);
         this.tripValidator = Guards.ThrowIfNull(tripValidator);
+        this.tripCostCalculator = tripCostCalculator;
     }
 
     public async Task<Result<Trip>> CreateDraftTripAsync(
@@ -27,7 +29,14 @@ public sealed class TripService : ITripService
         var result = await Result.Init
             .OnSuccess(async () => await this.tripValidator.ValidateTripDistanceAsync(origin, destination, cancellationToken))
             .OnSuccess(async () => await this.CreateLocationsAsync(origin, destination, cancellationToken))
-            .OnSuccess(locations => new Trip(userId, pickUp, locations.Item1, locations.Item2));
+            .OnSuccess(locations => new Trip(userId, pickUp, locations.Item1, locations.Item2))
+            .OnSuccess(trip =>
+            {
+                var cost = this.tripCostCalculator.CalculateCost(trip.Origin, trip.Destination);
+                trip.SetCost(cost);
+
+                return trip;
+            });
 
         return result;
     }

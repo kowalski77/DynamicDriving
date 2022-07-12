@@ -6,7 +6,7 @@ public sealed record CreateDraftTripRequest(DateTime PickUp, decimal OriginLatit
 
 public sealed record CreateDraftTripResponse(Guid TripId);
 
-public record TripByIdResponse(Guid UserId, string? DriverName, DateTime PickUpTime, TripByIdLocationResponse Origin, TripByIdLocationResponse Destination);
+public record TripByIdResponse(Guid UserId, string? DriverName, DateTime PickUpTime, TripByIdLocationResponse Origin, TripByIdLocationResponse Destination, int Credits);
 
 public record TripsByUserResponse(Guid UserId, IEnumerable<TripSummary> TripSummaries);
 
