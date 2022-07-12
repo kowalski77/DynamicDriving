@@ -14,6 +14,7 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.InstanceState(state => state.CurrentState);
         this.ConfigureEvents();
         this.ConfigureInitialState();
+        this.ConfigureAny();
     }
 
     public State? Accepted { get; }
@@ -26,9 +27,12 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
 
     public Event<BookingRequested>? BookingRequested { get; }
 
+    public Event<GetBookingState>? GetBookingState { get; }
+
     private void ConfigureEvents()
     {
         this.Event(() => this.BookingRequested);
+        this.Event(() => this.GetBookingState);
     }
 
     private void ConfigureInitialState()
@@ -44,5 +48,12 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.LastUpdated = context.Saga.Received;
             })
             .TransitionTo(this.Accepted));
+    }
+
+    private void ConfigureAny()
+    {
+        DuringAny(
+            When(this.GetBookingState)
+            .Respond(x => x.Saga));
     }
 }

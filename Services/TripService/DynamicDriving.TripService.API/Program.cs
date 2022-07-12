@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.SharedKernel.Mongo;
@@ -7,7 +8,12 @@ using MassTransit;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+})
+    .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMongo();
