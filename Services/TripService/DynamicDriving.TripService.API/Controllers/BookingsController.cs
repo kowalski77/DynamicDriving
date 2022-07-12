@@ -36,7 +36,7 @@ public class BookingsController : ControllerBase
         }
 
         var trip = await this.tripRepository.GetAsync((Guid)booking.TripId!).ConfigureAwait(false);
-        if(trip is null)
+        if (trip is null)
         {
             return this.NotFound($"Trip with id {booking.TripId} not found");
         }
@@ -44,12 +44,12 @@ public class BookingsController : ControllerBase
         var userId = this.User.FindFirstValue("sub");
         var correlationId = Guid.NewGuid(); // TEMP
 
-        var message = new BookingRequested(Guid.Parse(userId), booking.TripId!.Value, booking.Credits, correlationId);
+        var message = new BookingRequested(Guid.Parse(userId), booking.TripId!.Value, trip.Credits, correlationId);
         await this.publishEndpoint.Publish(message).ConfigureAwait(false);
 
         return this.AcceptedAtAction(
-            nameof(GetStatusAsync), 
-            new { correlationId }, 
+            nameof(GetStatusAsync),
+            new { correlationId },
             new { correlationId });
     }
 
