@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2A3C3841-0D14-4DB4-90FB-11F27902420A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestHarness", "TestHarness", "{C101C2D5-D120-4C83-A294-2C5DA890E962}"
+	ProjectSection(SolutionItems) = preProject
+		Services\Trips\DynamicDriving.TripManagement.Application\Trips\Exceptions\TripNotFoundException.cs = Services\Trips\DynamicDriving.TripManagement.Application\Trips\Exceptions\TripNotFoundException.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.Contracts", "Contracts\DynamicDriving.Contracts\DynamicDriving.Contracts.csproj", "{E259B573-F977-40A0-AA51-03CF1F387CB8}"
 EndProject
@@ -73,7 +76,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.Receiver.TestHa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TripService", "TripService", "{017FEAD3-6133-452D-B7AC-9ABB89DA795B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDriving.TripService.API", "Services\TripService\DynamicDriving.TripService.API\DynamicDriving.TripService.API.csproj", "{0511BCE1-EC31-4308-B10B-44E144CA2B9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicDriving.TripService.API", "Services\TripService\DynamicDriving.TripService.API\DynamicDriving.TripService.API.csproj", "{0511BCE1-EC31-4308-B10B-44E144CA2B9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

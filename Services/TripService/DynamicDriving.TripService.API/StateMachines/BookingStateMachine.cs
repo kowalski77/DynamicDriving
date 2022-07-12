@@ -1,4 +1,5 @@
 ﻿using DynamicDriving.Contracts.TripService;
+using DynamicDriving.TripService.API.Activities;
 using MassTransit;
 
 namespace DynamicDriving.TripService.API.StateMachines;
@@ -47,7 +48,14 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.Received = DateTimeOffset.UtcNow;
                 context.Saga.LastUpdated = context.Saga.Received;
             })
-            .TransitionTo(this.Accepted));
+            .Activity(x => x.OfType<CalculateBookingTotalActivity>())
+            .TransitionTo(this.Accepted)
+            .Catch<Exception>(e => e.Then(context =>
+            {
+                context.Saga.ErrorMessage = context.Exception.Message;
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+            })
+            .TransitionTo(this.Faulted)));
     }
 
     private void ConfigureAny()

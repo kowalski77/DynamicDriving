@@ -5,6 +5,7 @@ using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.SharedKernel.Mongo;
 using DynamicDriving.TripService.API.Consumers;
 using DynamicDriving.TripService.API.Entities;
+using DynamicDriving.TripService.API.Exceptions;
 using DynamicDriving.TripService.API.StateMachines;
 using MassTransit;
 
@@ -45,7 +46,11 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
 {
     services.AddMassTransit(configure =>
     {
-        configure.UsingDynamicDrivingRabbitMq();
+        configure.UsingDynamicDrivingRabbitMq(retryConfig =>
+        {
+            retryConfig.Interval(3, TimeSpan.FromSeconds(5));
+            retryConfig.Ignore(typeof(TripNotFoundException));
+        });
         configure.AddConsumers(typeof(TripDraftedConsumer).Assembly);
         configure.AddSagaStateMachine<BookingStateMachine, BookingState>()
         .MongoDbRepository(r =>
