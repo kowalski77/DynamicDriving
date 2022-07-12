@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DynamicDriving.Identity.Service.Consumers;
 using DynamicDriving.Identity.Service.Entities;
 using DynamicDriving.Identity.Service.Exceptions;
@@ -5,11 +6,15 @@ using DynamicDriving.Identity.Service.Settings;
 using DynamicDriving.Identity.Service.Support;
 using DynamicDriving.MassTransit;
 using MassTransit;
+using Microsoft.AspNetCore.MiddlewareAnalysis;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// insert the AnalysisStartupFilter as the first IStartupFilter in the container
+builder.Services.Insert(0, ServiceDescriptor.Transient<IStartupFilter, AnalysisStartupFilter>());
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -54,6 +59,14 @@ builder.Services.AddMassTransitWithRabbitMq(typeof(DeductCreditsConsumer).Assemb
 });
 
 var app = builder.Build();
+
+// Grab the "Microsoft.AspNetCore" DiagnosticListener from DI
+var listener = app.Services.GetRequiredService<DiagnosticListener>();
+// Create an instance of the AnalysisDiagnosticAdapter using the IServiceProvider
+// so that the ILogger is injected from DI
+var observer = ActivatorUtilities.CreateInstance<AnalysisDiagnosticAdapter>(app.Services);
+// Subscribe to the listener with the SubscribeWithAdapter() extension method
+using var disposable = listener.SubscribeWithAdapter(observer);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
