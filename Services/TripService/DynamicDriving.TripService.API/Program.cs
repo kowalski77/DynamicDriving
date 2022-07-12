@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
+using DynamicDriving.Contracts.Trips;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Identity;
 using DynamicDriving.SharedKernel.Mongo;
 using DynamicDriving.TripService.API.Consumers;
 using DynamicDriving.TripService.API.Entities;
 using DynamicDriving.TripService.API.Exceptions;
+using DynamicDriving.TripService.API.Settings;
 using DynamicDriving.TripService.API.StateMachines;
 using MassTransit;
 
@@ -51,7 +53,11 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
             retryConfig.Ignore(typeof(TripNotFoundException));
         });
         configure.AddConsumers(typeof(TripDraftedConsumer).Assembly);
-        configure.AddSagaStateMachine<BookingStateMachine, BookingState>()
+        configure.AddSagaStateMachine<BookingStateMachine, BookingState>(sagaConfigurator =>
+        {
+            sagaConfigurator.UseInMemoryOutbox(); // No message will be sent from the Saga pipelines until the transition to the state is stored in the database.
+                                                  // Ex.  Send(context => new ConfirmTrip(context.Saga.TripId, context.Saga.CorrelationId))
+        })
         .MongoDbRepository(r =>
         {
             var mongoOptions = configuration.GetSection(nameof(MongoOptions)).Get<MongoOptions>();
@@ -61,4 +67,8 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
             r.DatabaseName = massTransitSettings.ServiceName;
         });
     });
+
+    // Map Commands in MassTransit
+    var queueSettings = configuration.GetSection(nameof(QueueSettings)).Get<QueueSettings>();
+    EndpointConvention.Map<ConfirmTrip>(new Uri(queueSettings.ConfirmTripQueueAddress!));
 }

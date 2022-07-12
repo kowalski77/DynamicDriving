@@ -1,4 +1,5 @@
-﻿using DynamicDriving.Contracts.TripService;
+﻿using DynamicDriving.Contracts.Trips;
+using DynamicDriving.Contracts.TripService;
 using DynamicDriving.TripService.API.Activities;
 using MassTransit;
 
@@ -16,11 +17,12 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.ConfigureEvents();
         this.ConfigureInitialState();
         this.ConfigureAny();
+        this.ConfigureAccepted();
     }
 
     public State? Accepted { get; }
 
-    public State? ItemsGranted { get; }
+    public State? Confirmed { get; }
 
     public State? Completed { get; }
 
@@ -30,16 +32,19 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
 
     public Event<GetBookingState>? GetBookingState { get; }
 
+    public Event<TripConfirmed>? TripConfirmed { get; set; }
+
     private void ConfigureEvents()
     {
         this.Event(() => this.BookingRequested);
         this.Event(() => this.GetBookingState);
+        this.Event(() => this.TripConfirmed);
     }
 
     private void ConfigureInitialState()
     {
         this.Initially(
-            When(this.BookingRequested)
+            this.When(this.BookingRequested)
             .Then(context =>
             {
                 context.Saga.UserId = context.Message.UserId;
@@ -49,6 +54,7 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.LastUpdated = context.Saga.Received;
             })
             .Activity(x => x.OfType<CalculateBookingTotalActivity>())
+            .Send(context => new ConfirmTrip(context.Saga.TripId, context.Saga.CorrelationId))
             .TransitionTo(this.Accepted)
             .Catch<Exception>(e => e.Then(context =>
             {
@@ -58,10 +64,21 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
             .TransitionTo(this.Faulted)));
     }
 
+    private void ConfigureAccepted()
+    {
+        this.During(this.Accepted,
+            this.When(this.TripConfirmed)
+            .Then(context =>
+            {
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+            })
+            .TransitionTo(this.Confirmed));
+    }
+
     private void ConfigureAny()
     {
-        DuringAny(
-            When(this.GetBookingState)
+        this.DuringAny(
+            this.When(this.GetBookingState)
             .Respond(x => x.Saga));
     }
 }
