@@ -73,4 +73,5 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
     var queueSettings = configuration.GetSection(nameof(QueueSettings)).Get<QueueSettings>();
     EndpointConvention.Map<ConfirmTrip>(new Uri(queueSettings.ConfirmTripQueueAddress!));
     EndpointConvention.Map<DeductCredits>(new Uri(queueSettings.DeductCreditsQueueAddress!));
+    EndpointConvention.Map<InvalidateTrip>(new Uri(queueSettings.InvalidateTripQueueAddress!));
 }

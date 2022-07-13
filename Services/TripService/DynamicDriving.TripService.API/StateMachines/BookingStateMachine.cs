@@ -20,6 +20,7 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.ConfigureAny();
         this.ConfigureAccepted();
         this.ConfigureCompleted();
+        this.ConfigureFaulted();
     }
 
     public State? Accepted { get; }
@@ -38,12 +39,19 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
 
     public Event<CreditsDeducted>? CreditsDeducted { get; }
 
+    public Event<Fault<ConfirmTrip>>? ConfirmTripFaulted { get; }
+
+    public Event<Fault<DeductCredits>>? DeductCreditsFaulted { get; }
+
+
     private void ConfigureEvents()
     {
         this.Event(() => this.BookingRequested);
         this.Event(() => this.GetBookingState);
         this.Event(() => this.TripConfirmed);
         this.Event(() => this.CreditsDeducted);
+        this.Event(() => this.ConfirmTripFaulted, x => x.CorrelateById(context => context.Message.Message.CorrelationId));
+        this.Event(() => this.DeductCreditsFaulted, x => x.CorrelateById(context => context.Message.Message.CorrelationId));
     }
 
     private void ConfigureInitialState()
@@ -80,7 +88,14 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.UserId,
                 context.Saga.Credits,
                 context.Saga.CorrelationId))
-            .TransitionTo(this.Confirmed));
+            .TransitionTo(this.Confirmed),
+            this.When(this.ConfirmTripFaulted)
+            .Then(context =>
+            {
+                context.Saga.ErrorMessage = context.Message.Exceptions[0].Message;
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+            })
+            .TransitionTo(this.Faulted));
     }
 
     private void ConfigureCompleted()
@@ -88,7 +103,15 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.During(this.Confirmed,
             this.When(this.CreditsDeducted)
             .Then(context => context.Saga.LastUpdated = DateTimeOffset.UtcNow)
-            .TransitionTo(this.Completed));
+            .TransitionTo(this.Completed),
+            this.When(this.DeductCreditsFaulted)
+            .Send(context => new InvalidateTrip(context.Saga.TripId, context.Saga.CorrelationId))
+            .Then(context =>
+            {
+                context.Saga.ErrorMessage = context.Message.Exceptions[0].Message;
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+            })
+            .TransitionTo(this.Faulted));
     }
 
     private void ConfigureAny()
@@ -96,5 +119,13 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.DuringAny(
             this.When(this.GetBookingState)
             .Respond(x => x.Saga));
+    }
+
+    private void ConfigureFaulted()
+    {
+        this.During(this.Faulted,
+            this.Ignore(this.BookingRequested),
+            this.Ignore(this.TripConfirmed),
+            this.Ignore(this.CreditsDeducted));
     }
 }
