@@ -30,10 +30,6 @@ public class BookingsController : ControllerBase
     public async Task<IActionResult> PostAsync([FromBody] SubmitBookingRequest booking)
     {
         Guards.ThrowIfNull(booking);
-        if (!this.ModelState.IsValid)
-        {
-            return this.BadRequest(this.ModelState);
-        }
 
         var trip = await this.tripRepository.GetAsync((Guid)booking.TripId!).ConfigureAwait(false);
         if (trip is null)
@@ -42,7 +38,7 @@ public class BookingsController : ControllerBase
         }
 
         var userId = this.User.FindFirstValue("sub");
-        var correlationId = Guid.NewGuid(); // TEMP
+        var correlationId = (Guid)booking.IdempotencyId!;
 
         var message = new BookingRequested(Guid.Parse(userId), booking.TripId!.Value, trip.Credits, correlationId);
         await this.publishEndpoint.Publish(message).ConfigureAwait(false);
@@ -53,10 +49,10 @@ public class BookingsController : ControllerBase
             new { correlationId });
     }
 
-    [HttpGet("status/{correlationId}")]
-    public async Task<ActionResult<BookingResponse>> GetStatusAsync(Guid correlationId)
+    [HttpGet("status/{idempotencyId}")]
+    public async Task<ActionResult<BookingResponse>> GetStatusAsync(Guid idempotencyId)
     {
-        var bookingStateResponse = await this.bookingClient.GetResponse<BookingState>(new GetBookingState(correlationId)).ConfigureAwait(false);
+        var bookingStateResponse = await this.bookingClient.GetResponse<BookingState>(new GetBookingState(idempotencyId)).ConfigureAwait(false);
 
         var bookingState = bookingStateResponse.Message;
         var response = new BookingResponse(
