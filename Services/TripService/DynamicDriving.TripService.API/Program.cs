@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DynamicDriving.Contracts.Identity;
 using DynamicDriving.Contracts.Trips;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Identity;
@@ -71,4 +72,5 @@ static void AddMassTransit(IServiceCollection services, IConfiguration configura
     // Map Commands in MassTransit
     var queueSettings = configuration.GetSection(nameof(QueueSettings)).Get<QueueSettings>();
     EndpointConvention.Map<ConfirmTrip>(new Uri(queueSettings.ConfirmTripQueueAddress!));
+    EndpointConvention.Map<DeductCredits>(new Uri(queueSettings.DeductCreditsQueueAddress!));
 }

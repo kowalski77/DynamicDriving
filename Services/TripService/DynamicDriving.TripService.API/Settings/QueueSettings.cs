@@ -3,4 +3,6 @@
 public class QueueSettings
 {
     public string? ConfirmTripQueueAddress { get; init; }
+
+    public string? DeductCreditsQueueAddress { get; init; }
 }

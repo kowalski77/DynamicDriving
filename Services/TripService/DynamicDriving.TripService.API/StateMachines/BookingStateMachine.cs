@@ -1,4 +1,5 @@
-﻿using DynamicDriving.Contracts.Trips;
+﻿using DynamicDriving.Contracts.Identity;
+using DynamicDriving.Contracts.Trips;
 using DynamicDriving.Contracts.TripService;
 using DynamicDriving.TripService.API.Activities;
 using MassTransit;
@@ -18,6 +19,7 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.ConfigureInitialState();
         this.ConfigureAny();
         this.ConfigureAccepted();
+        this.ConfigureCompleted();
     }
 
     public State? Accepted { get; }
@@ -32,13 +34,16 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
 
     public Event<GetBookingState>? GetBookingState { get; }
 
-    public Event<TripConfirmed>? TripConfirmed { get; set; }
+    public Event<TripConfirmed>? TripConfirmed { get; }
+
+    public Event<CreditsDeducted>? CreditsDeducted { get; }
 
     private void ConfigureEvents()
     {
         this.Event(() => this.BookingRequested);
         this.Event(() => this.GetBookingState);
         this.Event(() => this.TripConfirmed);
+        this.Event(() => this.CreditsDeducted);
     }
 
     private void ConfigureInitialState()
@@ -54,7 +59,9 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.LastUpdated = context.Saga.Received;
             })
             .Activity(x => x.OfType<CalculateBookingTotalActivity>())
-            .Send(context => new ConfirmTrip(context.Saga.TripId, context.Saga.CorrelationId))
+            .Send(context => new ConfirmTrip(
+                context.Saga.TripId,
+                context.Saga.CorrelationId))
             .TransitionTo(this.Accepted)
             .Catch<Exception>(e => e.Then(context =>
             {
@@ -68,11 +75,20 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
     {
         this.During(this.Accepted,
             this.When(this.TripConfirmed)
-            .Then(context =>
-            {
-                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
-            })
+            .Then(context => context.Saga.LastUpdated = DateTimeOffset.UtcNow)
+            .Send(context => new DeductCredits(
+                context.Saga.UserId,
+                context.Saga.Credits,
+                context.Saga.CorrelationId))
             .TransitionTo(this.Confirmed));
+    }
+
+    private void ConfigureCompleted()
+    {
+        this.During(this.Confirmed,
+            this.When(this.CreditsDeducted)
+            .Then(context => context.Saga.LastUpdated = DateTimeOffset.UtcNow)
+            .TransitionTo(this.Completed));
     }
 
     private void ConfigureAny()
