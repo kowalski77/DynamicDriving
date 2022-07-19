@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DynamicDriving.TripManagement.API.UseCases.Trips.GetById;
 
 [Route("api/v1/[controller]")]
-//[Authorize]
+[Authorize]
 public class TripsController : ApplicationController
 {
     private readonly IMediator mediator;
