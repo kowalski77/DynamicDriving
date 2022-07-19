@@ -26,11 +26,19 @@ public class DeductCreditsConsumer : IConsumer<DeductCredits>
             throw new UnknownUserException(context.Message.UserId);
         }
 
+        if (user.MessageIds.Contains(context.MessageId!.Value)) // NOTE: Idempotency in consumers
+        {
+            await context.Publish(new CreditsDeducted(context.Message.CorrelationId)).ConfigureAwait(false);
+            return;
+        }
+
         user.Credits -= context.Message.Credits;
         if (user.Credits < 0)
         {
             throw new NotEnoughCreditsException(context.Message.UserId, user.Credits);
         }
+
+        user.MessageIds.Add(context.MessageId.Value); // NOTE: Idempotency in consumers
 
         _ = await this.userManager.UpdateAsync(user).ConfigureAwait(false);
 

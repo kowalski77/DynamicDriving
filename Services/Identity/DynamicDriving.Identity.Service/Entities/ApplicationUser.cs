@@ -7,4 +7,6 @@ namespace DynamicDriving.Identity.Service.Entities;
 public class ApplicationUser : MongoIdentityUser<Guid>
 {
     public int Credits { get; set; }
+
+    public HashSet<Guid> MessageIds { get; set; } = new(); // NOTE: Idempotency in consumers
 }
