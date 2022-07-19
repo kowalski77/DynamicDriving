@@ -24,7 +24,7 @@ public class ErrorResult
         return $"{this.Code}{Separator}{this.Message}";
     }
 
-    public static ErrorResult Deserialize(string serialized)
+    public static ErrorResult Deserialize(string? serialized)
     {
         switch (serialized)
         {

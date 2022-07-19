@@ -13,7 +13,7 @@ public class ApplicationController : ControllerBase
 {
     protected static IActionResult Error(ErrorResult? error, string invalidField)
     {
-        return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.BadRequest);
+        return new EnvelopeResult(HttpStatusCode.BadRequest, ErrorEnvelope.Error(error, invalidField));
     }
 
     protected static IActionResult FromResult<T>(Result<T> result)
@@ -23,7 +23,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.Error?.Code) switch
         {
-            (true, _) => new EnvelopeResult(SuccessEnvelope.Create(result.Value), HttpStatusCode.Created),
+            (true, _) => new EnvelopeResult(HttpStatusCode.Created, SuccessEnvelope.Create(result.Value)),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.Error, string.Empty),
             _ => Error(result.Error, string.Empty)
         };
@@ -35,7 +35,7 @@ public class ApplicationController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        return new EnvelopeResult(SuccessEnvelope.Create(model), HttpStatusCode.OK);
+        return new EnvelopeResult(HttpStatusCode.OK, SuccessEnvelope.Create(model));
     }
 
     protected IActionResult CreatedResult<T, TR>(Result<T> result, Func<T, TR> converter, string routeName, Func<object> routeValues)
@@ -64,7 +64,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.Error?.Code) switch
         {
-            (true, _) => new EnvelopeResult(SuccessEnvelope.Create(converter(result.Value)), HttpStatusCode.OK),
+            (true, _) => new EnvelopeResult(HttpStatusCode.OK, SuccessEnvelope.Create(converter(result.Value))),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.Error, string.Empty),
             _ => Error(result.Error, string.Empty)
         };
@@ -78,7 +78,7 @@ public class ApplicationController : ControllerBase
 
         IActionResult actionResult = (result.Success, result.Error?.Code) switch
         {
-            (true, _) => new EnvelopeResult(SuccessEnvelope.Ok(), HttpStatusCode.OK),
+            (true, _) => new EnvelopeResult(HttpStatusCode.OK, SuccessEnvelope.Ok()),
             (false, ErrorConstants.RecordNotFound) => NotFound(result.Error, string.Empty),
             _ => Error(result.Error, string.Empty)
         };
@@ -88,6 +88,6 @@ public class ApplicationController : ControllerBase
 
     private static IActionResult NotFound(ErrorResult error, string invalidField)
     {
-        return new EnvelopeResult(ErrorEnvelope.Error(error, invalidField), HttpStatusCode.NotFound);
+        return new EnvelopeResult(HttpStatusCode.NotFound, ErrorEnvelope.Error(error, invalidField));
     }
 }

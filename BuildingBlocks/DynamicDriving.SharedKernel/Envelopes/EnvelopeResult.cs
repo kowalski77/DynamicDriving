@@ -5,19 +5,19 @@ namespace DynamicDriving.SharedKernel.Envelopes
 {
     public sealed class EnvelopeResult : IActionResult
     {
-        public EnvelopeResult(ErrorEnvelope errorEnvelope, HttpStatusCode statusCode)
+        public EnvelopeResult(HttpStatusCode statusCode, params ErrorEnvelope[] errorEnvelopes)
         {
-            this.ErrorEnvelope = errorEnvelope;
             this.StatusCode = (int)statusCode;
+            this.ErrorEnvelopeCollection = errorEnvelopes;
         }
 
-        public EnvelopeResult(SuccessEnvelope successEnvelope, HttpStatusCode statusCode)
+        public EnvelopeResult(HttpStatusCode statusCode, SuccessEnvelope successEnvelope)
         {
+            this.StatusCode = (int)statusCode;
             this.SuccessEnvelope = successEnvelope;
-            this.StatusCode = (int)statusCode;
         }
 
-        public ErrorEnvelope? ErrorEnvelope { get; }
+        public IEnumerable<ErrorEnvelope>? ErrorEnvelopeCollection { get; }
 
         public SuccessEnvelope? SuccessEnvelope { get; }
 
@@ -25,9 +25,9 @@ namespace DynamicDriving.SharedKernel.Envelopes
 
         public Task ExecuteResultAsync(ActionContext context)
         {
-            var objectResult = this.ErrorEnvelope is null ?
+            var objectResult = this.ErrorEnvelopeCollection is null ?
                 new ObjectResult(this.SuccessEnvelope) { StatusCode = this.StatusCode } :
-                new ObjectResult(this.ErrorEnvelope) { StatusCode = this.StatusCode };
+                new ObjectResult(this.ErrorEnvelopeCollection) { StatusCode = this.StatusCode };
 
             return objectResult.ExecuteResultAsync(context);
         }

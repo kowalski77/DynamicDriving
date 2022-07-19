@@ -50,8 +50,9 @@ public class CreateDraftTripShould
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
         envelopeResult.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(ErrorConstants.RecordNotFound);
-        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.ErrorEnvelopeCollection.Should().Contain(x => x.ErrorCode == ErrorConstants.RecordNotFound);
+        envelopeResult.ErrorEnvelopeCollection.Should().Contain(x => x.ErrorMessage == errorMessage);
+       
     }
 
     [Theory, CustomDataSource]
@@ -72,7 +73,7 @@ public class CreateDraftTripShould
         // Assert
         var envelopeResult = (EnvelopeResult)actionResult;
         envelopeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        envelopeResult.ErrorEnvelope!.ErrorCode.Should().Be(errorCode);
-        envelopeResult.ErrorEnvelope.ErrorMessage.Should().Be(errorMessage);
+        envelopeResult.ErrorEnvelopeCollection.Should().Contain(x => x.ErrorCode == errorCode);
+        envelopeResult.ErrorEnvelopeCollection.Should().Contain(x => x.ErrorMessage == errorMessage);
     }
 }
