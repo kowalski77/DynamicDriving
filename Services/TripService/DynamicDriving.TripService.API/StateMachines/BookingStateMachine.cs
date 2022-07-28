@@ -66,6 +66,8 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
                 context.Saga.Credits = context.Message.Credits;
                 context.Saga.Received = DateTimeOffset.UtcNow;
                 context.Saga.LastUpdated = context.Saga.Received;
+
+                this.logger.LogInformation("Calculating total booking with correlation id: {CorrelationId}", context.Saga.CorrelationId);
             })
             .Activity(x => x.OfType<CalculateBookingTotalActivity>())
             .Send(context => new ConfirmTrip(
@@ -76,6 +78,8 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
             {
                 context.Saga.ErrorMessage = context.Exception.Message;
                 context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+
+                this.logger.LogError(context.Exception, "Could not calculate the total booking with correlation id: {CorrelationId}, Error: {Error}", context.Saga.CorrelationId, context.Saga.ErrorMessage);
             })
             .TransitionTo(this.Faulted)));
     }
@@ -85,7 +89,11 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
         this.During(this.Accepted,
             this.Ignore(this.BookingRequested),
             this.When(this.TripConfirmed)
-            .Then(context => context.Saga.LastUpdated = DateTimeOffset.UtcNow)
+            .Then(context =>
+            {
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+                this.logger.LogInformation("Trip accepted for user with id: {UserId} with correlation id: {CorrelationId}", context.Saga.UserId, context.Saga.CorrelationId);
+            })
             .Send(context => new DeductCredits(
                 context.Saga.UserId,
                 context.Saga.Credits,
@@ -96,6 +104,8 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
             {
                 context.Saga.ErrorMessage = context.Message.Exceptions[0].Message;
                 context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+
+                this.logger.LogError("Could not accepted trip for user with id: {UserId} with correlation id: {CorrelationId}, Error: {Error}", context.Saga.UserId, context.Saga.CorrelationId, context.Saga.ErrorMessage);
             })
             .TransitionTo(this.Faulted));
     }
@@ -106,7 +116,11 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
             this.Ignore(this.BookingRequested),
             this.Ignore(this.TripConfirmed),
             this.When(this.CreditsDeducted)
-            .Then(context => context.Saga.LastUpdated = DateTimeOffset.UtcNow)
+            .Then(context => 
+            { 
+                context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+                this.logger.LogInformation("Trip confirmed for user with id: {UserId} with correlation id: {CorrelationId}", context.Saga.UserId, context.Saga.CorrelationId);
+            })
             .TransitionTo(this.Completed),
             this.When(this.DeductCreditsFaulted)
             .Send(context => new InvalidateTrip(context.Saga.TripId, context.Saga.CorrelationId))
@@ -114,6 +128,8 @@ public class BookingStateMachine : MassTransitStateMachine<BookingState>
             {
                 context.Saga.ErrorMessage = context.Message.Exceptions[0].Message;
                 context.Saga.LastUpdated = DateTimeOffset.UtcNow;
+
+                this.logger.LogError("Could not confirm trip for user with id: {UserId} with correlation id: {CorrelationId}, Error: {Error}", context.Saga.UserId, context.Saga.CorrelationId, context.Saga.ErrorMessage);
             })
             .TransitionTo(this.Faulted));
     }

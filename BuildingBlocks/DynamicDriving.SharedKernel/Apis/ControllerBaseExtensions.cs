@@ -6,7 +6,7 @@ namespace DynamicDriving.SharedKernel.Apis;
 
 public static class ControllerBaseExtensions
 {
-    public static Guid GetCurrentUserIdBySub(this ControllerBase controllerBase)
+    public static Guid GetCurrentUser(this ControllerBase controllerBase)
     {
         ArgumentNullException.ThrowIfNull(controllerBase);
 
