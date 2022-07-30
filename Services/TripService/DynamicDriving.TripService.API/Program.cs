@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using DynamicDriving.Contracts.Identity;
 using DynamicDriving.Contracts.Trips;
@@ -26,11 +25,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMongo().AddMongoRepository<Trip>();
 builder.Services.AddJwtBearerAuthentication();
 AddMassTransit(builder.Services, builder.Configuration);
-
-//builder.Host.ConfigureLogging(builder => builder.AddJsonConsole(options =>
-//{
-//    options.JsonWriterOptions = new JsonWriterOptions { Indented = true };
-//}));
 
 var app = builder.Build();
 
