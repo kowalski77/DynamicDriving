@@ -49,10 +49,10 @@ public class BookingsController : ControllerBase
             new { correlationId });
     }
 
-    [HttpGet("status/{idempotencyId}")]
-    public async Task<ActionResult<BookingResponse>> GetStatusAsync(Guid idempotencyId)
+    [HttpGet("status/{correlationId}")]
+    public async Task<ActionResult<BookingResponse>> GetStatusAsync(Guid correlationId)
     {
-        var bookingStateResponse = await this.bookingClient.GetResponse<BookingState>(new GetBookingState(idempotencyId)).ConfigureAwait(false);
+        var bookingStateResponse = await this.bookingClient.GetResponse<BookingState>(new GetBookingState(correlationId)).ConfigureAwait(false);
 
         var bookingState = bookingStateResponse.Message;
         var response = new BookingResponse(

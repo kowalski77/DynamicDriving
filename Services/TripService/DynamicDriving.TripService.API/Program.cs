@@ -3,6 +3,7 @@ using DynamicDriving.Contracts.Identity;
 using DynamicDriving.Contracts.Trips;
 using DynamicDriving.MassTransit;
 using DynamicDriving.SharedKernel.Identity;
+using DynamicDriving.SharedKernel.Logging;
 using DynamicDriving.SharedKernel.Mongo;
 using DynamicDriving.TripService.API.Consumers;
 using DynamicDriving.TripService.API.Entities;
@@ -10,6 +11,8 @@ using DynamicDriving.TripService.API.Exceptions;
 using DynamicDriving.TripService.API.Settings;
 using DynamicDriving.TripService.API.StateMachines;
 using MassTransit;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMongo().AddMongoRepository<Trip>();
 builder.Services.AddJwtBearerAuthentication();
 AddMassTransit(builder.Services, builder.Configuration);
+
+builder.Services.AddSeqLogging(builder.Configuration);
+
+builder.Services.AddOpenTelemetryTracing(tracerBuilder =>
+{
+    tracerBuilder
+        .AddSource("TripService")
+        .AddSource("MassTransit")
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "TripService"))
+        .AddHttpClientInstrumentation()
+        .AddAspNetCoreInstrumentation()
+        .AddJaegerExporter(options => 
+        {
+            var jaegerSettings = builder.Configuration.GetSection(nameof(JaegerSettings)).Get<JaegerSettings>();
+            options.AgentHost = jaegerSettings.Host;
+            options.AgentPort = jaegerSettings.Port;
+        });
+});
 
 var app = builder.Build();
 
