@@ -24,7 +24,7 @@ public class TripsController : ApplicationController
     [ProducesResponseType(typeof(ErrorEnvelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCurrentUserTrips()
     {
-        var userId = this.GetCurrentUserIdBySub();
+        var userId = this.GetCurrentUser();
         var trips = await this.mediator.Send(new GetTripByUser(userId)).ConfigureAwait(false);
 
         return Ok(trips.AsResponse(userId));

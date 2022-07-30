@@ -28,7 +28,7 @@ public class TripsController : ApplicationController
     {
         Guards.ThrowIfNull(request);
 
-        CreateDraftTrip command = request.AsCommand(this.GetCurrentUserIdBySub());
+        CreateDraftTrip command = request.AsCommand(this.GetCurrentUser());
         var result = await this.mediator.Send(command).ConfigureAwait(false);
 
         return this.CreatedResult(
