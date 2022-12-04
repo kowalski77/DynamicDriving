@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
 
-
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -41,8 +40,8 @@ builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 //builder.Services.AddHostedService<OutboxHostedService>();
 
-builder.Services.AddCustomAuthorization();
 builder.Services.AddJwtBearerAuthentication();
+builder.Services.AddCustomAuthorization();
 
 var app = builder.Build();
 

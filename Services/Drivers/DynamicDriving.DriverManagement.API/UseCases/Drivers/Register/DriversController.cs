@@ -16,10 +16,7 @@ public class DriversController : ApplicationController
 {
     private readonly IServiceCommand<RegisterDriver, Result<Guid>> serviceCommand;
 
-    public DriversController(IServiceCommand<RegisterDriver, Result<Guid>> serviceCommand)
-    {
-        this.serviceCommand = serviceCommand;
-    }
+    public DriversController(IServiceCommand<RegisterDriver, Result<Guid>> serviceCommand) => this.serviceCommand = serviceCommand;
 
     [HttpPost]
     [ProducesResponseType(typeof(SuccessEnvelope<Guid>), StatusCodes.Status200OK)]
@@ -29,7 +26,7 @@ public class DriversController : ApplicationController
         Guards.ThrowIfNull(request);
 
         RegisterDriver command = request.AsCommand();
-        var result = await this.serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
+        Result<Guid> result = await serviceCommand.ExecuteAsync(command).ConfigureAwait(false);
 
         return FromResult(result, value => new RegisterDriverResponse(value));
     }
